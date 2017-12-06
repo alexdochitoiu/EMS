@@ -19,7 +19,8 @@ namespace Data.Core.Domain
             string email, string password, string phone, Address address)
         {
             Validate(firstName, lastName, gender, dateOfBirth, email, password, phone, address);
-            var user = new User()
+
+            var user = new User
             {
                 Id = new Guid()
             };
@@ -47,6 +48,7 @@ namespace Data.Core.Domain
         {
             Ensure.That(firstName).IsNotNullOrEmpty();
             Ensure.That(lastName).IsNotNullOrEmpty();
+            Ensure.That(Enum.IsDefined(typeof(GenderEnum), gender)).IsTrue();
             Ensure.That(dateOfBirth).IsLt(DateTime.Now);
             Ensure.That(email).IsNotNullOrEmpty();
             Ensure.That(password).IsNotNullOrEmpty();
