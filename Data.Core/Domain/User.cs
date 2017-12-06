@@ -56,11 +56,4 @@ namespace Data.Core.Domain
             Ensure.That(address).IsNotNull();
         }
     }
-
-    public enum GenderEnum
-    {
-        Male,
-        Female,
-        Other
-    }
 }
