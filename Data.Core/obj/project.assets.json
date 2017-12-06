@@ -2,6 +2,15 @@
   "version": 3,
   "targets": {
     ".NETCoreApp,Version=v2.0": {
+      "EnsureThatCore/1.0.0": {
+        "type": "package",
+        "compile": {
+          "lib/netcoreapp2.0/Ensure.That.dll": {}
+        },
+        "runtime": {
+          "lib/netcoreapp2.0/Ensure.That.dll": {}
+        }
+      },
       "Microsoft.NETCore.App/2.0.0": {
         "type": "package",
         "dependencies": {
@@ -200,6 +209,21 @@
     }
   },
   "libraries": {
+    "EnsureThatCore/1.0.0": {
+      "sha512": "+gAXDeDo0aiOPGxCuN/L46t20dH1KvrZkvwtJ/P+Cgr7fO2EzEMuMRS9HX3rw6Nt7dt4+iN++Wfj2wHxXELY1g==",
+      "type": "package",
+      "path": "ensurethatcore/1.0.0",
+      "files": [
+        "ensurethatcore.1.0.0.nupkg.sha512",
+        "ensurethatcore.nuspec",
+        "lib/net45/Ensure.That.dll",
+        "lib/net47/Ensure.That.dll",
+        "lib/netcoreapp1.1/Ensure.That.dll",
+        "lib/netcoreapp2.0/Ensure.That.dll",
+        "lib/netstandard1.6/Ensure.That.dll",
+        "lib/netstandard2.0/Ensure.That.dll"
+      ]
+    },
     "Microsoft.NETCore.App/2.0.0": {
       "sha512": "/mzXF+UtZef+VpzzN88EpvFq5U6z4rj54ZMq/J968H6pcvyLOmcupmTRpJ3CJm8ILoCGh9WI7qpDdiKtuzswrQ==",
       "type": "package",
@@ -660,6 +684,7 @@
   },
   "projectFileDependencyGroups": {
     ".NETCoreApp,Version=v2.0": [
+      "EnsureThatCore >= 1.0.0",
       "Microsoft.NETCore.App >= 2.0.0"
     ]
   },
@@ -707,6 +732,10 @@
     "frameworks": {
       "netcoreapp2.0": {
         "dependencies": {
+          "EnsureThatCore": {
+            "target": "Package",
+            "version": "1.0.0"
+          },
           "Microsoft.NETCore.App": {
             "suppressParent": "All",
             "target": "Package",
