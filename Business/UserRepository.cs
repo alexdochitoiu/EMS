@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using Data.Core.Domain;
 using Data.Core.Interfaces;
@@ -56,19 +55,19 @@ namespace Business
             _databaseService.SaveChangesAsync();
         }
 
-        public Task<IQueryable<User>> GetByFirstName(string firstName)
+        public async Task<List<User>> GetByFirstName(string firstName)
         {
-            throw new NotImplementedException();
+            return await _databaseService.Users.Where(u => u.FirstName == firstName).ToListAsync();
         }
 
-        public IQueryable<User> GetByLastName(string lastName)
+        public async Task<List<User>> GetByLastName(string lastName)
         {
-            throw new NotImplementedException();
+            return await _databaseService.Users.Where(u => u.LastName == lastName).ToListAsync();
         }
 
-        public IQueryable<User> GetByAge(int age)
+        public async Task<List<User>> GetByAge(int age)
         {
-            throw new NotImplementedException();
+            return await _databaseService.Users.Where(u => u.Age == age).ToListAsync();
         }
     }
 }

@@ -14,6 +14,18 @@ namespace Data.Core.Domain
         public string Password { get; private set; }
         public string Phone { get; private set; }
         public Address Address { get; private set; }
+        public int Age
+        {
+            get
+            {
+                var age = 0;
+                age = DateTime.Now.Year - DateOfBirth.Year;
+                if (DateTime.Now.DayOfYear < DateOfBirth.DayOfYear)
+                    age = age - 1;
+
+                return age;
+            } 
+        }
 
         public static User Create(string firstName, string lastName, GenderEnum gender, DateTime dateOfBirth,
             string email, string password, string phone, Address address)
