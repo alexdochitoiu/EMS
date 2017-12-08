@@ -25,7 +25,7 @@ namespace WebAPI
             services.AddScoped<IUserRepository, UserRepository>();
             const string connectionString = @"Server = .\SQLEXPRESS; Database=EMS.Development; Trusted_Connection=true;";
             services.AddDbContext<DatabaseService>(options =>
-                options.UseSqlServer(connectionString)
+                options.UseSqlServer(connectionString, b => b.MigrationsAssembly("WebAPI"))
             );
 
             services.AddMvc();
