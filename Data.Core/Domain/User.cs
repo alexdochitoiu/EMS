@@ -18,7 +18,7 @@ namespace Data.Core.Domain
         {
             get
             {
-                var age = 0;
+                int age;
                 age = DateTime.Now.Year - DateOfBirth.Year;
                 if (DateTime.Now.DayOfYear < DateOfBirth.DayOfYear)
                     age = age - 1;

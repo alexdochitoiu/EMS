@@ -12,9 +12,9 @@ namespace Business
 {
     public class UserRepository : IUserRepository
     {
-        private readonly IDatabaseService _databaseService;
+        private readonly DatabaseService _databaseService;
 
-        public UserRepository(IDatabaseService databaseService)
+        public UserRepository(DatabaseService databaseService)
         {
             _databaseService = databaseService;
         }
@@ -34,10 +34,10 @@ namespace Business
             return await _databaseService.Users.Where(predicate).ToListAsync();
         }
 
-        public void Add(User entity)
+        public async Task Add(User entity)
         {
             _databaseService.Users.Add(entity);
-            _databaseService.SaveChangesAsync();
+            await _databaseService.SaveChangesAsync();
         }
 
         public async Task<bool> Delete(Guid id)
@@ -45,14 +45,14 @@ namespace Business
             var user = await GetByIdAsync(id);
             if (user == null) return false;
             _databaseService.Users.Remove(user);
-            _databaseService.SaveChangesAsync();
+            await _databaseService.SaveChangesAsync();
             return true;
         }
 
-        public void Edit(User entity)
+        public async Task Edit(User entity)
         {
             _databaseService.Users.Update(entity);
-            _databaseService.SaveChangesAsync();
+            await _databaseService.SaveChangesAsync();
         }
 
         public async Task<List<User>> GetByFirstName(string firstName)

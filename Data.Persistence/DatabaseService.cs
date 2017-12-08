@@ -3,13 +3,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Data.Persistence
 {
-    public sealed class DatabaseService : DbContext, IDatabaseService
+    public sealed class DatabaseService : DbContext
     {
-        public DatabaseService(DbContextOptions options) : base(options)
-        {
-
-        }
-
+        public DatabaseService(DbContextOptions options) : base(options) { }
         public DbSet<User> Users { get; set; }
     }
 }
