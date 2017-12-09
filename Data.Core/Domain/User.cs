@@ -65,7 +65,7 @@ namespace Data.Core.Domain
             Ensure.That(email).IsNotNullOrEmpty();
             Ensure.That(password).IsNotNullOrEmpty();
             Ensure.That(phone).IsNotNullOrEmpty();
-            Ensure.That(address).IsNotNull();
+           // Ensure.That(address).IsNotNull();
         }
     }
 }

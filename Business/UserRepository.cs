@@ -21,7 +21,9 @@ namespace Business
 
         public async Task<List<User>> GetAll()
         {
-            return await _databaseService.Users.ToListAsync();
+            return await _databaseService.Users
+                .Include(u => u.Address)
+                .ToListAsync();
         }
 
         public async Task<User> GetByIdAsync(Guid id)

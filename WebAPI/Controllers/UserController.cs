@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Data.Core.Domain;
 using Data.Core.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using WebAPI.Models.UserModels;
 
 namespace WebAPI.Controllers
@@ -13,12 +12,10 @@ namespace WebAPI.Controllers
     public class UserController : Controller
     {
         private readonly IUserRepository _userRepository;
-        private readonly ILogger _logger;
 
-        public UserController(IUserRepository userRepository, ILogger logger)
+        public UserController(IUserRepository userRepository)
         {
             _userRepository = userRepository;
-            _logger = logger;
         }
 
 
@@ -34,7 +31,7 @@ namespace WebAPI.Controllers
             }
             catch (Exception exp)
             {
-                _logger.LogError(exp.Message);
+                Console.Write(exp);
                 return BadRequest();
             }
         }
@@ -51,53 +48,73 @@ namespace WebAPI.Controllers
             }
             catch (Exception exp)
             {
-                _logger.LogError(exp.Message);
                 return BadRequest();
             }
         }
 
         // POST api/users
         [HttpPost]
-        [ValidateAntiForgeryToken]
         [ProducesResponseType(typeof(User), 201)]
         public async Task<ActionResult> CreateUser([FromBody]CreatingUserModel model)
         {
-            var user = Data.Core.Domain.User.Create(
-                model.FirstName,
-                model.LastName,
-                model.Gender,
-                model.DateOfBirth,
-                model.Email,
-                "Secret",
-                model.Phone,
-                model.Address);
-            await _userRepository.Add(user);
-            return CreatedAtRoute("GetUserRoute", new {id = user.Id}, user);
+            try
+            {
+                var country = Country.Create("Romania", "RO");
+                var city = City.Create("Bacau", "BC", 2.45, 22.3);
+                var address = Address.Create(country, city, "Calea Moldovei", "192", "600352");
+                var user = Data.Core.Domain.User.Create(
+                    model.FirstName,
+                    model.LastName,
+                    model.Gender,
+                    model.DateOfBirth,
+                    model.Email,
+                    "Secret",
+                    model.Phone,
+                    address);
+                await _userRepository.Add(user);
+                return Ok(user);
+            }
+            catch (Exception exp)
+            {
+                Console.Write(exp);
+                return BadRequest();
+            }
         }
 
         // PUT api/users/5
         [HttpPut("{id}")]
-        [ValidateAntiForgeryToken]
         [ProducesResponseType(typeof(User), 200)]
-        public async Task<ActionResult> UpdateUser(Guid id, [FromBody]User model)
+        public async Task<ActionResult> UpdateUser(Guid id, [FromBody]CreatingUserModel model)
         {
-            var user = _userRepository.GetByIdAsync(id);
-            user.Result.Update(
-                model.FirstName,
-                model.LastName,
-                model.Gender,
-                model.DateOfBirth,
-                model.Email,
-                "Secret",
-                model.Phone,
-                model.Address);
-            await _userRepository.Edit(user.Result);
-            return Ok(user);
+            try
+            {
+                var user = _userRepository.GetByIdAsync(id).Result;
+                //Debug
+                Console.Write(user.FirstName + "\n\n");
+
+                Console.Write(model.FirstName + "\n");
+                //End Debug
+                user.Update(
+                    model.FirstName,
+                    model.LastName,
+                    model.Gender,
+                    model.DateOfBirth,
+                    model.Email,
+                    "Secret",
+                    model.Phone,
+                    null);
+                await _userRepository.Edit(user);
+                return Ok(user);
+            }
+            catch (Exception exp)
+            {
+                Console.Write(exp);
+                return BadRequest();
+            }
         }
 
         // DELETE api/users/5
         [HttpDelete("{id}")]
-        [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteUser(Guid id)
         {
             var status = await _userRepository.Delete(id);
