@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Data.Core.Domain;
 using Data.Core.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -12,22 +14,24 @@ namespace WebAPI.Controllers
     public class UserController : Controller
     {
         private readonly IUserRepository _userRepository;
+        private readonly IMapper _mapper;
 
-        public UserController(IUserRepository userRepository)
+        public UserController(IUserRepository userRepository, IMapper mapper)
         {
             _userRepository = userRepository;
+            _mapper = mapper;
         }
-
 
         // GET api/users
         [HttpGet]
-        [ProducesResponseType(typeof(List<User>), 200)]
+        [ProducesResponseType(typeof(List<DisplayUserModel>), 200)]
         public async Task<ActionResult> Users()
         {
             try
             {
                 var users = await _userRepository.GetAll();
-                return Ok(users);
+                var displayUsers = _mapper.Map<List<DisplayUserModel>>(users);
+                return Ok(displayUsers);
             }
             catch (Exception exp)
             {
@@ -37,17 +41,37 @@ namespace WebAPI.Controllers
         }
 
         // GET api/users/5
-        [HttpGet("{id}", Name = "GetUserRoute")]
-        [ProducesResponseType(typeof(User), 200)]
+        [HttpGet("{id}")]
+        [ProducesResponseType(typeof(DisplayUserModel), 200)]
         public async Task<ActionResult> Users(Guid id)
         {
             try
             {
-                var user = await _userRepository.GetByIdAsync(id);
-                return Ok(user);
+                var user = await _userRepository.GetById(id);
+                var displayUser = _mapper.Map<DisplayUserModel>(user);
+                return Ok(displayUser);
             }
             catch (Exception exp)
             {
+                Console.Write(exp);
+                return BadRequest();
+            }
+        }
+
+        // GET api/users/alex
+        [HttpGet("{firstName}")]
+        [ProducesResponseType(typeof(DisplayUserModel), 200)]
+        public async Task<ActionResult> Users(string firstName)
+        {
+            try
+            {
+                var user = await _userRepository.GetByFirstName(firstName);
+                var displayUser = _mapper.Map<List<DisplayUserModel>>(user);
+                return Ok(displayUser);
+            }
+            catch (Exception exp)
+            {
+                Console.Write(exp);
                 return BadRequest();
             }
         }
@@ -88,12 +112,7 @@ namespace WebAPI.Controllers
         {
             try
             {
-                var user = _userRepository.GetByIdAsync(id).Result;
-                //Debug
-                Console.Write(user.FirstName + "\n\n");
-
-                Console.Write(model.FirstName + "\n");
-                //End Debug
+                var user = _userRepository.GetById(id).Result;
                 user.Update(
                     model.FirstName,
                     model.LastName,
@@ -103,7 +122,7 @@ namespace WebAPI.Controllers
                     "Secret",
                     model.Phone,
                     null);
-                await _userRepository.Edit(user);
+                await _userRepository.Edit(user, id);
                 return Ok(user);
             }
             catch (Exception exp)
@@ -117,12 +136,21 @@ namespace WebAPI.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteUser(Guid id)
         {
-            var status = await _userRepository.Delete(id);
-            if (!status)
+            try
             {
+                var user = _userRepository.GetById(id).Result;
+                var status = await _userRepository.Delete(user);
+                if (status > 0)
+                {
+                    return BadRequest();
+                }
+                return Ok();
+            }
+            catch (Exception exp)
+            {
+                Console.Write(exp);
                 return BadRequest();
             }
-            return Ok();
         }
     }
 }

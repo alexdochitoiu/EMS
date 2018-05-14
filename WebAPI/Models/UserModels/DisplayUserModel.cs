@@ -3,7 +3,7 @@ using Data.Core.Domain;
 
 namespace WebAPI.Models.UserModels
 {
-    public class CreatingUserModel
+    public class DisplayUserModel
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
@@ -11,5 +11,6 @@ namespace WebAPI.Models.UserModels
         public DateTime DateOfBirth { get; set; }
         public string Email { get; set; }
         public string Phone { get; set; }
+        public DisplayAddressModel Address { get; set; }
     }
 }

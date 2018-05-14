@@ -1,4 +1,5 @@
 ﻿using Business;
+using Data.Core.Domain;
 using Data.Core.Interfaces;
 using Data.Persistence;
 using Microsoft.AspNetCore.Builder;
@@ -7,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Swashbuckle.AspNetCore.Swagger;
+using WebAPI.Models;
 
 namespace WebAPI
 {
@@ -22,12 +24,21 @@ namespace WebAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddScoped<IUserRepository, UserRepository>();
             const string connectionString = @"Server = .\SQLEXPRESS; Database=EMS.Development; Trusted_Connection=true;";
             services.AddDbContext<DatabaseService>(options =>
                 options.UseSqlServer(connectionString, b => b.MigrationsAssembly("WebAPI"))
             );
 
+            var config = new AutoMapper.MapperConfiguration(c =>
+                {
+                    c.AddProfile(new AutoMapperProfile());
+                }
+            );
+            var mapper = config.CreateMapper();
+
+            services.AddSingleton(mapper);
+
+            services.AddScoped<IUserRepository, UserRepository>();
             services.AddMvc();
 
             services.AddSwaggerGen(options => {
@@ -53,7 +64,7 @@ namespace WebAPI
             // Enable middleware to serve generated Swagger as a JSON endpoint
             app.UseSwagger();
 
-            // Enable middleware to serve swagger-ui assets (HTML, JS, CSS etc.)
+            // Enable miWddleware to serve swagger-ui assets (HTML, JS, CSS etc.)
             // Visit http://localhost:5000/swagger
             app.UseSwaggerUI(c => {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
