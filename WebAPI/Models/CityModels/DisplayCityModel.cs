@@ -1,4 +1,4 @@
-﻿namespace WebAPI.Models
+﻿namespace WebAPI.Models.CityModels
 {
     public class DisplayCityModel
     {

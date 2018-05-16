@@ -1,5 +1,4 @@
 ﻿using Business;
-using Data.Core.Domain;
 using Data.Core.Interfaces;
 using Data.Persistence;
 using Microsoft.AspNetCore.Builder;

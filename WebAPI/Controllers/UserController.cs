@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Data.Core.Domain;
 using Data.Core.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using WebAPI.Models.UserModels;
 
 namespace WebAPI.Controllers
@@ -25,11 +25,15 @@ namespace WebAPI.Controllers
         // GET api/users
         [HttpGet]
         [ProducesResponseType(typeof(List<DisplayUserModel>), 200)]
-        public async Task<ActionResult> Users()
+        public async Task<ActionResult> AllUsers()
         {
             try
             {
-                var users = await _userRepository.GetAll();
+                var users = await _userRepository.GetAll(
+                      t => t.Include(user => user.Address)
+                                .ThenInclude(address => address.Country)
+                            .Include(user => user.Address)
+                                .ThenInclude(address => address.City));
                 var displayUsers = _mapper.Map<List<DisplayUserModel>>(users);
                 return Ok(displayUsers);
             }
@@ -43,7 +47,7 @@ namespace WebAPI.Controllers
         // GET api/users/5
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(DisplayUserModel), 200)]
-        public async Task<ActionResult> Users(Guid id)
+        public async Task<ActionResult> UserById(Guid id)
         {
             try
             {
@@ -60,14 +64,50 @@ namespace WebAPI.Controllers
 
         // GET api/users/alex
         [HttpGet("{firstName}")]
-        [ProducesResponseType(typeof(DisplayUserModel), 200)]
-        public async Task<ActionResult> Users(string firstName)
+        [ProducesResponseType(typeof(List<DisplayUserModel>), 200)]
+        public async Task<ActionResult> UsersByFirstName(string firstName)
         {
             try
             {
                 var user = await _userRepository.GetByFirstName(firstName);
-                var displayUser = _mapper.Map<List<DisplayUserModel>>(user);
-                return Ok(displayUser);
+                var displayUsers = _mapper.Map<List<DisplayUserModel>>(user);
+                return Ok(displayUsers);
+            }
+            catch (Exception exp)
+            {
+                Console.Write(exp);
+                return BadRequest();
+            }
+        }
+
+        // GET api/users/dochitoiu
+        [HttpGet("{lastName}")]
+        [ProducesResponseType(typeof(List<DisplayUserModel>), 200)]
+        public async Task<ActionResult> UsersByLastName(string lastName)
+        {
+            try
+            {
+                var user = await _userRepository.GetByLastName(lastName);
+                var displayUsers = _mapper.Map<List<DisplayUserModel>>(user);
+                return Ok(displayUsers);
+            }
+            catch (Exception exp)
+            {
+                Console.Write(exp);
+                return BadRequest();
+            }
+        }
+
+        // GET api/users/21
+        [HttpGet("{age}")]
+        [ProducesResponseType(typeof(List<DisplayUserModel>), 200)]
+        public async Task<ActionResult> UsersByLastName(int age)
+        {
+            try
+            {
+                var user = await _userRepository.GetByAge(age);
+                var displayUsers = _mapper.Map<List<DisplayUserModel>>(user);
+                return Ok(displayUsers);
             }
             catch (Exception exp)
             {
@@ -78,7 +118,7 @@ namespace WebAPI.Controllers
 
         // POST api/users
         [HttpPost]
-        [ProducesResponseType(typeof(User), 201)]
+        [ProducesResponseType(typeof(DisplayUserModel), 201)]
         public async Task<ActionResult> CreateUser([FromBody]CreatingUserModel model)
         {
             try
@@ -96,7 +136,8 @@ namespace WebAPI.Controllers
                     model.Phone,
                     address);
                 await _userRepository.Add(user);
-                return Ok(user);
+                var displayUser = _mapper.Map<DisplayUserModel>(user);
+                return Ok(displayUser);
             }
             catch (Exception exp)
             {
@@ -123,7 +164,8 @@ namespace WebAPI.Controllers
                     model.Phone,
                     null);
                 await _userRepository.Edit(user, id);
-                return Ok(user);
+                var displayUser = _mapper.Map<DisplayUserModel>(user);
+                return Ok(displayUser);
             }
             catch (Exception exp)
             {

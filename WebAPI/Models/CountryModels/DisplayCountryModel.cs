@@ -1,4 +1,4 @@
-﻿namespace WebAPI.Models
+﻿namespace WebAPI.Models.CountryModels
 {
     public class DisplayCountryModel
     {

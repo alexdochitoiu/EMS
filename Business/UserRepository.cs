@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Data.Core.Domain;
 using Data.Core.Interfaces;
@@ -25,17 +24,29 @@ namespace Business
         
         public async Task<List<User>> GetByFirstName(string firstName)
         {
-            return await _databaseService.Users.Where(u => u.FirstName.StartsWith(firstName)).ToListAsync();
+            return await FindByAsync(u => u.FirstName.StartsWith(firstName),
+                                     t => t.Include(user => user.Address)
+                                                .ThenInclude(address => address.Country)
+                                           .Include(user => user.Address)
+                                                .ThenInclude(address => address.City));
         }
 
         public async Task<List<User>> GetByLastName(string lastName)
         {
-            return await _databaseService.Users.Where(u => u.LastName == lastName).ToListAsync();
+            return await FindByAsync(u => u.LastName == lastName,
+                                     t => t.Include(user => user.Address)
+                                                .ThenInclude(address => address.Country)
+                                           .Include(user => user.Address)
+                                                .ThenInclude(address => address.City));
         }
 
         public async Task<List<User>> GetByAge(int age)
         {
-            return await _databaseService.Users.Where(u => u.Age == age).ToListAsync();
+            return await FindByAsync(u => u.Age == age,
+                                     t => t.Include(user => user.Address)
+                                                .ThenInclude(address => address.Country)
+                                           .Include(user => user.Address)
+                                                .ThenInclude(address => address.City));
         }
     }
 }

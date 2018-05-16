@@ -18,14 +18,17 @@ namespace Business
             _databaseService = databaseService;
         }
 
-        public virtual async Task<List<T>> GetAll()
+        public virtual async Task<List<T>> GetAll(Func<IQueryable<T>, IQueryable<T>> func)
         {
-            return await _databaseService.Set<T>().ToListAsync();
+            var loadedData = func(_databaseService.Set<T>());
+            return await loadedData.ToListAsync();
         }
 
-        public virtual async Task<List<T>> FindByAsync(Expression<Func<T, bool>> predicate)
+        public virtual async Task<List<T>> FindByAsync(Expression<Func<T, bool>> predicate, 
+            Func<IQueryable<T>, IQueryable<T>> func)
         {
-            return await _databaseService.Set<T>().Where(predicate).ToListAsync();
+            var loadedData = func(_databaseService.Set<T>());
+            return await loadedData.Where(predicate).ToListAsync();
         }
 
         public virtual async Task<T> Add(T entity)

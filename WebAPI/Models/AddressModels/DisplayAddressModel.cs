@@ -1,4 +1,7 @@
-﻿namespace WebAPI.Models
+﻿using WebAPI.Models.CityModels;
+using WebAPI.Models.CountryModels;
+
+namespace WebAPI.Models.AddressModels
 {
     public class DisplayAddressModel
     {
