@@ -13,23 +13,23 @@ namespace WebAPI.Controllers
     [Route("api/users")]
     public class UserController : Controller
     {
-        private readonly IUserRepository _userRepository;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public UserController(IUserRepository userRepository, IMapper mapper)
+        public UserController(IUnitOfWork unitOfWork, IMapper mapper)
         {
-            _userRepository = userRepository;
+            _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
 
         // GET api/users
-        [HttpGet]
+        [HttpGet(Name="AllUsers")]
         [ProducesResponseType(typeof(List<DisplayUserModel>), 200)]
         public async Task<ActionResult> AllUsers()
         {
             try
             {
-                var users = await _userRepository.GetAll(
+                var users = await _unitOfWork.Users.GetAll(
                       t => t.Include(user => user.Address)
                                 .ThenInclude(address => address.Country)
                             .Include(user => user.Address)
@@ -45,13 +45,13 @@ namespace WebAPI.Controllers
         }
 
         // GET api/users/5
-        [HttpGet("{id}")]
+        [HttpGet("{id:guid}", Name="UserById")]
         [ProducesResponseType(typeof(DisplayUserModel), 200)]
         public async Task<ActionResult> UserById(Guid id)
         {
             try
             {
-                var user = await _userRepository.GetById(id);
+                var user = await _unitOfWork.Users.GetById(id);
                 var displayUser = _mapper.Map<DisplayUserModel>(user);
                 return Ok(displayUser);
             }
@@ -62,50 +62,14 @@ namespace WebAPI.Controllers
             }
         }
 
-        // GET api/users/alex
-        [HttpGet("{firstName}")]
-        [ProducesResponseType(typeof(List<DisplayUserModel>), 200)]
-        public async Task<ActionResult> UsersByFirstName(string firstName)
-        {
-            try
-            {
-                var user = await _userRepository.GetByFirstName(firstName);
-                var displayUsers = _mapper.Map<List<DisplayUserModel>>(user);
-                return Ok(displayUsers);
-            }
-            catch (Exception exp)
-            {
-                Console.Write(exp);
-                return BadRequest();
-            }
-        }
-
-        // GET api/users/dochitoiu
-        [HttpGet("{lastName}")]
-        [ProducesResponseType(typeof(List<DisplayUserModel>), 200)]
-        public async Task<ActionResult> UsersByLastName(string lastName)
-        {
-            try
-            {
-                var user = await _userRepository.GetByLastName(lastName);
-                var displayUsers = _mapper.Map<List<DisplayUserModel>>(user);
-                return Ok(displayUsers);
-            }
-            catch (Exception exp)
-            {
-                Console.Write(exp);
-                return BadRequest();
-            }
-        }
-
         // GET api/users/21
-        [HttpGet("{age}")]
+        [HttpGet("{age:int}", Name="UsersByAge")]
         [ProducesResponseType(typeof(List<DisplayUserModel>), 200)]
-        public async Task<ActionResult> UsersByLastName(int age)
+        public async Task<ActionResult> UsersByAge(int age)
         {
             try
             {
-                var user = await _userRepository.GetByAge(age);
+                var user = await _unitOfWork.Users.GetByAge(age);
                 var displayUsers = _mapper.Map<List<DisplayUserModel>>(user);
                 return Ok(displayUsers);
             }
@@ -117,15 +81,15 @@ namespace WebAPI.Controllers
         }
 
         // POST api/users
-        [HttpPost]
+        [HttpPost(Name="CreateUser")]
         [ProducesResponseType(typeof(DisplayUserModel), 201)]
         public async Task<ActionResult> CreateUser([FromBody]CreatingUserModel model)
         {
             try
             {
-                var country = Country.Create("Romania", "RO");
-                var city = City.Create("Bacau", "BC", 2.45, 22.3);
-                var address = Address.Create(country, city, "Calea Moldovei", "192", "600352");
+                var country = await _unitOfWork.Countries.GetByName(model.Country);
+                var city = await _unitOfWork.Cities.GetByName(model.City);
+                var address = Address.Create(country, city, model.Street, model.Number, model.ZipCode);
                 var user = Data.Core.Domain.User.Create(
                     model.FirstName,
                     model.LastName,
@@ -135,7 +99,7 @@ namespace WebAPI.Controllers
                     "Secret",
                     model.Phone,
                     address);
-                await _userRepository.Add(user);
+                await _unitOfWork.Users.Add(user);
                 var displayUser = _mapper.Map<DisplayUserModel>(user);
                 return Ok(displayUser);
             }
@@ -147,13 +111,13 @@ namespace WebAPI.Controllers
         }
 
         // PUT api/users/5
-        [HttpPut("{id}")]
-        [ProducesResponseType(typeof(User), 200)]
+        [HttpPut("{id:guid}", Name="UpdateUser")]
+        [ProducesResponseType(typeof(DisplayUserModel), 200)]
         public async Task<ActionResult> UpdateUser(Guid id, [FromBody]CreatingUserModel model)
         {
             try
             {
-                var user = _userRepository.GetById(id).Result;
+                var user = await _unitOfWork.Users.GetById(id);
                 user.Update(
                     model.FirstName,
                     model.LastName,
@@ -163,7 +127,7 @@ namespace WebAPI.Controllers
                     "Secret",
                     model.Phone,
                     null);
-                await _userRepository.Edit(user, id);
+                await _unitOfWork.Users.Edit(user, id);
                 var displayUser = _mapper.Map<DisplayUserModel>(user);
                 return Ok(displayUser);
             }
@@ -175,17 +139,13 @@ namespace WebAPI.Controllers
         }
 
         // DELETE api/users/5
-        [HttpDelete("{id}")]
-        public async Task<ActionResult> DeleteUser(Guid id)
+        [HttpDelete("{id:guid}", Name="DeleteUser")]
+        public ActionResult DeleteUser(Guid id)
         {
             try
             {
-                var user = _userRepository.GetById(id).Result;
-                var status = await _userRepository.Delete(user);
-                if (status > 0)
-                {
-                    return BadRequest();
-                }
+                var user = _unitOfWork.Users.GetById(id).Result;
+                _unitOfWork.Users.Delete(user);
                 return Ok();
             }
             catch (Exception exp)

@@ -7,9 +7,7 @@ namespace Data.Core.Interfaces
 {
     public interface IUserRepository : IGenericRepository<User>
     {
-        Task<List<User>> GetByFirstName(string firstName);
-        Task<List<User>> GetByLastName(string lastName);
-        Task<List<User>> GetByAge(int age);
         Task<User> GetById(Guid id);
+        Task<IEnumerable<User>> GetByAge(int age);
     }
 }

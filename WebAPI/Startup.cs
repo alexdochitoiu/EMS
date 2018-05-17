@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Swashbuckle.AspNetCore.Swagger;
 using WebAPI.Models;
+using WebAPI.Seeders;
 
 namespace WebAPI
 {
@@ -23,10 +24,10 @@ namespace WebAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            const string connectionString = @"Server = .\SQLEXPRESS; Database=EMS.Development; Trusted_Connection=true;";
+            var dbConnection = Configuration.GetConnectionString("EMSConnection");
+            services.AddTransient<IDatabaseService, DatabaseService>();
             services.AddDbContext<DatabaseService>(options =>
-                options.UseSqlServer(connectionString, b => b.MigrationsAssembly("WebAPI"))
-            );
+                options.UseSqlServer(dbConnection));
 
             var config = new AutoMapper.MapperConfiguration(c =>
                 {
@@ -37,7 +38,11 @@ namespace WebAPI
 
             services.AddSingleton(mapper);
 
-            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            
+            services.AddTransient<CountriesDbSeeder>();
+            services.AddTransient<CitiesDbSeeder>();
+
             services.AddMvc();
 
             services.AddSwaggerGen(options => {
@@ -53,7 +58,10 @@ namespace WebAPI
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, 
+            IHostingEnvironment env,
+            CountriesDbSeeder countriesDbSeeder,
+            CitiesDbSeeder citiesDbSeeder)
         {
             if (env.IsDevelopment())
             {
@@ -70,6 +78,9 @@ namespace WebAPI
             });
 
             app.UseMvc();
+
+            countriesDbSeeder.Seed();
+            citiesDbSeeder.Seed();
         }
     }
 }

@@ -1,5 +1,8 @@
 ﻿using AutoMapper;
 using Data.Core.Domain;
+using WebAPI.Models.AddressModels;
+using WebAPI.Models.CityModels;
+using WebAPI.Models.CountryModels;
 using WebAPI.Models.UserModels;
 
 namespace WebAPI.Models

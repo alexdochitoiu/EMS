@@ -3,10 +3,17 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Data.Persistence
 {
-    public sealed class DatabaseService : DbContext
+    public sealed class DatabaseService : DbContext, IDatabaseService
     {
-        public DatabaseService() { } //Param less c-tor for generic repository
-        public DatabaseService(DbContextOptions options) : base(options) { }
+        public DatabaseService() { }
+
+        public DatabaseService(DbContextOptions options) : base(options)
+        {
+            Database.EnsureCreated();
+        }
+
         public DbSet<User> Users { get; set; }
+        public DbSet<City> Cities { get; set; }
+        public DbSet<Country> Countries { get; set; }
     }
 }

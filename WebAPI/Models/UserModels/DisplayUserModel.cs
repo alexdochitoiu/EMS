@@ -1,5 +1,6 @@
 ﻿using System;
 using Data.Core.Domain;
+using WebAPI.Models.AddressModels;
 
 namespace WebAPI.Models.UserModels
 {
