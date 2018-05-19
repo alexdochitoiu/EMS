@@ -1,13 +1,14 @@
-﻿using Data.Core.Domain;
+﻿using Data.Core.Domain.Entities;
+using Data.Persistence.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace Data.Persistence
 {
-    public sealed class DatabaseService : DbContext, IDatabaseService
+    public sealed class DatabaseContext : DbContext, IDatabaseContext
     {
-        public DatabaseService() { }
+        public DatabaseContext() { }
 
-        public DatabaseService(DbContextOptions options) : base(options)
+        public DatabaseContext(DbContextOptions<DatabaseContext> options) : base(options)
         {
             Database.EnsureCreated();
         }

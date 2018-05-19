@@ -1,10 +1,10 @@
-﻿using Data.Core.Domain;
+﻿using Data.Core.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 
-namespace Data.Persistence
+namespace Data.Persistence.Interfaces
 {
-    public interface IDatabaseService
+    public interface IDatabaseContext
     {
         DbSet<User> Users { get; set; }
         DbSet<City> Cities { get; set; }
