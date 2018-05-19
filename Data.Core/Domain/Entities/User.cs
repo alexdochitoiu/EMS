@@ -1,19 +1,19 @@
 ﻿using System;
 using EnsureThat;
+using Microsoft.AspNetCore.Identity;
 
-namespace Data.Core.Domain
+namespace Data.Core.Domain.Entities
 {
-    public class User
+    public class User : IdentityUser<Guid>
     {
-        public Guid Id { get; private set; }
         public string FirstName { get; private set; }
         public string LastName { get; private set; }
         public GenderEnum Gender { get; private set; }
         public DateTime DateOfBirth { get; private set; } 
-        public string Email { get; private set; }
-        public string Password { get; private set; }
-        public string Phone { get; private set; }
         public Address Address { get; private set; }
+        public DateTime Created { get; private set; }
+        public DateTime Modified { get; set; }
+
         public int Age
         {
             get
@@ -27,14 +27,14 @@ namespace Data.Core.Domain
             } 
         }
 
+
         public static User Create(string firstName, string lastName, GenderEnum gender, DateTime dateOfBirth,
             string email, string password, string phone, Address address)
         {
-            Validate(firstName, lastName, gender, dateOfBirth, email, password, phone, address);
-
             var user = new User
             {
-                Id = new Guid()
+                Id = new Guid(),
+                Created = DateTime.Now
             };
             user.Update(firstName, lastName, gender, dateOfBirth, email, password, phone, address);
             return user;
@@ -50,9 +50,10 @@ namespace Data.Core.Domain
             Gender = gender;
             DateOfBirth = dateOfBirth;
             Email = email;
-            Password = password;
-            Phone = phone;
+            PasswordHash = password;
+            PhoneNumber = phone;
             Address = address;
+            Modified = DateTime.Now;
         }
 
         private static void Validate(string firstName, string lastName, GenderEnum gender, DateTime dateOfBirth,

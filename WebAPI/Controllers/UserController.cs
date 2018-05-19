@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
-using Data.Core.Domain;
+using Data.Core.Domain.Entities;
 using Data.Core.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -90,7 +90,7 @@ namespace WebAPI.Controllers
                 var country = await _unitOfWork.Countries.GetByName(model.Country);
                 var city = await _unitOfWork.Cities.GetByName(model.City);
                 var address = Address.Create(country, city, model.Street, model.Number, model.ZipCode);
-                var user = Data.Core.Domain.User.Create(
+                var user = Data.Core.Domain.Entities.User.Create(
                     model.FirstName,
                     model.LastName,
                     model.Gender,
@@ -100,6 +100,7 @@ namespace WebAPI.Controllers
                     model.Phone,
                     address);
                 await _unitOfWork.Users.Add(user);
+                await _unitOfWork.Complete();
                 var displayUser = _mapper.Map<DisplayUserModel>(user);
                 return Ok(displayUser);
             }
@@ -128,6 +129,7 @@ namespace WebAPI.Controllers
                     model.Phone,
                     null);
                 await _unitOfWork.Users.Edit(user, id);
+                await _unitOfWork.Complete();
                 var displayUser = _mapper.Map<DisplayUserModel>(user);
                 return Ok(displayUser);
             }
@@ -146,6 +148,10 @@ namespace WebAPI.Controllers
             {
                 var user = _unitOfWork.Users.GetById(id).Result;
                 _unitOfWork.Users.Delete(user);
+                if (_unitOfWork.Complete().Result != 1)
+                {
+                    return BadRequest();
+                }
                 return Ok();
             }
             catch (Exception exp)

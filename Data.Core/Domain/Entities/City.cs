@@ -1,11 +1,10 @@
 ﻿using System;
 using EnsureThat;
 
-namespace Data.Core.Domain
+namespace Data.Core.Domain.Entities
 {
-    public class City
+    public class City : BaseEntity
     {
-        public Guid Id { get; private set; }
         public string Name { get; private set; }
         public string Abbreviation { get; private set; }
         public double Latitude { get; private set; }
@@ -15,7 +14,6 @@ namespace Data.Core.Domain
 
         public static City Create(string name, string abbreviation, double latitude, double longitude, Guid countryId)
         {
-            Validate(name, abbreviation, latitude, longitude, countryId);
             var city = new City
             {
                 Id = new Guid()

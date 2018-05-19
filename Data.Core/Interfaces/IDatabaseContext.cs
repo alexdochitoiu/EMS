@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 
-namespace Data.Persistence.Interfaces
+namespace Data.Core.Interfaces
 {
     public interface IDatabaseContext
     {

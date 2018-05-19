@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Data.Core.Domain;
 using System.Collections.Generic;
+using Data.Core.Domain.Entities;
 
 namespace Data.Core.Interfaces
 {

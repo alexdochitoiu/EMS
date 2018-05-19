@@ -1,11 +1,10 @@
 ﻿using System;
 using EnsureThat;
 
-namespace Data.Core.Domain
+namespace Data.Core.Domain.Entities
 {
-    public class Address
+    public class Address : BaseEntity
     {
-        public Guid Id { get; private set; }
         public Country Country { get; private set; }
         public City City { get; private set; }
         public string Street { get; private set; }
@@ -14,10 +13,10 @@ namespace Data.Core.Domain
 
         public static Address Create(Country country, City city, string street, string number, string zipCode)
         {
-            Validate(country, city, street, number, zipCode);
             var address = new Address
             {
-                Id = new Guid()
+                Id = new Guid(),
+                Created = DateTime.Now
             };
             address.Update(country, city, street, number, zipCode);
             return address;
@@ -31,6 +30,7 @@ namespace Data.Core.Domain
             Street = street;
             Number = number;
             ZipCode = zipCode;
+            Modified = DateTime.Now;
         }
         
         private static void Validate(Country country, City city, string street, string number, string zipCode)

@@ -5,7 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Seeders\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>
 

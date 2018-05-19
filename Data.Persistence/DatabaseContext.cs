@@ -1,5 +1,5 @@
 ﻿using Data.Core.Domain.Entities;
-using Data.Persistence.Interfaces;
+using Data.Core.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace Data.Persistence

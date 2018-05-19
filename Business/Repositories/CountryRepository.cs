@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Data.Core.Domain;
+using Data.Core.Domain.Entities;
 using Data.Core.Interfaces;
 using Data.Persistence;
 using Microsoft.EntityFrameworkCore;
@@ -9,9 +9,9 @@ namespace Business.Repositories
 {
     public class CountryRepository : GenericRepository<Country>, ICountryRepository
     {
-        private readonly DatabaseService _databaseService;
+        private readonly DatabaseContext _databaseService;
 
-        public CountryRepository(DatabaseService databaseService) : base(databaseService)
+        public CountryRepository(DatabaseContext databaseService) : base(databaseService)
         {
             _databaseService = databaseService;
         }

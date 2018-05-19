@@ -1,23 +1,22 @@
-﻿using EnsureThat;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using EnsureThat;
 
-namespace Data.Core.Domain
+namespace Data.Core.Domain.Entities
 {
-    public class Country
+    public class Country : BaseEntity
     {
-        public Guid Id { get; private set; }
         public string Name { get; private set; }
         public string Abbreviation { get; private set; }
         public IReadOnlyCollection<City> Cities { get; private set; }
 
         public static Country Create(string name, string abbreviation)
         {
-            Validate(name, abbreviation);
             var country = new Country
             {
                 Id = new Guid(),
-                Cities = new List<City>()
+                Cities = new List<City>(),
+                Created = DateTime.Now
             };
             country.Update(name, abbreviation);
             return country;
@@ -28,6 +27,7 @@ namespace Data.Core.Domain
             Validate(name, abbreviation);
             Name = name;
             Abbreviation = abbreviation;
+            Modified = DateTime.Now;
         }
 
         private static void Validate(string name, string abbreviation)

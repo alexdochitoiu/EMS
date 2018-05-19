@@ -7,9 +7,9 @@ namespace Business
 {
     public class UnitOfWork : IUnitOfWork
     {
-        private readonly DatabaseService _databaseService;
+        private readonly DatabaseContext _databaseService;
 
-        public UnitOfWork(DatabaseService databaseService)
+        public UnitOfWork(DatabaseContext databaseService)
         {
             _databaseService = databaseService;
             Users = new UserRepository(_databaseService);
