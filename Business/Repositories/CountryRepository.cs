@@ -9,20 +9,20 @@ namespace Business.Repositories
 {
     public class CountryRepository : GenericRepository<Country>, ICountryRepository
     {
-        private readonly DatabaseContext _databaseService;
+        private readonly IdentityContext _identityContext;
 
-        public CountryRepository(DatabaseContext databaseService) : base(databaseService)
+        public CountryRepository(IdentityContext identityContext) : base(identityContext)
         {
-            _databaseService = databaseService;
+            _identityContext = identityContext;
         }
 
         public async Task<Country> GetById(Guid id) =>
-            await _databaseService.Countries
+            await _identityContext.Countries
                     .Include(t => t.Cities)
                     .FirstOrDefaultAsync(t => t.Id == id);
 
         public async Task<Country> GetByName(string name) => 
-            await _databaseService.Countries
+            await _identityContext.Countries
                     .FirstOrDefaultAsync(t => t.Name == name);
     }
 }

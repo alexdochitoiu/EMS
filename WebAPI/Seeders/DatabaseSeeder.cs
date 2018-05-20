@@ -1,4 +1,4 @@
-﻿using Data.Persistence.Interfaces;
+﻿using Data.Persistence;
 
 namespace WebAPI.Seeders
 {
@@ -7,10 +7,10 @@ namespace WebAPI.Seeders
         private readonly CitiesSeeder _citiesSeeder;
         private readonly CountriesSeeder _countriesSeeder;
 
-        public DatabaseSeeder(IDatabaseContext databaseContext)
+        public DatabaseSeeder(IdentityContext identityContext)
         {
-            _citiesSeeder = new CitiesSeeder(databaseContext);
-            _countriesSeeder = new CountriesSeeder(databaseContext);
+            _citiesSeeder = new CitiesSeeder(identityContext);
+            _countriesSeeder = new CountriesSeeder(identityContext);
         }
 
         public void Seed()

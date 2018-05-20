@@ -1,27 +1,27 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Data.Core.Domain.Entities;
-using Data.Persistence.Interfaces;
+using Data.Persistence;
 
 namespace WebAPI.Seeders
 {
     public class CitiesSeeder
     {
-        private readonly IDatabaseContext _databaseContext;
+        private readonly IdentityContext _identityContext;
 
-        public CitiesSeeder(IDatabaseContext database)
+        public CitiesSeeder(IdentityContext identityContext)
         {
-            _databaseContext = database;
+            _identityContext = identityContext;
         }
 
         public void Seed()
         {
-            if (_databaseContext.Cities.Any()) return;
-            if (!_databaseContext.Countries.Any()) return;
+            if (_identityContext.Cities.Any()) return;
+            if (!_identityContext.Countries.Any()) return;
 
-            var countries = _databaseContext.Countries.ToList();
-            _databaseContext.Cities.AddRange(GetCities(countries));
-            _databaseContext.SaveChanges();
+            var countries = _identityContext.Countries.ToList();
+            _identityContext.Cities.AddRange(GetCities(countries));
+            _identityContext.SaveChangesAsync();
         }
 
         private static IEnumerable<City> GetCities(IEnumerable<Country> countries)

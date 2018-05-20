@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Data.Core.Domain.Entities;
+using Data.Core.Domain.Entities.Identity;
 using Data.Core.Interfaces;
 using Data.Persistence;
 using Microsoft.EntityFrameworkCore;
@@ -10,11 +10,11 @@ namespace Business.Repositories
 {
     public class UserRepository : GenericRepository<User>, IUserRepository
     {
-        private readonly DatabaseContext _databaseService;
+        private readonly IdentityContext _identityContext;
 
-        public UserRepository(DatabaseContext databaseService) : base(databaseService)
+        public UserRepository(IdentityContext identityContext) : base(identityContext)
         {
-            _databaseService = databaseService;
+            _identityContext = identityContext;
         }
 
         public async Task<IEnumerable<User>> GetByAge(int age)
@@ -28,7 +28,7 @@ namespace Business.Repositories
 
         public async Task<User> GetById(Guid id)
         {
-            return await _databaseService.Users
+            return await _identityContext.Users
                 .Include(t => t.Address)
                     .ThenInclude(a => a.Country)
                 .Include(t => t.Address)

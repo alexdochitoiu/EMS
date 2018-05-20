@@ -2,7 +2,7 @@
 using EnsureThat;
 using Microsoft.AspNetCore.Identity;
 
-namespace Data.Core.Domain.Entities
+namespace Data.Core.Domain.Entities.Identity
 {
     public class User : IdentityUser<Guid>
     {

@@ -1,25 +1,25 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Data.Core.Domain.Entities;
-using Data.Persistence.Interfaces;
+using Data.Persistence;
 
 namespace WebAPI.Seeders
 {
     public class CountriesSeeder
     {
-        private readonly IDatabaseContext _databaseContext;
+        private readonly IdentityContext _identityContext;
 
-        public CountriesSeeder(IDatabaseContext databaseService)
+        public CountriesSeeder(IdentityContext identityContext)
         {
-            _databaseContext = databaseService;
+            _identityContext = identityContext;
         }
 
         public void Seed()
         {
-            if (_databaseContext.Countries.Any()) return;
+            if (_identityContext.Countries.Any()) return;
 
-            _databaseContext.Countries.AddRange(GetCountries());
-            _databaseContext.SaveChanges();
+            _identityContext.Countries.AddRange(GetCountries());
+            _identityContext.SaveChangesAsync();
         }
 
         private static IEnumerable<Country> GetCountries()

@@ -90,7 +90,7 @@ namespace WebAPI.Controllers
                 var country = await _unitOfWork.Countries.GetByName(model.Country);
                 var city = await _unitOfWork.Cities.GetByName(model.City);
                 var address = Address.Create(country, city, model.Street, model.Number, model.ZipCode);
-                var user = Data.Core.Domain.Entities.User.Create(
+                var user = Data.Core.Domain.Entities.Identity.User.Create(
                     model.FirstName,
                     model.LastName,
                     model.Gender,

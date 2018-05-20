@@ -9,19 +9,19 @@ namespace Business.Repositories
 {
     public class CityRepository : GenericRepository<City>, ICityRepository
     {
-        private readonly DatabaseContext _databaseService;
+        private readonly IdentityContext _identityContext;
 
-        public CityRepository(DatabaseContext databaseService) : base(databaseService)
+        public CityRepository(IdentityContext identityContext) : base(identityContext)
         {
-            _databaseService = databaseService;
+            _identityContext = identityContext;
         }
 
         public async Task<City> GetById(Guid id) =>
-            await _databaseService.Cities
+            await _identityContext.Cities
                     .FirstOrDefaultAsync(t => t.Id == id);
 
         public async Task<City> GetByName(string name) => 
-            await _databaseService.Cities
+            await _identityContext.Cities
                     .FirstOrDefaultAsync(t => t.Name == name);
     }
 }

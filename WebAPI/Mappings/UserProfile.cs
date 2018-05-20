@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Data.Core.Domain.Entities;
+using Data.Core.Domain.Entities.Identity;
 using WebAPI.Models.UserModels;
 
 namespace WebAPI.Mappings

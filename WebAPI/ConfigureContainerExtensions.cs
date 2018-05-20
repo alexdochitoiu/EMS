@@ -1,8 +1,7 @@
 ﻿using Business;
-using Data.Core.Domain.Entities;
+using Data.Core.Domain.Entities.Identity;
 using Data.Core.Interfaces;
 using Data.Persistence;
-using Data.Persistence.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
@@ -16,16 +15,12 @@ namespace WebAPI
     {
         public static void AddDbContext(this IServiceCollection services, IConfiguration configuration, string keyConnectionString)
         {
-            services.AddTransient<IDatabaseContext, DatabaseContext>();
-
             var dbConnection = configuration.GetConnectionString(keyConnectionString);
-            services.AddDbContext<DatabaseContext>(options =>
-                options.UseSqlServer(dbConnection));
 
             services.AddDbContext<IdentityContext>(options =>
                 options.UseSqlite(dbConnection));
 
-            services.AddIdentity<User, UserRole>()
+            services.AddIdentity<User, Role>()
                 .AddEntityFrameworkStores<IdentityContext>();
         }
 
