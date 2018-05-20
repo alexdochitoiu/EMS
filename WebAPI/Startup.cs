@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using WebAPI.Infrastructure;
 using WebAPI.Seeders;
 
 namespace WebAPI
@@ -18,7 +19,10 @@ namespace WebAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext(Configuration, "EMSConnection");
+            services.AddSingleton(Configuration);
+            services.AddDbContext(Configuration);
+            services.AddJwtAuthentication(Configuration);
+            services.SetPasswordPolicy();
             services.AddAutoMapper();
             services.AddUnitOfWork();
             services.AddTrasitentServices();
@@ -29,6 +33,8 @@ namespace WebAPI
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, DatabaseSeeder seeder)
         {
+            app.UseAuthentication();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

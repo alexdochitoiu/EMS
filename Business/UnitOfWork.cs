@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Business.Repositories;
+using Data.Core.Domain.Entities.Identity;
 using Data.Core.Interfaces;
 using Data.Persistence;
 
@@ -16,7 +17,7 @@ namespace Business
         public UnitOfWork(IdentityContext identityContext)
         {
             _identityContext = identityContext;
-
+            
             Users = new UserRepository(_identityContext);
             Countries = new CountryRepository(_identityContext);
             Cities = new CityRepository(_identityContext);

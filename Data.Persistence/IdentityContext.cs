@@ -14,6 +14,7 @@ namespace Data.Persistence
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+
             builder.Entity<User>().ToTable("Users");
             builder.Entity<RoleClaim>().ToTable("RoleClaims");
             builder.Entity<Role>().ToTable("Roles");
