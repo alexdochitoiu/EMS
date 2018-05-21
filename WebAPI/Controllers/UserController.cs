@@ -5,7 +5,6 @@ using AutoMapper;
 using Data.Core.Domain.Entities;
 using Data.Core.Domain.Entities.Identity;
 using Data.Core.Interfaces;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebAPI.Models.UserModels;
@@ -17,13 +16,11 @@ namespace WebAPI.Controllers
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        private readonly UserManager<User> _userManager;
 
-        public UserController(IUnitOfWork unitOfWork, IMapper mapper, UserManager<User> userManager)
+        public UserController(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
-            _userManager = userManager;
         }
 
         // GET api/users
@@ -94,13 +91,13 @@ namespace WebAPI.Controllers
                 var country = await _unitOfWork.Countries.GetByNameAsync(model.Country);
                 var city = await _unitOfWork.Cities.GetByNameAsync(model.City);
                 var address = Address.Create(country, city, model.Street, model.Number, model.ZipCode);
-                var user = Data.Core.Domain.Entities.Identity.User.Create(
+                var user = ApplicationUser.Create(
                     model.FirstName,
                     model.LastName,
                     model.Gender,
                     model.DateOfBirth,
                     model.Email,
-                    "Secret",
+                    model.Username,
                     model.Phone,
                     address);
                 await _unitOfWork.Users.AddAsync(user);
@@ -129,7 +126,7 @@ namespace WebAPI.Controllers
                     model.Gender,
                     model.DateOfBirth,
                     model.Email,
-                    "Secret",
+                    model.Username,
                     model.Phone,
                     null);
                 await _unitOfWork.Users.EditAsync(user, id);

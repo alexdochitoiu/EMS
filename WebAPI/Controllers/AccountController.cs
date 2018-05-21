@@ -1,40 +1,84 @@
-﻿using System;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
+﻿using System.Linq;
+using System.Threading.Tasks;
+using Data.Core.Domain.Entities.Identity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
-using static Dna.FrameworkDI;
+using WebAPI.Infrastructure;
+using WebAPI.Models.AccountModels;
 
 namespace WebAPI.Controllers
 {
     [Route("api/account")]
     public class AccountController : Controller
     {
-        [HttpGet("login", Name="LogIn")]
-        public IActionResult LogIn()
+        private readonly UserManager<ApplicationUser> _userManager;
+
+        public AccountController(UserManager<ApplicationUser> userManager)
         {
-            var claims = new[]
+            _userManager = userManager;
+        }
+        
+        [HttpPost("register", Name = "Register")]
+        public async Task<IActionResult> RegisterAsync([FromBody]RegisterCredentialsModel registerCredentials)
+        {
+            const string invalidErrorMessage = "Please provide all required details to register for an account!";
+            if (registerCredentials == null) return BadRequest(invalidErrorMessage);
+
+            var user = ApplicationUser.Create(
+                registerCredentials.FirstName,
+                registerCredentials.LastName,
+                registerCredentials.Gender,
+                registerCredentials.DateOfBirth,
+                registerCredentials.Email,
+                registerCredentials.Username,
+                registerCredentials.Phone,
+                registerCredentials.Address);
+
+            var result = await _userManager.CreateAsync(user, registerCredentials.Password);
+
+            if (!result.Succeeded) return BadRequest(result.Errors.ToList());
+
+            var emailConfirmationToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            // TODO: Email verification code
+            // ...
+
+            return Ok(new RegisterResultModel
             {
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim(JwtRegisteredClaimNames.Email, "alexdochitoiu@gmail.com")
-            };
+                FirstName = user.FirstName,
+                Email = user.Email,
+                LastName = user.LastName,
+                Username = user.UserName,
+                Token = user.GenerateJwtToken()
+            });
+        }
 
-            var credentials = new SigningCredentials(
-                new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT:SecurityKey"])),
-                SecurityAlgorithms.HmacSha256);
+        [HttpPost("login", Name="Login")]
+        public async Task<IActionResult> LoginAsync([FromBody]LoginCredentialsModel loginCredentials)
+        {
+            var invalidErrorMessage = "Invalid username or password";
+            if (string.IsNullOrWhiteSpace(loginCredentials?.EmailOrUsername))
+                return BadRequest(invalidErrorMessage);
 
-            var token = new JwtSecurityToken(
-                issuer: Configuration["JWT:Issuer"],
-                audience: Configuration["JWT:Audience"],
-                claims: claims,
-                expires: DateTime.Now.AddMonths(1),
-                signingCredentials: credentials
-                );
+            var isEmail = loginCredentials.EmailOrUsername.Contains("@");
 
-            return Ok(new
+            var user = isEmail ?
+                await _userManager.FindByEmailAsync(loginCredentials.EmailOrUsername) :
+                await _userManager.FindByNameAsync(loginCredentials.EmailOrUsername);
+            if (user == null)
+                return BadRequest(invalidErrorMessage);
+
+            var isValidPassword = await _userManager.CheckPasswordAsync(user, loginCredentials.Password);
+
+            if (!isValidPassword)
+                return BadRequest(invalidErrorMessage);
+
+            return Ok(new LoginResultModel
             {
-                token = new JwtSecurityTokenHandler().WriteToken(token)
+                FirstName = user.FirstName,
+                Email = user.Email,
+                LastName = user.LastName,
+                Username = user.UserName,
+                Token = user.GenerateJwtToken()
             });
         }
     }

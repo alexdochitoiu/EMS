@@ -5,9 +5,9 @@ using Data.Core.Domain.Entities.Identity;
 
 namespace Data.Core.Interfaces
 {
-    public interface IUserRepository : IGenericRepository<User>
+    public interface IUserRepository : IGenericRepository<ApplicationUser>
     {
-        Task<User> GetByIdAsync(Guid id);
-        Task<IEnumerable<User>> GetByAgeAsync(int age);
+        Task<ApplicationUser> GetByIdAsync(Guid id);
+        Task<IEnumerable<ApplicationUser>> GetByAgeAsync(int age);
     }
 }

@@ -24,7 +24,7 @@ namespace WebAPI.Infrastructure
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlite(dbConnection));
 
-            services.AddIdentity<User, Role>()
+            services.AddIdentity<ApplicationUser, Role>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
         }
@@ -66,7 +66,7 @@ namespace WebAPI.Infrastructure
             });
         }
 
-        public static void SetPasswordPolicy(this IServiceCollection services)
+        public static void SetRegisterPolicy(this IServiceCollection services)
         {
             services.Configure<IdentityOptions>(options =>
             {
@@ -75,6 +75,7 @@ namespace WebAPI.Infrastructure
                 options.Password.RequireLowercase = true;
                 options.Password.RequireUppercase = false;
                 options.Password.RequireNonAlphanumeric = false;
+                options.User.RequireUniqueEmail = true;
             });
         }
 

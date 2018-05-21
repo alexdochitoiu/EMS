@@ -7,19 +7,19 @@ namespace WebAPI.Seeders
 {
     public class CountriesSeeder
     {
-        private readonly IdentityContext _identityContext;
+        private readonly ApplicationDbContext _context;
 
-        public CountriesSeeder(IdentityContext identityContext)
+        public CountriesSeeder(ApplicationDbContext context)
         {
-            _identityContext = identityContext;
+            _context = context;
         }
 
         public void Seed()
         {
-            if (_identityContext.Countries.Any()) return;
+            if (_context.Countries.Any()) return;
 
-            _identityContext.Countries.AddRange(GetCountries());
-            _identityContext.SaveChangesAsync();
+            _context.Countries.AddRange(GetCountries());
+            _context.SaveChangesAsync();
         }
 
         private static IEnumerable<Country> GetCountries()

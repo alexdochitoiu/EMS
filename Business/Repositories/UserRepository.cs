@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Business.Repositories
 {
-    public class UserRepository : GenericRepository<User>, IUserRepository
+    public class UserRepository : GenericRepository<ApplicationUser>, IUserRepository
     {
         private readonly ApplicationDbContext _context;
 
@@ -17,16 +17,16 @@ namespace Business.Repositories
             _context = context;
         }
 
-        public async Task<IEnumerable<User>> GetByAgeAsync(int age)
+        public async Task<IEnumerable<ApplicationUser>> GetByAgeAsync(int age)
         {
-            return await Find(u => u.Age == age,
-                                     t => t.Include(user => user.Address)
-                                                .ThenInclude(address => address.Country)
-                                           .Include(user => user.Address)
-                                                .ThenInclude(address => address.City));
+            return await FindAsync(u => u.Age == age,
+                t => t.Include(user => user.Address)
+                        .ThenInclude(address => address.Country)
+                    .Include(user => user.Address)
+                        .ThenInclude(address => address.City));
         }
 
-        public async Task<User> GetByIdAsync(Guid id)
+        public async Task<ApplicationUser> GetByIdAsync(Guid id)
         {
             return await _context.Users
                 .Include(t => t.Address)

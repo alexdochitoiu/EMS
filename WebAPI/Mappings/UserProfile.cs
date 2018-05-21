@@ -8,8 +8,8 @@ namespace WebAPI.Mappings
     {
         public UserProfile()
         {
-            CreateMap<User, CreatingUserModel>().ReverseMap();
-            CreateMap<User, DisplayUserModel>().ReverseMap();
+            CreateMap<ApplicationUser, CreatingUserModel>().ReverseMap();
+            CreateMap<ApplicationUser, DisplayUserModel>().ReverseMap();
         }
     }
 }

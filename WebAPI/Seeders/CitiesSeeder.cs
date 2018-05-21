@@ -7,21 +7,21 @@ namespace WebAPI.Seeders
 {
     public class CitiesSeeder
     {
-        private readonly IdentityContext _identityContext;
+        private readonly ApplicationDbContext _context;
 
-        public CitiesSeeder(IdentityContext identityContext)
+        public CitiesSeeder(ApplicationDbContext context)
         {
-            _identityContext = identityContext;
+            _context = context;
         }
 
         public void Seed()
         {
-            if (_identityContext.Cities.Any()) return;
-            if (!_identityContext.Countries.Any()) return;
+            if (_context.Cities.Any()) return;
+            if (!_context.Countries.Any()) return;
 
-            var countries = _identityContext.Countries.ToList();
-            _identityContext.Cities.AddRange(GetCities(countries));
-            _identityContext.SaveChangesAsync();
+            var countries = _context.Countries.ToList();
+            _context.Cities.AddRange(GetCities(countries));
+            _context.SaveChangesAsync();
         }
 
         private static IEnumerable<City> GetCities(IEnumerable<Country> countries)

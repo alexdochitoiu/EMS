@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Data.Persistence
 {
-    public sealed class ApplicationDbContext : IdentityDbContext<User, Role, Guid, UserClaim, UserRole, UserLogin, RoleClaim, UserToken>
+    public sealed class ApplicationDbContext : IdentityDbContext<ApplicationUser, Role, Guid, UserClaim, UserRole, UserLogin, RoleClaim, UserToken>
     {
         public ApplicationDbContext(DbContextOptions options) 
             : base(options) => Database.EnsureCreated();
@@ -15,7 +15,7 @@ namespace Data.Persistence
         {
             base.OnModelCreating(builder);
 
-            builder.Entity<User>().ToTable("Users");
+            builder.Entity<ApplicationUser>().ToTable("Users");
             builder.Entity<RoleClaim>().ToTable("RoleClaims");
             builder.Entity<Role>().ToTable("Roles");
             builder.Entity<UserClaim>().ToTable("UserClaims");

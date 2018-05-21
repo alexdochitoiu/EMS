@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Data.Core.Domain.Entities.Identity
 {
-    public class User : IdentityUser<Guid>
+    public class ApplicationUser : IdentityUser<Guid>
     {
         public string FirstName { get; private set; }
         public string LastName { get; private set; }
@@ -28,43 +28,43 @@ namespace Data.Core.Domain.Entities.Identity
         }
 
 
-        public static User Create(string firstName, string lastName, GenderEnum gender, DateTime dateOfBirth,
-            string email, string password, string phone, Address address)
+        public static ApplicationUser Create(string firstName, string lastName, GenderEnum gender, DateTime dateOfBirth,
+            string email, string username, string phone, Address address)
         {
-            var user = new User
+            var user = new ApplicationUser
             {
                 Id = new Guid(),
                 Created = DateTime.Now
             };
-            user.Update(firstName, lastName, gender, dateOfBirth, email, password, phone, address);
+            user.Update(firstName, lastName, gender, dateOfBirth, email, username, phone, address);
             return user;
         }
 
         public void Update(string firstName, string lastName, GenderEnum gender, DateTime dateOfBirth,
-            string email, string password, string phone, Address address)
+            string email, string username, string phone, Address address)
         {
-            Validate(firstName, lastName, gender, dateOfBirth, email, password, phone, address);
+            Validate(firstName, lastName, gender, dateOfBirth, email, username, phone, address);
 
             FirstName = firstName;
             LastName = lastName;
             Gender = gender;
             DateOfBirth = dateOfBirth;
             Email = email;
-            PasswordHash = password;
+            UserName = username;
             PhoneNumber = phone;
             Address = address;
             Modified = DateTime.Now;
         }
 
         private static void Validate(string firstName, string lastName, GenderEnum gender, DateTime dateOfBirth,
-            string email, string password, string phone, Address address)
+            string email, string username, string phone, Address address)
         {
             Ensure.That(firstName).IsNotNullOrEmpty();
             Ensure.That(lastName).IsNotNullOrEmpty();
             Ensure.That(Enum.IsDefined(typeof(GenderEnum), gender)).IsTrue();
             Ensure.That(dateOfBirth).IsLt(DateTime.Now);
             Ensure.That(email).IsNotNullOrEmpty();
-            Ensure.That(password).IsNotNullOrEmpty();
+            Ensure.That(username).IsNotNullOrEmpty();
             Ensure.That(phone).IsNotNullOrEmpty();
             Ensure.That(address).IsNotNull();
         }
