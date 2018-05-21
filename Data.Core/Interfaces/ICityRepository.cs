@@ -6,7 +6,7 @@ namespace Data.Core.Interfaces
 {
     public interface ICityRepository : IGenericRepository<City>
     {
-        Task<City> GetById(Guid id);
-        Task<City> GetByName(string name);
+        Task<City> GetByIdAsync(Guid id);
+        Task<City> GetByNameAsync(string name);
     }
 }

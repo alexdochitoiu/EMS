@@ -1,6 +1,5 @@
 ﻿using System.Threading.Tasks;
 using Business.Repositories;
-using Data.Core.Domain.Entities.Identity;
 using Data.Core.Interfaces;
 using Data.Persistence;
 
@@ -8,23 +7,23 @@ namespace Business
 {
     public class UnitOfWork : IUnitOfWork
     {
-        private readonly IdentityContext _identityContext;
+        private readonly ApplicationDbContext _context;
 
         public IUserRepository Users { get; }
         public ICountryRepository Countries { get; }
         public ICityRepository Cities { get; }
 
-        public UnitOfWork(IdentityContext identityContext)
+        public UnitOfWork(ApplicationDbContext context)
         {
-            _identityContext = identityContext;
+            _context = context;
             
-            Users = new UserRepository(_identityContext);
-            Countries = new CountryRepository(_identityContext);
-            Cities = new CityRepository(_identityContext);
+            Users = new UserRepository(_context);
+            Countries = new CountryRepository(_context);
+            Cities = new CityRepository(_context);
         }
 
-        public async Task<int> Complete() => await _identityContext.SaveChangesAsync();
+        public async Task<int> CompleteAsync() => await _context.SaveChangesAsync();
 
-        public void Dispose() => _identityContext.Dispose();
+        public void Dispose() => _context.Dispose();
     }
 }

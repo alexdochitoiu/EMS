@@ -8,6 +8,6 @@ namespace Data.Core.Interfaces
         IUserRepository Users { get; }
         ICountryRepository Countries { get; }
         ICityRepository Cities { get; }
-        Task<int> Complete();
+        Task<int> CompleteAsync();
     }
 }

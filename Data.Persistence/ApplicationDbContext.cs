@@ -6,9 +6,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Data.Persistence
 {
-    public sealed class IdentityContext : IdentityDbContext<User, Role, Guid, UserClaim, UserRole, UserLogin, RoleClaim, UserToken>
+    public sealed class ApplicationDbContext : IdentityDbContext<User, Role, Guid, UserClaim, UserRole, UserLogin, RoleClaim, UserToken>
     {
-        public IdentityContext(DbContextOptions options) 
+        public ApplicationDbContext(DbContextOptions options) 
             : base(options) => Database.EnsureCreated();
 
         protected override void OnModelCreating(ModelBuilder builder)

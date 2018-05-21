@@ -29,7 +29,7 @@ namespace WebAPI.Controllers
         {
             try
             {
-                var countries = await _unitOfWork.Countries.GetAll();
+                var countries = await _unitOfWork.Countries.GetAllAsync();
                 var displayCountries = _mapper.Map<List<DisplayCountryModel>>(countries);
                 return Ok(displayCountries);
             }
@@ -47,7 +47,7 @@ namespace WebAPI.Controllers
         {
             try
             {
-                var country = await _unitOfWork.Countries.GetById(id);
+                var country = await _unitOfWork.Countries.GetByIdAsync(id);
                 var displayCountry = _mapper.Map<DisplayCountryModel>(country);
                 return Ok(displayCountry);
             }
@@ -65,7 +65,7 @@ namespace WebAPI.Controllers
         {
             try
             {
-                var country = await _unitOfWork.Countries.GetByName(name);
+                var country = await _unitOfWork.Countries.GetByNameAsync(name);
                 var displayCountry = _mapper.Map<DisplayCountryModel>(country);
                 return Ok(displayCountry);
             }
@@ -83,7 +83,7 @@ namespace WebAPI.Controllers
         {
             try
             {
-                var country = await _unitOfWork.Countries.GetById(id);
+                var country = await _unitOfWork.Countries.GetByIdAsync(id);
                 var cities = country.Cities.ToList();
                 var displayCities = _mapper.Map<List<DisplayCityModel>>(cities);
                 return Ok(displayCities);

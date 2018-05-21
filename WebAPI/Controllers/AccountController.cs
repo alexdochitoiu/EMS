@@ -3,21 +3,14 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using static Dna.FrameworkDI;
 
 namespace WebAPI.Controllers
 {
     [Route("api/account")]
     public class AccountController : Controller
     {
-        private readonly IConfiguration _configuration;
-
-        public AccountController(IConfiguration configuration)
-        {
-            _configuration = configuration;
-        }
-        
         [HttpGet("login", Name="LogIn")]
         public IActionResult LogIn()
         {
@@ -28,12 +21,12 @@ namespace WebAPI.Controllers
             };
 
             var credentials = new SigningCredentials(
-                new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:SecurityKey"])),
+                new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT:SecurityKey"])),
                 SecurityAlgorithms.HmacSha256);
 
             var token = new JwtSecurityToken(
-                issuer: _configuration["JWT:Issuer"],
-                audience: _configuration["JWT:Audience"],
+                issuer: Configuration["JWT:Issuer"],
+                audience: Configuration["JWT:Audience"],
                 claims: claims,
                 expires: DateTime.Now.AddMonths(1),
                 signingCredentials: credentials

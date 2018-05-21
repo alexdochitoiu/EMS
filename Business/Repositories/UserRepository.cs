@@ -10,14 +10,14 @@ namespace Business.Repositories
 {
     public class UserRepository : GenericRepository<User>, IUserRepository
     {
-        private readonly IdentityContext _identityContext;
+        private readonly ApplicationDbContext _context;
 
-        public UserRepository(IdentityContext identityContext) : base(identityContext)
+        public UserRepository(ApplicationDbContext context) : base(context)
         {
-            _identityContext = identityContext;
+            _context = context;
         }
 
-        public async Task<IEnumerable<User>> GetByAge(int age)
+        public async Task<IEnumerable<User>> GetByAgeAsync(int age)
         {
             return await Find(u => u.Age == age,
                                      t => t.Include(user => user.Address)
@@ -26,9 +26,9 @@ namespace Business.Repositories
                                                 .ThenInclude(address => address.City));
         }
 
-        public async Task<User> GetById(Guid id)
+        public async Task<User> GetByIdAsync(Guid id)
         {
-            return await _identityContext.Users
+            return await _context.Users
                 .Include(t => t.Address)
                     .ThenInclude(a => a.Country)
                 .Include(t => t.Address)

@@ -7,10 +7,10 @@ namespace WebAPI.Seeders
         private readonly CitiesSeeder _citiesSeeder;
         private readonly CountriesSeeder _countriesSeeder;
 
-        public DatabaseSeeder(IdentityContext identityContext)
+        public DatabaseSeeder(ApplicationDbContext context)
         {
-            _citiesSeeder = new CitiesSeeder(identityContext);
-            _countriesSeeder = new CountriesSeeder(identityContext);
+            _citiesSeeder = new CitiesSeeder(context);
+            _countriesSeeder = new CountriesSeeder(context);
         }
 
         public void Seed()

@@ -27,7 +27,7 @@ namespace WebAPI.Controllers
         {
             try
             {
-                var cities = await _unitOfWork.Cities.GetAll();
+                var cities = await _unitOfWork.Cities.GetAllAsync();
                 var displayCities = _mapper.Map<List<DisplayCityModel>>(cities);
                 return Ok(displayCities);
             }
@@ -45,7 +45,7 @@ namespace WebAPI.Controllers
         {
             try
             {
-                var city = await _unitOfWork.Cities.GetById(id);
+                var city = await _unitOfWork.Cities.GetByIdAsync(id);
                 var displayCity = _mapper.Map<DisplayCityModel>(city);
                 return Ok(displayCity);
             }
@@ -63,7 +63,7 @@ namespace WebAPI.Controllers
         {
             try
             {
-                var city = await _unitOfWork.Cities.GetByName(name);
+                var city = await _unitOfWork.Cities.GetByNameAsync(name);
                 var displayCity = _mapper.Map<DisplayCityModel>(city);
                 return Ok(displayCity);
             }

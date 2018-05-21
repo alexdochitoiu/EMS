@@ -11,20 +11,21 @@ using Microsoft.IdentityModel.Tokens;
 using Swashbuckle.AspNetCore.Swagger;
 using WebAPI.Mappings;
 using WebAPI.Seeders;
+using static Dna.FrameworkDI;
 
 namespace WebAPI.Infrastructure
 {
     public static class ConfigureContainerExtensions
     {
-        public static void AddDbContext(this IServiceCollection services, IConfiguration configuration)
+        public static void AddDbContext(this IServiceCollection services)
         {
-            var dbConnection = configuration.GetConnectionString("EMSConnection");
+            var dbConnection = Configuration.GetConnectionString("EMSConnection");
 
-            services.AddDbContext<IdentityContext>(options =>
+            services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlite(dbConnection));
 
             services.AddIdentity<User, Role>()
-                .AddEntityFrameworkStores<IdentityContext>()
+                .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
         }
 
@@ -77,7 +78,7 @@ namespace WebAPI.Infrastructure
             });
         }
 
-        public static void AddJwtAuthentication(this IServiceCollection services, IConfiguration configuration)
+        public static void AddJwtAuthentication(this IServiceCollection services)
         {
             services.AddAuthentication()
                 .AddJwtBearer(options =>
@@ -88,9 +89,9 @@ namespace WebAPI.Infrastructure
                         ValidateAudience = true,
                         ValidateLifetime = true,
                         ValidateIssuerSigningKey = true,
-                        ValidIssuer = configuration["JWT:Issuer"],
-                        ValidAudience = configuration["JWT:Audience"],
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:SecretKey"]))
+                        ValidIssuer = Configuration["JWT:Issuer"],
+                        ValidAudience = Configuration["JWT:Audience"],
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT:SecretKey"]))
                     };
                 });
         }

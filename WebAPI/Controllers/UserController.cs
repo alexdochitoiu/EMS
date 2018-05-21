@@ -33,7 +33,7 @@ namespace WebAPI.Controllers
         {
             try
             {
-                var users = await _unitOfWork.Users.GetAll(
+                var users = await _unitOfWork.Users.GetAllAsync(
                       t => t.Include(user => user.Address)
                                 .ThenInclude(address => address.Country)
                             .Include(user => user.Address)
@@ -55,7 +55,7 @@ namespace WebAPI.Controllers
         {
             try
             {
-                var user = await _unitOfWork.Users.GetById(id);
+                var user = await _unitOfWork.Users.GetByIdAsync(id);
                 var displayUser = _mapper.Map<DisplayUserModel>(user);
                 return Ok(displayUser);
             }
@@ -73,7 +73,7 @@ namespace WebAPI.Controllers
         {
             try
             {
-                var user = await _unitOfWork.Users.GetByAge(age);
+                var user = await _unitOfWork.Users.GetByAgeAsync(age);
                 var displayUsers = _mapper.Map<List<DisplayUserModel>>(user);
                 return Ok(displayUsers);
             }
@@ -91,8 +91,8 @@ namespace WebAPI.Controllers
         {
             try
             {
-                var country = await _unitOfWork.Countries.GetByName(model.Country);
-                var city = await _unitOfWork.Cities.GetByName(model.City);
+                var country = await _unitOfWork.Countries.GetByNameAsync(model.Country);
+                var city = await _unitOfWork.Cities.GetByNameAsync(model.City);
                 var address = Address.Create(country, city, model.Street, model.Number, model.ZipCode);
                 var user = Data.Core.Domain.Entities.Identity.User.Create(
                     model.FirstName,
@@ -103,8 +103,8 @@ namespace WebAPI.Controllers
                     "Secret",
                     model.Phone,
                     address);
-                await _unitOfWork.Users.Add(user);
-                await _unitOfWork.Complete();
+                await _unitOfWork.Users.AddAsync(user);
+                await _unitOfWork.CompleteAsync();
                 var displayUser = _mapper.Map<DisplayUserModel>(user);
                 return Ok(displayUser);
             }
@@ -122,7 +122,7 @@ namespace WebAPI.Controllers
         {
             try
             {
-                var user = await _unitOfWork.Users.GetById(id);
+                var user = await _unitOfWork.Users.GetByIdAsync(id);
                 user.Update(
                     model.FirstName,
                     model.LastName,
@@ -132,8 +132,8 @@ namespace WebAPI.Controllers
                     "Secret",
                     model.Phone,
                     null);
-                await _unitOfWork.Users.Edit(user, id);
-                await _unitOfWork.Complete();
+                await _unitOfWork.Users.EditAsync(user, id);
+                await _unitOfWork.CompleteAsync();
                 var displayUser = _mapper.Map<DisplayUserModel>(user);
                 return Ok(displayUser);
             }
@@ -150,9 +150,9 @@ namespace WebAPI.Controllers
         {
             try
             {
-                var user = _unitOfWork.Users.GetById(id).Result;
+                var user = _unitOfWork.Users.GetByIdAsync(id).Result;
                 _unitOfWork.Users.Delete(user);
-                if (_unitOfWork.Complete().Result != 1)
+                if (_unitOfWork.CompleteAsync().Result != 1)
                 {
                     return BadRequest();
                 }
