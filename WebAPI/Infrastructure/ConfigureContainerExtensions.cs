@@ -5,13 +5,13 @@ using Data.Core.Interfaces;
 using Data.Persistence;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Swashbuckle.AspNetCore.Swagger;
+using WebAPI.Infrastructure.Email.SendGrid;
 using WebAPI.Mappings;
 using WebAPI.Seeders;
-using static Dna.FrameworkDI;
 
 namespace WebAPI.Infrastructure
 {
@@ -19,7 +19,7 @@ namespace WebAPI.Infrastructure
     {
         public static void AddDbContext(this IServiceCollection services)
         {
-            var dbConnection = Configuration.GetConnectionString("EMSConnection");
+            var dbConnection = IocContainer.Configuration.GetConnectionString("EMSConnection");
 
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlite(dbConnection));
@@ -50,6 +50,7 @@ namespace WebAPI.Infrastructure
         public static void AddTrasitentServices(this IServiceCollection services)
         {
             services.AddTransient<DatabaseSeeder>();
+            services.AddTransient<IEmailSender, SendGridEmailSender>();
         }
 
         public static void AddSwagger(this IServiceCollection services)
@@ -90,9 +91,9 @@ namespace WebAPI.Infrastructure
                         ValidateAudience = true,
                         ValidateLifetime = true,
                         ValidateIssuerSigningKey = true,
-                        ValidIssuer = Configuration["JWT:Issuer"],
-                        ValidAudience = Configuration["JWT:Audience"],
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT:SecretKey"]))
+                        ValidIssuer = IocContainer.Configuration["JWT:Issuer"],
+                        ValidAudience = IocContainer.Configuration["JWT:Audience"],
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(IocContainer.Configuration["JWT:SecretKey"]))
                     };
                 });
         }

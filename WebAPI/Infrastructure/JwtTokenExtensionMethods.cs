@@ -4,7 +4,6 @@ using System.Security.Claims;
 using System.Text;
 using Data.Core.Domain.Entities.Identity;
 using Microsoft.IdentityModel.Tokens;
-using static Dna.FrameworkDI;
 
 namespace WebAPI.Infrastructure
 {
@@ -19,12 +18,12 @@ namespace WebAPI.Infrastructure
             };
 
             var credentials = new SigningCredentials(
-                new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT:SecurityKey"])),
+                new SymmetricSecurityKey(Encoding.UTF8.GetBytes(IocContainer.Configuration["JWT:SecurityKey"])),
                 SecurityAlgorithms.HmacSha256);
 
             var token = new JwtSecurityToken(
-                issuer: Configuration["JWT:Issuer"],
-                audience: Configuration["JWT:Audience"],
+                issuer: IocContainer.Configuration["JWT:Issuer"],
+                audience: IocContainer.Configuration["JWT:Audience"],
                 claims: claims,
                 expires: DateTime.Now.AddMonths(1),
                 signingCredentials: credentials
