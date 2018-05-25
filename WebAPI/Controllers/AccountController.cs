@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
+using System.Web;
 using Data.Core.Domain.Entities;
 using Data.Core.Domain.Entities.Identity;
 using Data.Core.Interfaces;
@@ -54,7 +55,9 @@ namespace WebAPI.Controllers
 
             var emailConfirmationToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
             var confirmationUrl = 
-                $"http://{Request.Host.Value}/api/account/verify/email/{user.Id}/{emailConfirmationToken}";
+                $"http://{Request.Host.Value}/api/account/verify/email/" +
+                $"{HttpUtility.UrlEncode(user.Id.ToString())}/" +
+                $"{HttpUtility.UrlEncode(emailConfirmationToken)}";
             await EmsEmailSender.SendVerificationEmailAsync(user.FirstName, user.Email, confirmationUrl);
 
             return Ok(new RegisterResultModel
