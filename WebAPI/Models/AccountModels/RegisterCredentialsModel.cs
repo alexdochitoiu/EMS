@@ -1,6 +1,6 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using Data.Core.Domain;
-using Data.Core.Domain.Entities;
 
 namespace WebAPI.Models.AccountModels
 {
@@ -10,7 +10,15 @@ namespace WebAPI.Models.AccountModels
         public string LastName { get; set; }
         public string Username { get; set; }
         public string Email { get; set; }
+
+
+        [DataType(DataType.Password)]
         public string Password { get; set; }
+
+        [DataType(DataType.Password)]
+        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+        public string ConfirmPassword { get; set; }
+
         public GenderEnum Gender { get; set; }
         public DateTime DateOfBirth { get; set; }
         public string Phone { get; set; }

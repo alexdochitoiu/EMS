@@ -73,12 +73,15 @@ namespace WebAPI.Controllers
         [HttpGet("verify/email/{userId}/{emailToken}", Name = "VerifyEmail")]
         public async Task<IActionResult> VerifyEmailAsync(string userId, string emailToken)
         {
+            emailToken = emailToken.Replace("%2f", "/").Replace("%2F", "/");
+
             var user = await _userManager.FindByIdAsync(userId);
             if (user == null) return BadRequest("User not found");
+            if (user.EmailConfirmed) return BadRequest("Email already verified");
 
             var result = await _userManager.ConfirmEmailAsync(user, emailToken);
-
             if (result.Succeeded) return Ok("Email verified");
+
             return BadRequest("Invalid email verification token");
         }
 
