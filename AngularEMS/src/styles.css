@@ -1,0 +1,55 @@
+/* You can add global styles to this file, and also import other style files */
+body {
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-content: stretch;
+  align-items: stretch;
+  height: 100vh;
+}
+
+app-root {
+  order: 0;
+  flex: 1 1 auto;
+  align-self: auto;
+  display: block;
+  background: #D8D8D8;
+}
+
+/* Add transition to drop down menus */
+.dropdown .dropdown-menu {
+  -webkit-transition: all 0.3s;
+  -moz-transition: all 0.3s;
+  -ms-transition: all 0.3s;
+  -o-transition: all 0.3s;
+  transition: all 0.3s;
+
+  max-height: 0;
+  display: block;
+  overflow: hidden;
+  opacity: 0;
+}
+
+.dropdown:hover .dropdown-menu {
+  max-height: 200px;
+  opacity: 1;
+}
+
+.k-state-selected {
+  background: #0d9e73 !important;
+  border-color: #085F45 !important;
+}
+
+.btn-success {
+  border-color: #0d9e73 !important;
+  background: #0d9e73 !important;
+}
+
+.btn-success:hover,
+.btn-success:active,
+.btn-success:visited,
+.btn-success:focus {
+  border-color: #067A56 !important;
+  background: #067A56 !important;
+}

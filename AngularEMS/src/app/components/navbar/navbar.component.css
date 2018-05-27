@@ -1,0 +1,52 @@
+.nav-top {
+  background-color: #0d9e73;
+  height: 40px;
+}
+.container {
+  width: 1200px;
+  margin: 0 auto;
+}
+.social-icon {
+  width: 30px;
+  height: 30px;
+  text-align: center;
+  font-size: 14px;
+  border-radius: 50%;
+  border: 1px solid white;
+  color: white !important;
+  margin: 0 6px;
+  transition: 0.3s;
+}
+
+.social-icon:hover {
+  border-color: #0d9e73;
+  color: #0d9e73 !important;
+  background: white;
+}
+
+.btn-success {
+  border-color: #0d9e73;
+  background: #0d9e73;
+}
+
+.btn-success:hover,
+.btn-success:active,
+.btn-success:visited,
+.btn-success:focus {
+  border-color: #067A56;
+  background: #067A56;
+}
+
+.auth-btns button {
+  margin: 0 10px;
+}
+
+.nav-height-100 {
+  height: 100px
+}
+
+@media (max-width: 600px)  {
+  .bg-nav-top {
+    display: none;
+  }
+}
