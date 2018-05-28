@@ -76,14 +76,14 @@ namespace WebAPI.Controllers
             }
         }
 
-        // GET api/countries/5/cities
-        [HttpGet("{id:guid}/cities", Name = "GetCities")]
+        // GET api/countries/Romania/cities
+        [HttpGet("{name:alpha}/cities", Name = "GetCities")]
         [ProducesResponseType(typeof(List<DisplayCityModel>), 200)]
-        public async Task<ActionResult> GetCities(Guid id)
+        public async Task<ActionResult> GetCities(string name)
         {
             try
             {
-                var country = await _unitOfWork.Countries.GetByIdAsync(id);
+                var country = await _unitOfWork.Countries.GetByNameAsync(name);
                 var cities = country.Cities.ToList();
                 var displayCities = _mapper.Map<List<DisplayCityModel>>(cities);
                 return Ok(displayCities);

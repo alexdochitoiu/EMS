@@ -24,6 +24,7 @@ namespace WebAPI
             services.SetRegisterPolicy();
             services.AddAutoMapper();
             services.AddUnitOfWork();
+            services.AddCors();
             services.AddMvc();
             services.AddSwagger();
         }
@@ -43,6 +44,13 @@ namespace WebAPI
             app.UseSwagger();
             app.UseSwaggerUI(c => {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+            });
+            app.UseCors(corsPolicyBuilder =>
+            {
+                corsPolicyBuilder.AllowAnyOrigin();
+                corsPolicyBuilder.AllowAnyMethod();
+                corsPolicyBuilder.AllowAnyHeader();
+                corsPolicyBuilder.WithExposedHeaders("X-InlineCount");
             });
             app.UseMvc();
             seeder.Seed();

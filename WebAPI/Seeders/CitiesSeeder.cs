@@ -27,9 +27,10 @@ namespace WebAPI.Seeders
         private static IEnumerable<City> GetCities(IEnumerable<Country> countries)
         {
             var cities = new List<City>();
+            var enumerable = countries as Country[] ?? countries.ToArray();
 
             // Romania
-            var country = countries.FirstOrDefault(c => c.Name.Equals("Romania"));
+            var country = enumerable.FirstOrDefault(c => c.Name.Equals("Romania"));
             if (country == null) return cities;
             cities.Add(City.Create("Alba", "TBD", 0, 0, country.Id));
             cities.Add(City.Create("Arad", "TBD", 0, 0, country.Id));
@@ -66,6 +67,34 @@ namespace WebAPI.Seeders
             cities.Add(City.Create("Vaslui", "TBD", 0, 0, country.Id));
             cities.Add(City.Create("Valcea", "TBD", 0, 0, country.Id));
             cities.Add(City.Create("Vrancea", "TBD", 0, 0, country.Id));
+
+            // Germany
+            country = enumerable.FirstOrDefault(c => c.Name.Equals("Germany"));
+            if (country == null) return cities;
+            cities.Add(City.Create("Berlin", "B", 0, 0, country.Id));
+            cities.Add(City.Create("Hamburg", "HH", 0, 0, country.Id));
+            cities.Add(City.Create("Munich", "M", 0, 0, country.Id));
+            cities.Add(City.Create("Stuttgart", "S", 0, 0, country.Id));
+            cities.Add(City.Create("Wolfsburg", "WOB", 0, 0, country.Id));
+            cities.Add(City.Create("Frankfurt", "FH", 0, 0, country.Id));
+            cities.Add(City.Create("Hanover", "H", 0, 0, country.Id));
+            cities.Add(City.Create("Hofheim", "HOH", 0, 0, country.Id));
+            cities.Add(City.Create("Ingolstadt", "IN", 0, 0, country.Id));
+            cities.Add(City.Create("Karlsruhe", "KH", 0, 0, country.Id));
+            cities.Add(City.Create("Leipzig", "L", 0, 0, country.Id));
+            cities.Add(City.Create("Regensberg", "R", 0, 0, country.Id));
+            cities.Add(City.Create("Freiberg", "FG", 0, 0, country.Id));
+
+            //Italy
+            country = enumerable.FirstOrDefault(c => c.Name.Equals("Italy"));
+            if (country == null) return cities;
+            cities.Add(City.Create("Napoli", "NA", 0, 0, country.Id));
+            cities.Add(City.Create("Bologna", "BO", 0, 0, country.Id));
+            cities.Add(City.Create("Parma", "PR", 0, 0, country.Id));
+            cities.Add(City.Create("Bari", "BA", 0, 0, country.Id));
+            cities.Add(City.Create("Reggio Emilia", "RE", 0, 0, country.Id));
+            cities.Add(City.Create("Roma", "RM", 0, 0, country.Id));
+
             return cities;
         }
     }

@@ -1,0 +1,43 @@
+
+.form-elegant .font-small {
+  font-size: 0.8rem; }
+
+.form-elegant .modal-header {
+  border-bottom: none; }
+
+.form-elegant .modal-body, .form-elegant .modal-footer {
+  font-weight: 400; }
+
+.modal-dialog .form-elegant .btn .fa {
+    color: white !important;
+    font-size: 16px;
+}
+
+.fa-envelope {
+  font-size: 20px;
+  padding-top: 5px;
+}
+
+.fa-envelope, .fa-lock {
+  margin-top: 5px;
+}
+
+.btn-facebook {
+  background-color: #3b5998;
+}
+
+.btn-twitter {
+  background-color: #1DA1F2;
+}
+
+.btn-google-plus {
+  background-color: #d34836;
+}
+.modal-dialog .form-elegant .social-buttons-login .btn {
+  display: inline-block;
+  padding: 6px 50px;
+  height: 35px;
+  margin:10px 0 0 2%;
+  flex-grow: 1;
+  width: calc(100% * (1/3) - 10px - 1px);
+}

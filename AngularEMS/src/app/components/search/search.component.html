@@ -1,0 +1,23 @@
+<div class="bg-search">
+  <div class="container">
+      <div class="text-container">
+        <div class="text-search-small">
+          Keep up to date with the latest news
+        </div>
+        <div class="text-search">
+          Search the latest incidents here
+        </div>
+      </div>
+      <div class="row">
+      <kendo-dropdownlist class="col-lg-3 col-sm" [data]="getCountriesNames()" [(ngModel)]="selectedCountry"  (ngModelChange)="getCities()" [defaultItem]="'Select country'"> </kendo-dropdownlist>
+      <kendo-dropdownlist class="col-lg-3 col-sm" [data]="getCitiesNames()" [(ngModel)]="selectedCity" [defaultItem]="'Select city'"> </kendo-dropdownlist>
+      <div class="input-group col-lg-6">
+        <input type="text" class="form-control" placeholder="Search for...">
+        <span class="input-group-btn">
+            <button class="btn btn-success search-button" type="button">Search</button>
+        </span>
+      </div>
+  </div>
+</div>
+</div>
+

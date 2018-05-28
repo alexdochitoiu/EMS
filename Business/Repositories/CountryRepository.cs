@@ -23,6 +23,7 @@ namespace Business.Repositories
 
         public async Task<Country> GetByNameAsync(string name) => 
             await _context.Countries
+                    .Include(t => t.Cities)
                     .FirstOrDefaultAsync(t => t.Name == name);
     }
 }
