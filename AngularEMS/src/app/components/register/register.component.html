@@ -1,6 +1,6 @@
 <app-search></app-search>
 
-<button #register id="openRegisterForm" [hidden]="true" data-toggle="modal" data-target="#registerModal">Register</button><!-- Modal -->
+<button #register id="openRegisterForm" [hidden]="true" data-dismiss="modal" data-toggle="modal" data-target="#registerModal">Register</button><!-- Modal -->
 <div class="modal fade" id="registerModal" tabindex="-1" role="dialog" aria-labelledby="registerModal" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <form #userRegistrationForm="ngForm" (ngSubmit)="OnSubmit(userRegistrationForm)" ngNativeValidate>
@@ -9,7 +9,7 @@
             <!--Header-->
             <div class="modal-header text-center">
                 <h3 class="modal-title w-100 dark-grey-text font-weight-bold my-3" id="registerModal"><strong>Sign up</strong></h3>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <button #closeModal type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -18,27 +18,40 @@
                 <!--Body-->
                 <div class="md-form mb-5">
                     <i class="fa fa-user prefix grey-text"></i>
-                    <input type="text" id="username-register" class="form-control validate" name="Username" #Username="ngModel" [(ngModel)]="user.Username" required>
-                    <label data-error="wrong" data-success="right" for="username-register">Your username</label>
+                    <input type="text" id="username-register" class="form-control" name="Username" #Username="ngModel" [(ngModel)]="user.Username" required>
+                    <label for="username-register">Your username</label>
                 </div>
 
 
                 <div class="md-form mb-5">
                     <i class="fa fa-envelope prefix grey-text"></i>
-                    <input type="email" id="email-register" class="form-control validate" name="Email" #Email="ngModel" [(ngModel)]="user.Email" required>
-                    <label data-error="wrong" data-success="right" for="email-register">Your email</label>
+                    <input type="email" id="email-register" class="form-control" name="Email" #Email="ngModel" [(ngModel)]="user.Email" required>
+                    <label for="email-register">Your email</label>
                 </div>
 
                 <div class="md-form pb-3">
                     <i class="fa fa-lock prefix grey-text"></i>
-                    <input type="password" id="password-register" class="form-control validate" name="Password" #Password="ngModel" [(ngModel)]="user.Password" required>
-                    <label data-error="wrong" data-success="right" for="password-register">Your password</label>
+                    <input type="password" id="password-register" class="form-control" name="Password" #Password="ngModel" [(ngModel)]="user.Password" required>
+                    <label for="password-register">Your password</label>
                 </div>
 
                 <div class="md-form pb-3">
                     <i class="fa fa-lock prefix grey-text"></i>
-                    <input type="password" id="confirm-password-register" class="form-control validate" name="ConfirmPassword" #ConfirmPassword="ngModel" [(ngModel)]="user.ConfirmPassword" required>
-                    <label data-error="wrong" data-success="right" for="confirm-password-register">Confirm your password</label>
+                    <input type="password" id="confirm-password-register" class="form-control" name="ConfirmPassword" #ConfirmPassword="ngModel" [(ngModel)]="user.ConfirmPassword" required>
+                    <label for="confirm-password-register">Confirm your password</label>
+                </div>
+
+                <div *ngIf="successRegistered == true" class="alert alert-success" role="alert">
+                    <h6 class="alert-heading"><strong>Successfully signed up!</strong></h6>
+                    <hr>
+                    <p>Now you have to confirm your email</p>
+                </div>
+
+                <div *ngFor="let error of errors" class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <p>{{ error }}</p>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
 
                 <div class="text-center mb-3">

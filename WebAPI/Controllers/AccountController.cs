@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using Data.Core.Domain.Entities;
@@ -27,8 +28,20 @@ namespace WebAPI.Controllers
         [HttpPost("register", Name = "Register")]
         public async Task<IActionResult> RegisterAsync([FromBody]RegisterCredentialsModel registerCredentials)
         {
-            const string invalidErrorMessage = "Please provide all required details to register for an account!";
-            if (registerCredentials == null) return BadRequest(invalidErrorMessage);
+            var invalidErrorMessage = "Please provide all required details to register for an account!";
+            if (registerCredentials == null)
+                return BadRequest(new RegisterResultModel {
+                    Succeeded = false,
+                    Errors = new List<string>(new [] {invalidErrorMessage})
+                });
+
+            invalidErrorMessage = "Your password and confirmation password do not match.";
+            if (registerCredentials.Password != registerCredentials.ConfirmPassword)
+                return BadRequest(new RegisterResultModel
+                {
+                    Succeeded = false,
+                    Errors = new List<string>(new[] { invalidErrorMessage })
+                });
 
             var country = await _unitOfWork.Countries.GetByNameAsync(registerCredentials.Country);
             var city = await _unitOfWork.Cities.GetByNameAsync(registerCredentials.City);
@@ -51,7 +64,12 @@ namespace WebAPI.Controllers
 
             var result = await _userManager.CreateAsync(user, registerCredentials.Password);
 
-            if (!result.Succeeded) return BadRequest(result.Errors.ToList());
+            if (!result.Succeeded)
+                return BadRequest(new RegisterResultModel
+                {
+                    Succeeded = false,
+                    Errors = new List<string>(result.Errors.Select(err => err.Description))
+                });
 
             var emailConfirmationToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
             var confirmationUrl = 
@@ -62,11 +80,13 @@ namespace WebAPI.Controllers
 
             return Ok(new RegisterResultModel
             {
+                Token = user.GenerateJwtToken(),
                 FirstName = user.FirstName,
-                Email = user.Email,
                 LastName = user.LastName,
                 Username = user.UserName,
-                Token = user.GenerateJwtToken()
+                Email = user.Email,
+                Succeeded = true,
+                Errors = null
             });
         }
 

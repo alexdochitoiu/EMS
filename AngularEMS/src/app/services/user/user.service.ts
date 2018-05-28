@@ -3,6 +3,7 @@ import { Observable } from 'rxjs/Observable';
 import { HttpClient } from '@angular/common/http';
 import { User } from './user.model';
 import { RootUrlService } from '../root-url/root-url.service';
+import 'rxjs/add/operator/map';
 
 @Injectable({
   providedIn: 'root'
@@ -32,7 +33,6 @@ export class UserService {
       Number: '192',
       ZipCode: '600352',
     };
-    console.log(body);
-    return this.http.post(this.url, body);
+    return this.http.post(this.url, body).map((response: Response) => <any>response);
   }
 }

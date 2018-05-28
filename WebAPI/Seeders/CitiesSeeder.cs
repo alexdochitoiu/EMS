@@ -94,6 +94,7 @@ namespace WebAPI.Seeders
             cities.Add(City.Create("Bari", "BA", 0, 0, country.Id));
             cities.Add(City.Create("Reggio Emilia", "RE", 0, 0, country.Id));
             cities.Add(City.Create("Roma", "RM", 0, 0, country.Id));
+            cities.Add(City.Create("Venice", "VCE", 0, 0, country.Id));
 
             return cities;
         }

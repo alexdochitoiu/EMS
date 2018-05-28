@@ -27,8 +27,16 @@ namespace WebAPI.Seeders
             return new List<Country>
             {
                 Country.Create("Romania", "RO"),
-                Country.Create("Germany", "RO"),
-                Country.Create("Italy", "RO")
+                Country.Create("Germany", "DE"),
+                Country.Create("Italy", "IT"),
+                Country.Create("United Kingdom", "UK"),
+                Country.Create("Spain", "ESP"),
+                Country.Create("France", "FR"),
+                Country.Create("Netherlands", "NE"),
+                Country.Create("Poland", "PL"),
+                Country.Create("Russia", "RU"),
+                Country.Create("Turkey", "TR"),
+                Country.Create("Austria", "AU")
             };
         }
     }

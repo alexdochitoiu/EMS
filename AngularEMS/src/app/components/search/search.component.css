@@ -83,6 +83,7 @@ kendo-dropdownlist {
   kendo-dropdownlist, div.input-group {
     margin: 5px 0;
   }
+
   .input-group {
     display: block;
   }
@@ -98,5 +99,11 @@ kendo-dropdownlist {
     margin: 0 !important;
     margin-top: 10px !important;
     padding: 0 !important;
+  }
+}
+
+@media (max-width: 320px) {
+  .text-search {
+    font-size: 16px;
   }
 }

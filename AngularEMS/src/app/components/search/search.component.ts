@@ -13,10 +13,21 @@ import { City } from '../../services/city/city.model';
 })
 export class SearchComponent implements OnInit {
 
-  countries: Array<Country> = new Array<Country>();
-  cities: Array<City> = new Array<City>();
-  selectedCountry: string = null;
-  selectedCity: string = null;
+  public defaultCountryItem: Country = {
+    name: 'Select country',
+    abbreviation: 'NA'
+  };
+
+  public defaultCityItem: City = {
+    name: 'Select city',
+    abbreviation: 'NA'
+  };
+
+  public dataCountries: Array<Country> = new Array<Country>();
+  public dataCities: Array<City> = new Array<City>();
+
+  public selectedCountry: Country;
+  public selectedCity: City;
 
   constructor(private countryService: CountryService,
               private cityService: CityService) {  }
@@ -25,10 +36,23 @@ export class SearchComponent implements OnInit {
     this.getCountries();
   }
 
-  getCountries() {
+  handleCountryChange(value) {
+    this.selectedCountry = value;
+    this.selectedCity = undefined;
+
+    if (value !== this.defaultCountryItem) {
+        this.getCities(value.name);
+    }
+  }
+
+  handleCityChange(value) {
+    this.selectedCity = value;
+  }
+
+  public getCountries() {
     this.countryService.getAllCountries().subscribe(
       (response) => {
-          this.countries = response;
+          this.dataCountries = response;
       },
       err => {
           console.log(err);
@@ -36,33 +60,14 @@ export class SearchComponent implements OnInit {
     );
   }
 
-  getCountriesNames() {
-    return this.countries.map(
-      (c) => {
-        return c.name;
-      });
-  }
-
-  getCities() {
-    this.selectedCity = 'Select city';
-    if (this.selectedCountry === 'Select country') {
-      this.cities = null;
-      return;
-    }
-    this.cityService.getAllCities(this.selectedCountry).subscribe(
+  public getCities(countryName: string) {
+    this.cityService.getAllCities(countryName).subscribe(
       (response) => {
-          this.cities = response;
+          this.dataCities = response;
       },
       err => {
           console.log(err);
       }
     );
-  }
-
-  getCitiesNames() {
-    return this.cities ? this.cities.map(
-      (c) => {
-        return c.name;
-      }) : null;
   }
 }

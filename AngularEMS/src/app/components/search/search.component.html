@@ -9,8 +9,27 @@
         </div>
       </div>
       <div class="row">
-      <kendo-dropdownlist class="col-lg-3 col-sm" [data]="getCountriesNames()" [(ngModel)]="selectedCountry"  (ngModelChange)="getCities()" [defaultItem]="'Select country'"> </kendo-dropdownlist>
-      <kendo-dropdownlist class="col-lg-3 col-sm" [data]="getCitiesNames()" [(ngModel)]="selectedCity" [defaultItem]="'Select city'"> </kendo-dropdownlist>
+
+      <kendo-dropdownlist
+        class="col-lg-3 col-sm"
+        [data]="dataCountries"
+        [value]="selectedCountry"
+        [textField]="'name'"
+        [valueField]="'name'"
+        [defaultItem]="defaultCountryItem"
+        (valueChange)="handleCountryChange($event)">
+      </kendo-dropdownlist>
+
+      <kendo-dropdownlist
+        class="col-lg-3 col-sm"
+        [data]="dataCities"
+        [value]="selectedCity"
+        [textField]="'name'"
+        [valueField]="'name'"
+        [defaultItem]="defaultCityItem"
+        (valueChange)="handleCityChange($event)">
+      </kendo-dropdownlist>
+
       <div class="input-group col-lg-6">
         <input type="text" class="form-control" placeholder="Search for...">
         <span class="input-group-btn">
