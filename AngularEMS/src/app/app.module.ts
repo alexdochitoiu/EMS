@@ -6,6 +6,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { DropDownsModule } from '@progress/kendo-angular-dropdowns';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
+import { AgmCoreModule } from '@agm/core';
 
 import { AppComponent } from './app.component';
 import { HomeComponent } from './components/home/home.component';
@@ -16,9 +17,9 @@ import { LoginComponent } from './components/authentication/login/login.componen
 import { RegisterComponent } from './components/authentication/register/register.component';
 import { ForgotPasswordComponent } from './components/authentication/forgot-password/forgot-password.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
-
-
-
+import { MapComponent } from './components/map/map.component';
+import { AnnouncementComponent } from './components/announcement/announcement.component';
+import { AnnouncementsComponent } from './components/announcements/announcements.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,10 @@ import { NotFoundComponent } from './components/not-found/not-found.component';
     RegisterComponent,
     ForgotPasswordComponent,
     FooterComponent,
-    NotFoundComponent
+    NotFoundComponent,
+    MapComponent,
+    AnnouncementComponent,
+    AnnouncementsComponent
   ],
   imports: [
     HttpClientModule,
@@ -39,7 +43,10 @@ import { NotFoundComponent } from './components/not-found/not-found.component';
     BrowserAnimationsModule,
     NgbModule.forRoot(),
     FormsModule,
-    AppRoutingModule
+    AppRoutingModule,
+    AgmCoreModule.forRoot({
+      apiKey: 'AIzaSyDNQIPldFqdwuHN9MN6RpVia1sYqUrVq54'
+    })
   ],
   providers: [],
   bootstrap: [AppComponent]

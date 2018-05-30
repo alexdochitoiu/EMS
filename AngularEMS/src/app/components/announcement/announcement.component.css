@@ -1,0 +1,8 @@
+
+.announce-box {
+  background-color: white;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19);
+  height: 120px;
+  padding: 8px;
+  margin: 12px 0;
+}

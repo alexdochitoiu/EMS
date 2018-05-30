@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-forgot-password',
@@ -9,7 +9,15 @@ export class ForgotPasswordComponent implements OnInit {
 
   constructor() { }
 
+  @ViewChild('forgotPassword') forgotPasswordModal;
   ngOnInit() {
+    console.log('Modal login form opening...');
+    this.showForgotPasswordForm();
+  }
+
+  showForgotPasswordForm() {
+    event = new MouseEvent('click', {bubbles: true});
+    this.forgotPasswordModal.nativeElement.dispatchEvent(event);
   }
 
 }
