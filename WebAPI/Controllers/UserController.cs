@@ -7,6 +7,7 @@ using Data.Core.Domain.Entities.Identity;
 using Data.Core.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using WebAPI.Infrastructure;
 using WebAPI.Models.UserModels;
 
 namespace WebAPI.Controllers
@@ -26,8 +27,10 @@ namespace WebAPI.Controllers
         // GET api/users
         [HttpGet(Name="AllUsers")]
         [ProducesResponseType(typeof(List<DisplayUserModel>), 200)]
+        //[AuthorizeToken]
         public async Task<ActionResult> AllUsers()
         {
+            var x = IocContainer.Configuration["JWTAuth:SecurityKey"];
             try
             {
                 var users = await _unitOfWork.Users.GetAllAsync(

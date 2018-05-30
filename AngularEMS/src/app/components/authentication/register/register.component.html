@@ -1,15 +1,15 @@
-<app-search></app-search>
-
+<app-home></app-home>
 <button #register id="openRegisterForm" [hidden]="true" data-dismiss="modal" data-toggle="modal" data-target="#registerModal">Register</button><!-- Modal -->
+
 <div class="modal fade" id="registerModal" tabindex="-1" role="dialog" aria-labelledby="registerModal" aria-hidden="true">
     <div class="modal-dialog" role="document">
-      <form #userRegistrationForm="ngForm" (ngSubmit)="OnSubmit(userRegistrationForm)" ngNativeValidate>
+      <form #userRegistrationForm="ngForm" (ngSubmit)="onSubmit(userRegistrationForm)" ngNativeValidate>
         <!--Content-->
         <div class="modal-content form-elegant">
             <!--Header-->
             <div class="modal-header text-center">
                 <h3 class="modal-title w-100 dark-grey-text font-weight-bold my-3" id="registerModal"><strong>Sign up</strong></h3>
-                <button #closeModal type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>

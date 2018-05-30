@@ -1,10 +1,11 @@
-<app-search></app-search>
-
+<app-home></app-home>
 
 <button #login id="openLoginForm" [hidden]="true" data-toggle="modal" data-target="#loginModal">Login</button>
+
 <!-- Modal -->
 <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModal" aria-hidden="true">
     <div class="modal-dialog" role="document">
+      <form #userLoginForm="ngForm" (ngSubmit)="onSubmit(userLoginForm)" ngNativeValidate>
         <!--Content-->
         <div class="modal-content form-elegant">
             <!--Header-->
@@ -19,19 +20,19 @@
                 <!--Body-->
                 <div class="md-form mb-5">
                     <i class="fa fa-envelope prefix grey-text"></i>
-                    <input type="email" id="email-or-username-login" class="form-control validate">
-                    <label data-error="wrong" data-success="right" for="email-or-username-login">Your email or username</label>
+                    <input type="text" id="email-or-username-login" class="form-control" name="EmailOrUsername" #EmailOrUsername="ngModel" [(ngModel)]="user.EmailOrUsername" required>
+                    <label for="email-or-username-login">Your email or username</label>
                 </div>
 
                 <div class="md-form pb-3">
                     <i class="fa fa-lock prefix grey-text"></i>
-                    <input type="password" id="password-login" class="form-control validate">
-                    <label data-error="wrong" data-success="right" for="password-login">Your password</label>
+                    <input type="password" id="password-login" class="form-control" name="Password" #Password="ngModel" [(ngModel)]="user.Password" required>
+                    <label for="password-login">Your password</label>
                     <p class="font-small blue-text d-flex justify-content-end"><a routerLink="/forgot-password" class="blue-text ml-1">Forgot Password?</a></p>
                 </div>
 
                 <div class="text-center mb-3">
-                    <button type="button" class="btn btn-success btn-block btn-rounded z-depth-1a">Sign in</button>
+                    <button type="submit" class="btn btn-success btn-block btn-rounded z-depth-1a">Sign in</button>
                 </div>
                 <p class="font-small dark-grey-text text-right d-flex justify-content-center mb-3 pt-2"> or Sign in with:</p>
 
@@ -50,6 +51,7 @@
             </div>
         </div>
         <!--/.Content-->
+      </form>
     </div>
 </div>
 <!-- Modal -->

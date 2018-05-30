@@ -1,8 +1,8 @@
-import { Router } from '@angular/router';
 import { NgForm } from '@angular/forms/src/directives';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { User } from '../../services/user/user.model';
-import { UserService } from '../../services/user/user.service';
+import { HttpErrorResponse } from '@angular/common/http';
+import { UserRegisterModel } from '../../../services/user/user.model';
+import { UserService } from '../../../services/user/user.service';
 
 @Component({
   selector: 'app-register',
@@ -11,19 +11,17 @@ import { UserService } from '../../services/user/user.service';
 })
 export class RegisterComponent implements OnInit {
 
-  user: User;
+  user: UserRegisterModel;
   event: MouseEvent;
   errors: Array<string>;
   successRegistered = false;
 
-  constructor(private userService: UserService,
-              private router: Router) {
-      this.user = new User();
+  constructor(private userService: UserService) {
+      this.user = new UserRegisterModel();
       event = new MouseEvent('click', {bubbles: true});
   }
 
   @ViewChild('register') registerModal;
-  @ViewChild('closeModal') closeModal;
   ngOnInit() {
     console.log('Modal register form opening...');
     this.showRegisterForm();
@@ -46,20 +44,21 @@ export class RegisterComponent implements OnInit {
     this.errors = null;
   }
 
-  OnSubmit(form: NgForm) {
+  onSubmit(form: NgForm) {
+    console.log(form.value);
     this.userService.registerUser(form.value)
       .subscribe(
-      (res) => {
-        console.log('Response:' + res);
-        if (res.succeeded === true) {
+      (response: any) => {
+        console.log('Response:' + response);
+        if (response.succeeded === true) {
           this.resetForm(form);
           this.successRegistered = true;
           console.log('User signed up with success!');
         }
       },
-      (err) => {
-        this.errors = err.error.errors;
-        console.log(err.error.errors);
+      (errorResponse: HttpErrorResponse) => {
+        this.errors = errorResponse.error.errors;
+        console.log(errorResponse.error.errors);
       }
     );
   }

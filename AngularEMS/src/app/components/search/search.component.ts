@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 
 import { CountryService } from '../../services/country/country.service';
@@ -51,22 +52,22 @@ export class SearchComponent implements OnInit {
 
   public getCountries() {
     this.countryService.getAllCountries().subscribe(
-      (response) => {
+      (response: any) => {
           this.dataCountries = response;
       },
-      err => {
-          console.log(err);
+      (errorResponse: HttpErrorResponse) => {
+          console.log(errorResponse);
       }
     );
   }
 
   public getCities(countryName: string) {
     this.cityService.getAllCities(countryName).subscribe(
-      (response) => {
+      (response: any) => {
           this.dataCities = response;
       },
-      err => {
-          console.log(err);
+      (errorResponse: HttpErrorResponse) => {
+          console.log(errorResponse);
       }
     );
   }

@@ -18,12 +18,12 @@ namespace WebAPI.Infrastructure
             };
 
             var credentials = new SigningCredentials(
-                new SymmetricSecurityKey(Encoding.UTF8.GetBytes(IocContainer.Configuration["JWT:SecurityKey"])),
+                new SymmetricSecurityKey(Encoding.UTF8.GetBytes(IocContainer.Configuration["JWTAuth:SecurityKey"])),
                 SecurityAlgorithms.HmacSha256);
 
             var token = new JwtSecurityToken(
-                issuer: IocContainer.Configuration["JWT:Issuer"],
-                audience: IocContainer.Configuration["JWT:Audience"],
+                issuer: IocContainer.Configuration["JWTAuth:Issuer"],
+                audience: IocContainer.Configuration["JWTAuth:Audience"],
                 claims: claims,
                 expires: DateTime.Now.AddMonths(1),
                 signingCredentials: credentials

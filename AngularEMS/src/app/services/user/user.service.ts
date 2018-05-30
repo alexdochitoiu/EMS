@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { HttpClient } from '@angular/common/http';
-import { User } from './user.model';
-import { RootUrlService } from '../root-url/root-url.service';
+import { UserRegisterModel, UserLoginModel } from './user.model';
+import { InfrastructureService } from '../infra/infra.service';
 import 'rxjs/add/operator/map';
 
 @Injectable({
@@ -13,11 +13,11 @@ export class UserService {
    url: string;
 
   constructor(private http: HttpClient,
-              private rootUrl: RootUrlService) { }
+              private infra: InfrastructureService) { }
 
-  registerUser(user: User) {
-    this.url = this.rootUrl.URL + '/api/account/register';
-    const body: User = {
+  registerUser(user: UserRegisterModel) {
+    this.url = this.infra.URL + '/api/account/register';
+    const body: UserRegisterModel = {
       FirstName: 'Alexandru',
       LastName: 'Dochitoiu',
       Username: user.Username,
@@ -34,5 +34,9 @@ export class UserService {
       ZipCode: '600352',
     };
     return this.http.post(this.url, body).map((response: Response) => <any>response);
+  }
+  loginUser(user: UserLoginModel) {
+    this.url = this.infra.URL + '/api/account/login';
+    return this.http.post(this.url, user).map((response: Response) => <any>response);
   }
 }

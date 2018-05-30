@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { HttpClient } from '@angular/common/http';
 import { City } from './city.model';
-import { RootUrlService } from '../root-url/root-url.service';
+import { InfrastructureService } from '../infra/infra.service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,9 +10,9 @@ import { RootUrlService } from '../root-url/root-url.service';
 export class CityService {
 
   constructor(private http: HttpClient,
-              private rootUrl: RootUrlService) { }
+              private infra: InfrastructureService) { }
 
   getAllCities(country: string): Observable<Array<City>> {
-    return this.http.get<Array<City>>(this.rootUrl.URL + '/api/countries/' + country + '/cities');
+    return this.http.get<Array<City>>(this.infra.URL + '/api/countries/' + country + '/cities');
   }
 }

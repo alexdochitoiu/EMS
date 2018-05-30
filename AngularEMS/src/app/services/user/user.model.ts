@@ -1,4 +1,4 @@
-export class User {
+export class UserRegisterModel {
   FirstName: string;
   LastName: string;
   Username: string;
@@ -13,4 +13,9 @@ export class User {
   Street: string;
   Number: string;
   ZipCode: string;
+}
+
+export class UserLoginModel {
+  EmailOrUsername: string;
+  Password: string;
 }

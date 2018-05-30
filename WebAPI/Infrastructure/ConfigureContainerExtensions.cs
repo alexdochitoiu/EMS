@@ -88,12 +88,12 @@ namespace WebAPI.Infrastructure
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateIssuer = true,
+                        ValidIssuer = "x",// IocContainer.Configuration["JWTAuth:Issuer"],
                         ValidateAudience = true,
+                        ValidAudience = "x",// IocContainer.Configuration["JWTAuth:Audience"],
                         ValidateLifetime = true,
                         ValidateIssuerSigningKey = true,
-                        ValidIssuer = IocContainer.Configuration["JWT:Issuer"],
-                        ValidAudience = IocContainer.Configuration["JWT:Audience"],
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(IocContainer.Configuration["JWT:SecretKey"]))
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("12345678987654321"))
                     };
                 });
         }
