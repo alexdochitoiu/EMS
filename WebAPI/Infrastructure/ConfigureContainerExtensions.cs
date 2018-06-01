@@ -82,8 +82,6 @@ namespace WebAPI.Infrastructure
 
         public static void AddJwtAuthentication(this IServiceCollection services)
         {
-
-            var x = IocContainer.Configuration["JWTAuth:SecurityKey"];
             services.AddAuthentication()
                 .AddJwtBearer(options =>
                 {

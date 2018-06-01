@@ -9,7 +9,7 @@ namespace WebAPI.Models.AccountModels
         public string LastName { get; set; }
         public string Username { get; set; }
         public string Email { get; set; }
-        public bool Succeeded { get; set; }
+        public bool Succeeded => Errors == null || Errors.Count == 0;
         public List<string> Errors { get; set; }
     }
 }

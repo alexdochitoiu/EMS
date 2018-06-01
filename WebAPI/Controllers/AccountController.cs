@@ -31,7 +31,6 @@ namespace WebAPI.Controllers
             var invalidErrorMessage = "Please provide all required details to register for an account!";
             if (registerCredentials == null)
                 return BadRequest(new RegisterResultModel {
-                    Succeeded = false,
                     Errors = new List<string>(new [] {invalidErrorMessage})
                 });
 
@@ -39,7 +38,6 @@ namespace WebAPI.Controllers
             if (registerCredentials.Password != registerCredentials.ConfirmPassword)
                 return BadRequest(new RegisterResultModel
                 {
-                    Succeeded = false,
                     Errors = new List<string>(new[] { invalidErrorMessage })
                 });
 
@@ -67,7 +65,6 @@ namespace WebAPI.Controllers
             if (!result.Succeeded)
                 return BadRequest(new RegisterResultModel
                 {
-                    Succeeded = false,
                     Errors = new List<string>(result.Errors.Select(err => err.Description))
                 });
 
@@ -85,7 +82,6 @@ namespace WebAPI.Controllers
                 LastName = user.LastName,
                 Username = user.UserName,
                 Email = user.Email,
-                Succeeded = true,
                 Errors = null
             });
         }
@@ -123,7 +119,10 @@ namespace WebAPI.Controllers
             var isValidPassword = await _userManager.CheckPasswordAsync(user, loginCredentials.Password);
 
             if (!isValidPassword)
-                return BadRequest(invalidErrorMessage);
+                return BadRequest(new LoginResultModel
+                {
+                    Errors = new List<string>(new[] { invalidErrorMessage })
+                });
 
             return Ok(new LoginResultModel
             {
