@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { NgForm } from '@angular/forms/src/directives';
 import { Router } from '@angular/router';
@@ -17,22 +17,35 @@ export class LoginComponent implements OnInit {
 
   errors: Array<string>;
   user: UserLoginModel;
+  event: MouseEvent;
 
   constructor(private userService: UserService,
               private authService: AuthService,
               private router: Router) {
     this.user = new UserLoginModel();
+    this.event = new MouseEvent('click', {bubbles: true});
   }
 
   @ViewChild('login') loginModal;
+  @ViewChild('closeBtn') closeBtn;
+
   ngOnInit() {
+    if (this.authService.isLogged()) {
+      this.router.navigate(['/home']);
+      console.log('User already logged in');
+      return;
+    }
     console.log('Modal login form opening...');
     this.showLoginForm();
   }
 
   showLoginForm() {
-    event = new MouseEvent('click', {bubbles: true});
-    this.loginModal.nativeElement.dispatchEvent(event);
+    this.loginModal.nativeElement.dispatchEvent(this.event);
+  }
+
+  closeModalForm() {
+    this.closeBtn.nativeElement.dispatchEvent(this.event);
+    this.router.navigate(['/home']);
   }
 
   onSubmit(form: NgForm) {
@@ -41,11 +54,11 @@ export class LoginComponent implements OnInit {
       .subscribe(
       (response: any) => {
         this.authService.login(response.token);
-        this.router.navigate(['/dashboard']);
+        this.closeModalForm()
       },
       (errorResponse: HttpErrorResponse) => {
         this.errors = errorResponse.error.errors;
-        console.log(errorResponse.error.errors);
+        console.log(errorResponse);
       }
     );
   }

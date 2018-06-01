@@ -114,7 +114,10 @@ namespace WebAPI.Controllers
                 await _userManager.FindByEmailAsync(loginCredentials.EmailOrUsername) :
                 await _userManager.FindByNameAsync(loginCredentials.EmailOrUsername);
             if (user == null)
-                return BadRequest(invalidErrorMessage);
+                return BadRequest(new LoginResultModel
+                {
+                    Errors = new List<string>(new[] { invalidErrorMessage })
+                });
 
             var isValidPassword = await _userManager.CheckPasswordAsync(user, loginCredentials.Password);
 

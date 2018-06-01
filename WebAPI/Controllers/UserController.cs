@@ -27,7 +27,7 @@ namespace WebAPI.Controllers
         // GET api/users
         [HttpGet(Name="AllUsers")]
         [ProducesResponseType(typeof(List<DisplayUserModel>), 200)]
-        //[AuthorizeToken]
+        [AuthorizeToken]
         public async Task<ActionResult> AllUsers()
         {
             var x = IocContainer.Configuration["JWTAuth:SecurityKey"];

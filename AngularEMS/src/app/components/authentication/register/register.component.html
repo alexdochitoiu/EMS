@@ -1,5 +1,5 @@
 <app-home></app-home>
-<button #register id="openRegisterForm" [hidden]="true" data-dismiss="modal" data-toggle="modal" data-target="#registerModal">Register</button><!-- Modal -->
+<button #register id="openRegisterForm" [hidden]="true" data-dismiss="modal" data-toggle="modal" data-target="#registerModal" data-backdrop="static" data-keyboard="false">Register</button><!-- Modal -->
 
 <div class="modal fade" id="registerModal" tabindex="-1" role="dialog" aria-labelledby="registerModal" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -9,7 +9,7 @@
             <!--Header-->
             <div class="modal-header text-center">
                 <h3 class="modal-title w-100 dark-grey-text font-weight-bold my-3" id="registerModal"><strong>Sign up</strong></h3>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" routerLink='/'>
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>

@@ -15,11 +15,11 @@ export class AuthService {
   }
 
   isLogged(): boolean {
-    return localStorage.getItem(this.infra.TOKEN_KEY) !== '';
+    let token = localStorage.getItem(this.infra.TOKEN_KEY)
+    return  token !== null && token !== '';
   }
 
   logout(): void {
     localStorage.setItem(this.infra.TOKEN_KEY, '');
-    this.router.navigate(['/login']);
   }
 }

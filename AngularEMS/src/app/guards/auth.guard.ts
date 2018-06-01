@@ -1,4 +1,4 @@
-import { Router } from '@angular/router/public_api';
+import { Router } from '@angular/router';
 import { Injectable } from '@angular/core';
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { AuthService } from '../services/auth/auth.service';
@@ -14,7 +14,7 @@ export class AuthGuard implements CanActivate {
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): boolean {
       if (!this.auth.isLogged()) {
-        this.router.navigate(['/login']);
+        this.router.navigateByUrl('/login');
         return false;
       }
       return true;

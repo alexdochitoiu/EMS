@@ -3,6 +3,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { UserRegisterModel } from '../../../services/user/user.model';
 import { UserService } from '../../../services/user/user.service';
+import { AuthService } from '../../../services/auth/auth.service';
 
 @Component({
   selector: 'app-register',
@@ -16,20 +17,26 @@ export class RegisterComponent implements OnInit {
   errors: Array<string>;
   successRegistered = false;
 
-  constructor(private userService: UserService) {
-      this.user = new UserRegisterModel();
-      event = new MouseEvent('click', {bubbles: true});
+  constructor(private userService: UserService,
+              private authService: AuthService) {
+    if (this.authService.isLogged()) {
+      this.authService.logout();
+    }
+    this.user = new UserRegisterModel();
+    this.event = new MouseEvent('click', {bubbles: true});
   }
 
   @ViewChild('register') registerModal;
+
   ngOnInit() {
+    
     console.log('Modal register form opening...');
     this.showRegisterForm();
     this.resetForm();
   }
 
   showRegisterForm() {
-    this.registerModal.nativeElement.dispatchEvent(event);
+    this.registerModal.nativeElement.dispatchEvent(this.event);
   }
 
   resetForm(form?: NgForm) {
