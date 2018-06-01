@@ -82,18 +82,22 @@ namespace WebAPI.Infrastructure
 
         public static void AddJwtAuthentication(this IServiceCollection services)
         {
+
+            var x = IocContainer.Configuration["JWTAuth:SecurityKey"];
             services.AddAuthentication()
                 .AddJwtBearer(options =>
                 {
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateIssuer = true,
-                        ValidIssuer = "x",// IocContainer.Configuration["JWTAuth:Issuer"],
+                        ValidIssuer = IocContainer.Configuration["JWTAuth:Issuer"],
                         ValidateAudience = true,
-                        ValidAudience = "x",// IocContainer.Configuration["JWTAuth:Audience"],
+                        ValidAudience = IocContainer.Configuration["JWTAuth:Audience"],
                         ValidateLifetime = true,
                         ValidateIssuerSigningKey = true,
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("12345678987654321"))
+                        IssuerSigningKey = new SymmetricSecurityKey(
+                            Encoding.UTF8.GetBytes(
+                                IocContainer.Configuration["JWTAuth:SecurityKey"]))
                     };
                 });
         }
