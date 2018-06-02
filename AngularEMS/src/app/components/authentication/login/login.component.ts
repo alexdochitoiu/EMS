@@ -53,7 +53,7 @@ export class LoginComponent implements OnInit {
     this.userService.loginUser(form.value)
       .subscribe(
       (response: any) => {
-        this.authService.login(response.token);
+        this.authService.login(response.token, response.email);
         this.closeModalForm()
       },
       (errorResponse: HttpErrorResponse) => {

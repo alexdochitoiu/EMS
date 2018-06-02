@@ -25,6 +25,10 @@
   margin: 0 10px;
 }
 
+.auth-btns span {
+  color: grey;
+}
+
 .nav-height-100 {
   min-height: 100px
 }

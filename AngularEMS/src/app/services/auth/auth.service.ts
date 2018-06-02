@@ -7,11 +7,18 @@ import { InfrastructureService } from '../infra/infra.service';
 })
 export class AuthService {
 
+  public email: string;
+
   constructor(private router: Router,
               private infra: InfrastructureService) { }
 
-  login(token: string) {
+  login(token: string, email: string) {
     localStorage.setItem(this.infra.TOKEN_KEY, token);
+    this.email = email;
+  }
+
+  getEmail(): string {
+    return this.email;
   }
 
   isLogged(): boolean {
@@ -21,5 +28,6 @@ export class AuthService {
 
   logout(): void {
     localStorage.setItem(this.infra.TOKEN_KEY, '');
+    this.email = null;
   }
 }
