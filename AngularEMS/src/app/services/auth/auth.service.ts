@@ -7,27 +7,31 @@ import { InfrastructureService } from '../infra/infra.service';
 })
 export class AuthService {
 
-  public email: string;
-
   constructor(private router: Router,
               private infra: InfrastructureService) { }
 
-  login(token: string, email: string) {
-    localStorage.setItem(this.infra.TOKEN_KEY, token);
-    this.email = email;
+  login(token: string, email: string, photoURL: string) {
+    localStorage.setItem(this.infra.TOKEN_KEY, token);    
+    localStorage.setItem(this.infra.EMAIL_KEY, email);
+    localStorage.setItem(this.infra.PHOTO_URL_KEY, photoURL);
   }
 
   getEmail(): string {
-    return this.email;
+    return localStorage.getItem(this.infra.EMAIL_KEY);
   }
 
-  isLogged(): boolean {
+  getPhotoUrl(): string {
+    return localStorage.getItem(this.infra.PHOTO_URL_KEY);
+  }
+
+  isLoggedIn(): boolean {
     let token = localStorage.getItem(this.infra.TOKEN_KEY)
     return  token !== null && token !== '';
   }
 
   logout(): void {
     localStorage.setItem(this.infra.TOKEN_KEY, '');
-    this.email = null;
+    localStorage.setItem(this.infra.EMAIL_KEY, '');
+    localStorage.setItem(this.infra.PHOTO_URL_KEY, '');
   }
 }

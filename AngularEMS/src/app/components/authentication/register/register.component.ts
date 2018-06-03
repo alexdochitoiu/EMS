@@ -19,7 +19,7 @@ export class RegisterComponent implements OnInit {
 
   constructor(private userService: UserService,
               private authService: AuthService) {
-    if (this.authService.isLogged()) {
+    if (this.authService.isLoggedIn()) {
       this.authService.logout();
     }
     this.user = new UserRegisterModel();
@@ -47,6 +47,7 @@ export class RegisterComponent implements OnInit {
     this.user.Email = '';
     this.user.Password = '';
     this.user.ConfirmPassword = '';
+    this.user.Phone = '';
     this.successRegistered = false;
     this.errors = null;
   }
@@ -58,6 +59,7 @@ export class RegisterComponent implements OnInit {
       (response: any) => {
         console.log('Response:' + response);
         if (response.succeeded === true) {
+          console.log(response.warnings);
           this.resetForm(form);
           this.successRegistered = true;
           console.log('User signed up with success!');

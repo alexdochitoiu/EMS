@@ -18,8 +18,7 @@ namespace Data.Core.Domain.Entities.Identity
         {
             get
             {
-                int age;
-                age = DateTime.Now.Year - DateOfBirth.Year;
+                var age = DateTime.Now.Year - DateOfBirth.Year;
                 if (DateTime.Now.DayOfYear < DateOfBirth.DayOfYear)
                     age = age - 1;
 
@@ -43,7 +42,7 @@ namespace Data.Core.Domain.Entities.Identity
         public void Update(string firstName, string lastName, GenderEnum gender, DateTime dateOfBirth,
             string email, string username, string phone, Address address)
         {
-            Validate(firstName, lastName, gender, dateOfBirth, email, username, phone, address);
+            Validate(email, username, phone);
 
             FirstName = firstName;
             LastName = lastName;
@@ -56,17 +55,11 @@ namespace Data.Core.Domain.Entities.Identity
             Modified = DateTime.Now;
         }
 
-        private static void Validate(string firstName, string lastName, GenderEnum gender, DateTime dateOfBirth,
-            string email, string username, string phone, Address address)
+        private static void Validate(string email, string username, string phone)
         {
-            //Ensure.That(firstName).IsNotNullOrEmpty();
-            //Ensure.That(lastName).IsNotNullOrEmpty();
-            //Ensure.That(Enum.IsDefined(typeof(GenderEnum), gender)).IsTrue();
-            //Ensure.That(dateOfBirth).IsLt(DateTime.Now);
             Ensure.That(email).IsNotNullOrEmpty();
             Ensure.That(username).IsNotNullOrEmpty();
-            //Ensure.That(phone).IsNotNullOrEmpty();
-            //Ensure.That(address).IsNotNull();
+            Ensure.That(phone).IsNotNullOrEmpty();
         }
     }
 }

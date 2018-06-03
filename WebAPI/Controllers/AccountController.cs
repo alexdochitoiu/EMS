@@ -7,8 +7,12 @@ using Data.Core.Domain.Entities.Identity;
 using Data.Core.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Twilio;
+using Twilio.Rest.Api.V2010.Account;
+using Twilio.Types;
 using WebAPI.Infrastructure;
 using WebAPI.Infrastructure.Email;
+using WebAPI.Infrastructure.Email.SendGrid;
 using WebAPI.Models.AccountModels;
 
 namespace WebAPI.Controllers
@@ -18,20 +22,26 @@ namespace WebAPI.Controllers
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IEmailSender _emailSender;
 
-        public AccountController(UserManager<ApplicationUser> userManager, IUnitOfWork unitOfWork)
+        public AccountController(
+            UserManager<ApplicationUser> userManager, 
+            IUnitOfWork unitOfWork, 
+            IEmailSender emailSender)
         {
             _userManager = userManager;
             _unitOfWork = unitOfWork;
+            _emailSender = emailSender;
         }
-        
+
         [HttpPost("register", Name = "Register")]
-        public async Task<IActionResult> RegisterAsync([FromBody]RegisterCredentialsModel registerCredentials)
+        public async Task<IActionResult> RegisterAsync([FromBody] RegisterCredentialsModel registerCredentials)
         {
             var invalidErrorMessage = "Please provide all required details to register for an account!";
             if (registerCredentials == null)
-                return BadRequest(new RegisterResultModel {
-                    Errors = new List<string>(new [] {invalidErrorMessage})
+                return BadRequest(new RegisterResultModel
+                {
+                    Errors = new List<string>(new[] {invalidErrorMessage})
                 });
 
             invalidErrorMessage = "Your password and confirmation password do not match.";
@@ -44,10 +54,10 @@ namespace WebAPI.Controllers
             var country = await _unitOfWork.Countries.GetByNameAsync(registerCredentials.Country);
             var city = await _unitOfWork.Cities.GetByNameAsync(registerCredentials.City);
             var address = Address.Create(
-                country, 
-                city, 
-                registerCredentials.Street, 
-                registerCredentials.Number, 
+                country,
+                city,
+                registerCredentials.Street,
+                registerCredentials.Number,
                 registerCredentials.ZipCode);
 
             var user = ApplicationUser.Create(
@@ -69,11 +79,12 @@ namespace WebAPI.Controllers
                 });
 
             var emailConfirmationToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-            var confirmationUrl = 
+            var confirmationUrl =
                 $"http://{Request.Host.Value}/api/account/verify/email/" +
                 $"{HttpUtility.UrlEncode(user.Id.ToString())}/" +
                 $"{HttpUtility.UrlEncode(emailConfirmationToken)}";
-            await EmsEmailSender.SendVerificationEmailAsync(user.FirstName, user.Email, confirmationUrl);
+
+            var sendEmailResponse = await EmsEmailSender.SendVerificationEmailAsync(user.FirstName, user.Email, confirmationUrl, _emailSender);
 
             return Ok(new RegisterResultModel
             {
@@ -82,7 +93,11 @@ namespace WebAPI.Controllers
                 LastName = user.LastName,
                 Username = user.UserName,
                 Email = user.Email,
-                Errors = null
+                Errors = null,
+                Warnings = !sendEmailResponse.Succeeded ?
+                        new List<string>(
+                            new[] {$"Can't send email verification!\nCause: { sendEmailResponse.ErrorMessage }"}) :
+                        null
             });
         }
 

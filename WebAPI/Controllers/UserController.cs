@@ -5,6 +5,7 @@ using AutoMapper;
 using Data.Core.Domain.Entities;
 using Data.Core.Domain.Entities.Identity;
 using Data.Core.Interfaces;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebAPI.Infrastructure;
@@ -17,11 +18,15 @@ namespace WebAPI.Controllers
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public UserController(IUnitOfWork unitOfWork, IMapper mapper)
+        public UserController(IUnitOfWork unitOfWork, 
+            IMapper mapper, 
+            UserManager<ApplicationUser> userManager)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _userManager = userManager;
         }
 
         // GET api/users
@@ -81,6 +86,28 @@ namespace WebAPI.Controllers
             {
                 Console.Write(exp);
                 return BadRequest();
+            }
+        }
+
+        // GET api/users/alexdochitoiu@gmail.com
+        [HttpGet("{email}", Name = "UsersByEmail")]
+        [ProducesResponseType(typeof(List<DisplayUserModel>), 200)]
+        public async Task<ActionResult> UsersByEmail(string email)
+        {
+            try
+            {
+                var user = await _unitOfWork.Users.GetByEmailAsync(email);
+                if (user == null)
+                {
+                    return BadRequest("User not found");
+                }
+                var displayUser = _mapper.Map<DisplayUserModel>(user);
+                return Ok(displayUser);
+            }
+            catch (Exception exp)
+            {
+                Console.Write(exp);
+                return BadRequest(exp.Message);
             }
         }
 

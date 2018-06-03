@@ -11,5 +11,6 @@ namespace WebAPI.Models.AccountModels
         public string Email { get; set; }
         public bool Succeeded => Errors == null || Errors.Count == 0;
         public List<string> Errors { get; set; }
+        public List<string> Warnings { get; set; }
     }
 }

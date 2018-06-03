@@ -1,5 +1,6 @@
 body {
-  background: rgb(238, 238, 238);
+  background-image: url("./assets/leaves-pattern.png");
+  background-repeat: repeat;
 }
 
 body.modal-open {
@@ -68,7 +69,8 @@ body.modal-open {
 .btn.btn-success:active,
 .btn.btn-success:visited,
 .btn.btn-success:active:focus,
-.btn.btn-success:focus {
+.btn.btn-success:focus,
+.btn.btn-success:target {
   border-color: #067A56 !important;
   background-color: #067A56 !important;
 }
@@ -84,7 +86,12 @@ body.modal-open {
 .btn.btn-secondary:active,
 .btn.btn-secondary:visited,
 .btn.btn-secondary:active:focus,
-.btn.btn-secondary:focus {
+.btn.btn-secondary:focus,
+.btn.btn-secondary:target {
   border-color: #2B3532 !important;
   background-color: #2B3532 !important;
+}
+
+.ngx-pagination .current {
+  background: #464948 !important;
 }

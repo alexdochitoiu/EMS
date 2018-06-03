@@ -1,0 +1,61 @@
+
+.bg-announcement {
+    height: 150px;
+    padding-top: 50px;
+    background-image: url("/assets/wallpaper2.jpg");
+    background-color: rgba(255, 255, 255, 0.75);
+    background-position: right top;
+    background-attachment: fixed;
+}
+  
+.title-announcement {
+    font-size: 32px;
+    font-family: 'Montserrat', sans-serif;
+    color: white;
+    text-align: center;
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.row app-announcement {
+    margin: 0 2px;
+    min-width: 295px;
+}
+
+.pag-div {
+    background: white;
+    text-align: center;
+    padding-right: 40px;
+    font-size: 18px;
+}
+
+.grid-list {
+    font-size: 26px;
+    width: 100px;
+    margin: 0 auto;
+    background: white;
+    text-align: center;
+}
+
+.grid-list > * {
+    padding: 10px;
+}
+
+.grid-list a {
+    color: #0d9e73;
+}
+
+.grid-list a:hover {
+    color: #054935;
+}
+
+@media (max-width: 425px) {
+    .grid-list {
+        display: none;
+    }
+}
+
+@media (max-width: 375px) {
+    .pag-div {
+        font-size: 12px;
+    }
+}

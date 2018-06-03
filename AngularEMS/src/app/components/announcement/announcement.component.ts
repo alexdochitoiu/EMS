@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, AfterViewInit, Input, ViewChild } from '@angular/core';
 import { Announcement } from '../../services/announcement/announcement.model';
 
 @Component({
@@ -6,20 +6,18 @@ import { Announcement } from '../../services/announcement/announcement.model';
   templateUrl: './announcement.component.html',
   styleUrls: ['./announcement.component.css']
 })
-export class AnnouncementComponent implements OnInit {
+export class AnnouncementComponent implements AfterViewInit {
 
-  public announcement: Announcement;
-
+  @Input() announcement: Announcement;
+  @ViewChild('icon') icon: ElementRef;
   constructor() { }
 
-  ngOnInit() {
-    this.announcement =  {
-      Title: 'Titlu - test',
-      Description: 'Descriere - test',
-      PostedBy: 'Grigore Ureche',
-      PostedAt: 'Friday, 13.05.2018 16:15',
-      Severity: 2
-    };
+  ngAfterViewInit() {
+    switch(this.announcement.Severity) {
+      case 0: this.icon.nativeElement.style.color = 'red'; break;
+      case 1: this.icon.nativeElement.style.color = 'orange'; break;
+      default: this.icon.nativeElement.style.color = '#0d9e73'; break;
+    
+    }
   }
-
 }

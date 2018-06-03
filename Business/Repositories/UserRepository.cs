@@ -35,5 +35,15 @@ namespace Business.Repositories
                     .ThenInclude(a => a.City)
                 .FirstOrDefaultAsync(t => t.Id == id);
         }
+
+        public async Task<ApplicationUser> GetByEmailAsync(string email)
+        {
+            return await _context.Users
+                .Include(t => t.Address)
+                .ThenInclude(a => a.Country)
+                .Include(t => t.Address)
+                .ThenInclude(a => a.City)
+                .FirstOrDefaultAsync(t => t.NormalizedEmail == email.ToUpper());
+        }
     }
 }

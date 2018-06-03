@@ -1,5 +1,4 @@
 ﻿using System;
-using EnsureThat;
 
 namespace Data.Core.Domain.Entities
 {
@@ -24,22 +23,12 @@ namespace Data.Core.Domain.Entities
 
         public void Update(Country country, City city, string street, string number, string zipCode)
         {
-            Validate(country, city, street, number, zipCode);
             Country = country;
             City = city;
             Street = street;
             Number = number;
             ZipCode = zipCode;
             Modified = DateTime.Now;
-        }
-        
-        private static void Validate(Country country, City city, string street, string number, string zipCode)
-        {
-            Ensure.That(country).IsNotNull();
-            Ensure.That(city).IsNotNull();
-            Ensure.That(street).IsNotNullOrEmpty();
-            Ensure.That(number).IsNotNullOrEmpty();
-            Ensure.That(zipCode).IsNotNullOrEmpty();
         }
     }
 }
