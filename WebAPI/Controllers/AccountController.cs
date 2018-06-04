@@ -7,9 +7,6 @@ using Data.Core.Domain.Entities.Identity;
 using Data.Core.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Twilio;
-using Twilio.Rest.Api.V2010.Account;
-using Twilio.Types;
 using WebAPI.Infrastructure;
 using WebAPI.Infrastructure.Email;
 using WebAPI.Infrastructure.Email.SendGrid;
@@ -96,7 +93,7 @@ namespace WebAPI.Controllers
                 Errors = null,
                 Warnings = !sendEmailResponse.Succeeded ?
                         new List<string>(
-                            new[] {$"Can't send email verification!\nCause: { sendEmailResponse.ErrorMessage }"}) :
+                            new[] {$"Cannot send email verification!\nCause: { sendEmailResponse.ErrorMessage }"}) :
                         null
             });
         }
