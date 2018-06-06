@@ -16,7 +16,8 @@ namespace Data.Core.Domain.Entities
         {
             var city = new City
             {
-                Id = new Guid()
+                Id = new Guid(),
+                Created = DateTime.Now
             };
             city.Update(name, abbreviation, latitude, longitude, countryId);
             return city;
@@ -31,6 +32,7 @@ namespace Data.Core.Domain.Entities
             Latitude = latitude;
             Longitude = longitude;
             CountryId = countryId;
+            Modified = DateTime.Now;
         }
 
         private static void Validate(string name, string abbreviation, double latitude, double longitude, Guid countryId)

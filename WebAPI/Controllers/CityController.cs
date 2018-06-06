@@ -27,7 +27,7 @@ namespace WebAPI.Controllers
         {
             try
             {
-                var cities = await _unitOfWork.Cities.GetAllAsync();
+                var cities = await _unitOfWork.Cities.GetAllAsync<object>();
                 var displayCities = _mapper.Map<List<DisplayCityModel>>(cities);
                 return Ok(displayCities);
             }

@@ -29,7 +29,7 @@ namespace WebAPI.Controllers
         {
             try
             {
-                var countries = await _unitOfWork.Countries.GetAllAsync();
+                var countries = await _unitOfWork.Countries.GetAllAsync<object>();
                 var displayCountries = _mapper.Map<List<DisplayCountryModel>>(countries);
                 return Ok(displayCountries);
             }

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Data.Core.Domain.Entities;
 using Data.Persistence;
 
@@ -14,14 +15,14 @@ namespace WebAPI.Seeders
             _context = context;
         }
 
-        public void Seed()
+        public async Task<int> SeedAsync()
         {
-            if (_context.Cities.Any()) return;
-            if (!_context.Countries.Any()) return;
+            if (_context.Cities.Any()) return -1;
+            if (!_context.Countries.Any()) return -1;
 
             var countries = _context.Countries.ToList();
-            _context.Cities.AddRange(GetCities(countries));
-            _context.SaveChangesAsync();
+            await _context.Cities.AddRangeAsync(GetCities(countries));
+            return await _context.SaveChangesAsync();
         }
 
         private static IEnumerable<City> GetCities(IEnumerable<Country> countries)
@@ -35,7 +36,7 @@ namespace WebAPI.Seeders
             cities.Add(City.Create("Alba", "TBD", 0, 0, country.Id));
             cities.Add(City.Create("Arad", "TBD", 0, 0, country.Id));
             cities.Add(City.Create("Arges", "TBD", 0, 0, country.Id));
-            cities.Add(City.Create("Bacau", "TBD", 0, 0, country.Id));
+            cities.Add(City.Create("Bacau", "BC", 0, 0, country.Id));
             cities.Add(City.Create("Bihor", "TBD", 0, 0, country.Id));
             cities.Add(City.Create("Botosani", "TBD", 0, 0, country.Id));
             cities.Add(City.Create("Brasov", "TBD", 0, 0, country.Id));
@@ -51,7 +52,7 @@ namespace WebAPI.Seeders
             cities.Add(City.Create("Harghita", "TBD", 0, 0, country.Id));
             cities.Add(City.Create("Hunedoara", "TBD", 0, 0, country.Id));
             cities.Add(City.Create("Ialomita", "TBD", 0, 0, country.Id));
-            cities.Add(City.Create("Iasi", "TBD", 0, 0, country.Id));
+            cities.Add(City.Create("Iasi", "IS", 0, 0, country.Id));
             cities.Add(City.Create("Ilfov", "TBD", 0, 0, country.Id));
             cities.Add(City.Create("Maramures", "TBD", 0, 0, country.Id));
             cities.Add(City.Create("Mehedinti", "TBD", 0, 0, country.Id));

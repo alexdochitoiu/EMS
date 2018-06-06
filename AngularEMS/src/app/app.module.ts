@@ -23,8 +23,10 @@ import { RegisterComponent } from './components/authentication/register/register
 import { ForgotPasswordComponent } from './components/authentication/forgot-password/forgot-password.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
 import { MapComponent } from './components/map/map.component';
-import { AnnouncementComponent } from './components/announcement/announcement.component';
-import { AnnouncementsComponent } from './components/announcements/announcements.component';
+import { AnnouncementBoxComponent } from './components/announcement/announcement-box/announcement-box.component';
+import { AnnouncementsComponent } from './components/announcement/announcements/announcements.component';
+import { UserProfileComponent } from './components/user-profile/user-profile.component';
+import { AnnouncementDetailsComponent } from './components/announcement/announcement-details/announcement-details.component';
 
 @NgModule({
   declarations: [
@@ -38,8 +40,10 @@ import { AnnouncementsComponent } from './components/announcements/announcements
     FooterComponent,
     NotFoundComponent,
     MapComponent,
-    AnnouncementComponent,
-    AnnouncementsComponent
+    AnnouncementBoxComponent,
+    AnnouncementsComponent,
+    UserProfileComponent,
+    AnnouncementDetailsComponent
   ],
   imports: [
     AngularFireModule.initializeApp(environment.firebase),

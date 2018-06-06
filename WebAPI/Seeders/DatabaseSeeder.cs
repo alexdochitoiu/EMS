@@ -1,22 +1,23 @@
-﻿using Data.Persistence;
+﻿using System.Threading.Tasks;
+using Data.Core.Interfaces;
 
 namespace WebAPI.Seeders
 {
-    public class DatabaseSeeder
+    public class DatabaseSeeder : IDatabaseSeeder
     {
         private readonly CitiesSeeder _citiesSeeder;
         private readonly CountriesSeeder _countriesSeeder;
 
-        public DatabaseSeeder(ApplicationDbContext context)
+        public DatabaseSeeder(CitiesSeeder cities, CountriesSeeder countries)
         {
-            _citiesSeeder = new CitiesSeeder(context);
-            _countriesSeeder = new CountriesSeeder(context);
+            _citiesSeeder = cities;
+            _countriesSeeder = countries;
         }
 
-        public void Seed()
+        public async Task<int> SeedAsync()
         {
-            _countriesSeeder.Seed();
-            _citiesSeeder.Seed();
+            var totalRecords = await _countriesSeeder.SeedAsync() + await _citiesSeeder.SeedAsync();
+            return totalRecords;
         }
     }
 }

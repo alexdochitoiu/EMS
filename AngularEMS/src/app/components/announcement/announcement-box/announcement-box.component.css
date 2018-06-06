@@ -12,8 +12,25 @@
   font-family: 'Trebuchet MS', sans-serif;
   color: #7d7d7d;  
   padding: 0 10px;
+  overflow: hidden;
+  margin-right: 25px;
+  display: flex;
+  white-space: nowrap;
 }
 
+#expand {
+  position: absolute;
+  top: 5px;
+  right: -3px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.2s;
+  color: rgba(0, 0, 0, 0.5);
+}
+#expand:hover {
+  font-size: 18px;
+  color: rgba(0, 0, 0, 0.8);
+}
 .announce-box .announce-title i {
   color: #0d9e73;
   padding: 0 10px;
@@ -42,6 +59,14 @@
 
 .announce-box .row > * {
   padding-right: 40px;
+}
+
+.announce-box .row .posted-by a {
+  color: rgb(66, 154, 255);
+}
+
+.announce-box .row .posted-by a:hover {
+  color: rgb(0, 84, 180);
 }
 
 @media (max-width: 425px) {

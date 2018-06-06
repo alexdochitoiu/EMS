@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
+using System.Threading.Tasks;
 using Data.Core.Domain.Entities;
 using Data.Persistence;
+using Microsoft.EntityFrameworkCore.Internal;
 
 namespace WebAPI.Seeders
 {
@@ -14,12 +15,11 @@ namespace WebAPI.Seeders
             _context = context;
         }
 
-        public void Seed()
+        public async Task<int> SeedAsync()
         {
-            if (_context.Countries.Any()) return;
-
-            _context.Countries.AddRange(GetCountries());
-            _context.SaveChangesAsync();
+            if (_context.Countries.Any()) return -1;
+            await _context.Countries.AddRangeAsync(GetCountries());
+            return await _context.SaveChangesAsync();
         }
 
         private static IEnumerable<Country> GetCountries()

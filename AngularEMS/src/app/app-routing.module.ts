@@ -1,13 +1,15 @@
 import {NgModule} from '@angular/core';
 import {Routes, RouterModule} from '@angular/router';
+import { AuthGuard } from './guards/auth.guard';
 
 import { HomeComponent } from './components/home/home.component';
 import { LoginComponent } from './components/authentication/login/login.component';
 import { RegisterComponent } from './components/authentication/register/register.component';
 import { ForgotPasswordComponent } from './components/authentication/forgot-password/forgot-password.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
-import { AnnouncementsComponent } from './components/announcements/announcements.component';
-import { AuthGuard } from './guards/auth.guard';
+import { AnnouncementsComponent } from './components/announcement/announcements/announcements.component';
+import { UserProfileComponent } from './components/user-profile/user-profile.component';
+import { AnnouncementDetailsComponent } from './components/announcement/announcement-details/announcement-details.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -15,8 +17,9 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'forgot-password', component: ForgotPasswordComponent },
-
+  { path: 'users/:username', component: UserProfileComponent, canActivate: [AuthGuard] },
   { path: 'announcements', component: AnnouncementsComponent, canActivate: [AuthGuard] },
+  { path: 'announcements/:id', component: AnnouncementDetailsComponent, canActivate: [AuthGuard] },
 
   { path: '404', component: NotFoundComponent },
   { path: '**', redirectTo: '404' }

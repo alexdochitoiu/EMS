@@ -17,24 +17,26 @@ namespace Business.Repositories
             _dbContext = dbContext;
         }
 
-        public virtual async Task<IEnumerable<T>> GetAllAsync(Func<IQueryable<T>, IQueryable<T>> load)
-        {
-            var loadedData = load(_dbContext.Set<T>());
-            return await loadedData.ToListAsync();
-        }
+        public virtual async Task<IEnumerable<T>> GetAllAsync<TOrderKey>(
+            Func<IQueryable<T>, IQueryable<T>> load, 
+            Expression<Func<T, TOrderKey>> orderBy = null) =>
+            orderBy != null ?
+                await load(_dbContext.Set<T>().OrderBy(orderBy)).ToListAsync() :
+                await load(_dbContext.Set<T>()).ToListAsync();
 
-        public virtual async Task<IEnumerable<T>> GetAllAsync() => 
-            await _dbContext.Set<T>().ToListAsync();
+        public virtual async Task<IEnumerable<T>> GetAllAsync<TOrderKey>(
+            Expression<Func<T, TOrderKey>> orderBy = null) =>
+            orderBy != null ? 
+                await _dbContext.Set<T>().OrderBy(orderBy).ToListAsync() :
+                await _dbContext.Set<T>().ToListAsync();
         
-
-        public virtual async Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> predicate, 
-            Func<IQueryable<T>, IQueryable<T>> load)
-        {
-            var loadedData = load(_dbContext.Set<T>());
-            return await loadedData.Where(predicate).ToListAsync();
-        }
-
-        public virtual async Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> predicate) =>
+        public virtual async Task<IEnumerable<T>> FindAsync(
+            Expression<Func<T, bool>> predicate, 
+            Func<IQueryable<T>, IQueryable<T>> load) =>
+            await load(_dbContext.Set<T>()).Where(predicate).ToListAsync();
+      
+        public virtual async Task<IEnumerable<T>> FindAsync(
+            Expression<Func<T, bool>> predicate) =>
             await _dbContext.Set<T>().Where(predicate).ToListAsync();
 
         public virtual async Task<T> AddAsync(T entity)

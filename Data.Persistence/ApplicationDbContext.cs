@@ -26,5 +26,9 @@ namespace Data.Persistence
 
         public DbSet<Country> Countries { get; set; }
         public DbSet<City> Cities { get; set; }
+        public DbSet<Announcement> Announcements { get; set; }
+        public DbSet<Guide> Guides { get; set; }
+        public DbSet<Plan> Plans { get; set; }
+        public DbSet<Incident> Incidents { get; set; }
     }
 }

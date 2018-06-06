@@ -10,6 +10,7 @@ namespace Business
         private readonly ApplicationDbContext _context;
 
         public IUserRepository Users { get; }
+        public IAnnouncementRepository Announcements { get; }
         public ICountryRepository Countries { get; }
         public ICityRepository Cities { get; }
 
@@ -18,6 +19,7 @@ namespace Business
             _context = context;
             
             Users = new UserRepository(_context);
+            Announcements = new AnnouncementRepository(_context);
             Countries = new CountryRepository(_context);
             Cities = new CityRepository(_context);
         }

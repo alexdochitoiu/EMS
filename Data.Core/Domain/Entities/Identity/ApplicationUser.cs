@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using EnsureThat;
 using Microsoft.AspNetCore.Identity;
 
@@ -12,7 +13,8 @@ namespace Data.Core.Domain.Entities.Identity
         public DateTime DateOfBirth { get; private set; } 
         public Address Address { get; private set; }
         public DateTime Created { get; private set; }
-        public DateTime Modified { get; set; }
+        public DateTime Modified { get; private set; }
+        public IEnumerable<Announcement> Announcements { get; private set; }
 
         public int Age
         {
@@ -33,6 +35,7 @@ namespace Data.Core.Domain.Entities.Identity
             var user = new ApplicationUser
             {
                 Id = new Guid(),
+                Announcements = new List<Announcement>(),
                 Created = DateTime.Now
             };
             user.Update(firstName, lastName, gender, dateOfBirth, email, username, phone, address);

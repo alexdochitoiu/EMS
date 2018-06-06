@@ -33,6 +33,7 @@ namespace Business.Repositories
                     .ThenInclude(a => a.Country)
                 .Include(t => t.Address)
                     .ThenInclude(a => a.City)
+                .Include(t => t.Announcements)
                 .FirstOrDefaultAsync(t => t.Id == id);
         }
 

@@ -1,0 +1,10 @@
+.title-announcement {
+    color: rgba(255, 255, 255, 0.5);
+    margin: -20px 0;
+}
+.title-announcement span {
+    color: white;
+    font-size: 0.7em;
+    bottom: 10px;
+    position: relative;
+}

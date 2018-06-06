@@ -95,3 +95,20 @@ body.modal-open {
 .ngx-pagination .current {
   background: #464948 !important;
 }
+
+.bg-announcement {
+  height: 150px;
+  padding-top: 50px;
+  background-image: url("/assets/wallpaper2.jpg");
+  background-color: rgba(255, 255, 255, 0.75);
+  background-position: right top;
+  background-attachment: fixed;
+}
+
+.title-announcement {
+  font-size: 32px;
+  font-family: 'Montserrat', sans-serif;
+  color: white;
+  text-align: center;
+  background: rgba(0, 0, 0, 0.5);
+}

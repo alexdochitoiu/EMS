@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebAPI.Infrastructure;
+using WebAPI.Models.AnnouncementModels;
 using WebAPI.Models.UserModels;
 
 namespace WebAPI.Controllers
@@ -35,10 +36,9 @@ namespace WebAPI.Controllers
         [AuthorizeToken]
         public async Task<ActionResult> AllUsers()
         {
-            var x = IocContainer.Configuration["JWTAuth:SecurityKey"];
             try
             {
-                var users = await _unitOfWork.Users.GetAllAsync(
+                var users = await _unitOfWork.Users.GetAllAsync<object>(
                       t => t.Include(user => user.Address)
                                 .ThenInclude(address => address.Country)
                             .Include(user => user.Address)
@@ -89,20 +89,18 @@ namespace WebAPI.Controllers
             }
         }
 
-        // GET api/users/alexdochitoiu@gmail.com
-        [HttpGet("{email}", Name = "UsersByEmail")]
-        [ProducesResponseType(typeof(List<DisplayUserModel>), 200)]
-        public async Task<ActionResult> UsersByEmail(string email)
+        // GET api/users/5/announcements
+        [HttpGet("{id:guid}/announcements", Name = "UserAnnouncements")]
+        [ProducesResponseType(typeof(List<DisplayAnnouncementModel>), 200)]
+        public async Task<ActionResult> UserAnnouncements(Guid id)
         {
             try
             {
-                var user = await _unitOfWork.Users.GetByEmailAsync(email);
-                if (user == null)
-                {
-                    return BadRequest("User not found");
-                }
-                var displayUser = _mapper.Map<DisplayUserModel>(user);
-                return Ok(displayUser);
+                var user = await _unitOfWork.Users.GetByIdAsync(id);
+                if (user == null) return NotFound();
+
+                var displayAnnouncements = _mapper.Map<List<DisplayAnnouncementModel>>(user.Announcements);
+                return Ok(displayAnnouncements);
             }
             catch (Exception exp)
             {

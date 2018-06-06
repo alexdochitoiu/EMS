@@ -1,0 +1,20 @@
+<div class="announce-box">
+  <div class="announce-title">
+    <i #icon class="fa fa-bullhorn"></i>{{ announcement.Title }}
+    <i (click)="navigateToAnnouncementDetails(announcement.Id)" 
+       class="fa fa-expand" 
+       id="expand">
+    </i>
+  </div>
+  <div class="announce-description">{{ announcement.Description }}</div>
+
+  <div class="row">
+    <div class="posted-by">
+      Posted by 
+      <a (click)="navigateToUserProfile(announcement.AuthorUsername)">
+        {{ announcement.AuthorUsername }}
+      </a>
+    </div>
+    <div class="posted-at">{{ announcement.PostedAt }}</div>
+  </div>
+</div>

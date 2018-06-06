@@ -19,10 +19,10 @@ namespace WebAPI.Infrastructure
     {
         public static void AddDbContext(this IServiceCollection services)
         {
-            var dbConnection = IocContainer.Configuration.GetConnectionString("EMSConnection");
+            var connection = IocContainer.Configuration.GetConnectionString("SQLExpressConnection");
 
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlite(dbConnection));
+                options.UseSqlServer(connection, b => b.MigrationsAssembly("WebAPI")));
 
             services.AddIdentity<ApplicationUser, Role>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
@@ -42,6 +42,7 @@ namespace WebAPI.Infrastructure
                 c.AddProfile(new AddressProfile());
                 c.AddProfile(new CityProfile());
                 c.AddProfile(new CountryProfile());
+                c.AddProfile(new AnnouncementProfile());
             });
             var mapper = config.CreateMapper();
             services.AddSingleton(mapper);
@@ -49,7 +50,9 @@ namespace WebAPI.Infrastructure
 
         public static void AddTrasitentServices(this IServiceCollection services)
         {
-            services.AddTransient<DatabaseSeeder>();
+            services.AddTransient<CountriesSeeder>();
+            services.AddTransient<CitiesSeeder>();
+            services.AddTransient<IDatabaseSeeder, DatabaseSeeder>();
             services.AddTransient<IEmailSender, SendGridEmailSender>();
         }
 
