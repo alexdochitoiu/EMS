@@ -89,6 +89,24 @@ namespace WebAPI.Controllers
             }
         }
 
+        // GET api/users/dokee131
+        [HttpGet("{username}", Name = "UsersByUsername")]
+        [ProducesResponseType(typeof(DisplayUserModel), 200)]
+        public async Task<ActionResult> UsersByUsername(string username)
+        {
+            try
+            {
+                var user = await _unitOfWork.Users.GetByUsernameAsync(username);
+                var displayUser = _mapper.Map<DisplayUserModel>(user);
+                return Ok(displayUser);
+            }
+            catch (Exception exp)
+            {
+                Console.Write(exp);
+                return BadRequest();
+            }
+        }
+
         // GET api/users/5/announcements
         [HttpGet("{id:guid}/announcements", Name = "UserAnnouncements")]
         [ProducesResponseType(typeof(List<DisplayAnnouncementModel>), 200)]

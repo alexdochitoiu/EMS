@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { HttpClient } from '@angular/common/http';
-import { UserRegisterModel, UserLoginModel } from './user.model';
+import { UserRegisterModel, UserLoginModel, UserModel } from './user.model';
 import { InfrastructureService } from '../infra/infra.service';
 import 'rxjs/add/operator/map';
 import { AngularFireAuth } from 'angularfire2/auth';
@@ -31,6 +31,14 @@ export class UserService {
   userByEmail(email: string) {
     this.url = this.infra.URL + '/api/users/' + email;
     return this.http.get(this.url);
+  }
+
+  userByUsername(username: string): Observable<UserModel> {
+    this.url = this.infra.URL + '/api/users/' + username;
+    return this.http.get(this.url)
+      .map((u: any) => 
+        new UserModel(u.firstName, u.lastName, u.username, u.email, 
+          u.gender, u.dateOfBirth, u.phoneNumber, u.address));
   }
   
   doFacebookLogin(){
@@ -73,4 +81,5 @@ export class UserService {
       })
     });
   }
+  
 }

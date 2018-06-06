@@ -1,0 +1,57 @@
+.body-container {
+    padding-top: 160px;
+    margin-top: -150px;
+    padding-bottom: 30px;
+}
+.profile-image {
+    display: block;
+    width: 150px;
+    height: 150px;
+    border: 2px solid rgba(128, 128, 128, 0.3);
+    background: rgba(255, 255, 255, 0.3);;
+    padding: 3px;
+    position: relative;
+    margin-left: auto;
+    margin-right: auto;
+    top: -40px;
+}
+.table-user-information {
+    margin: 0 auto;
+    width: 70%;
+}
+td i {
+    padding-right: 8px;
+}
+td {
+    padding: 0 75px;
+    width: 50%;
+    text-align: right;    
+    color: lightseagreen;
+}
+tr:nth-child(2n+1) {
+    background: rgba(211, 211, 211, 0.3);
+}
+tr > td:first-child {
+    font-size: 1.1em;
+    font-weight: 400;
+    color: grey;
+    text-align: left;
+}
+.edit-profile-btn {
+    display: block;
+    margin: 15px auto;
+}
+@media (max-width: 768px) {
+    td { padding: 0 5px;}
+}
+@media (max-width: 425px) {
+    .title-announcement {
+        font-size: 22px;
+    }
+    .table-user-information {
+        width: 95%;
+    }
+    tr > td:first-child {
+        font-size: 1em;
+    }
+}

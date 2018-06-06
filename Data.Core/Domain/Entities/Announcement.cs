@@ -40,8 +40,7 @@ namespace Data.Core.Domain.Entities
                 .HasLengthBetween(5, 50);
 
             Ensure.That(description)
-                .IsNotNullOrEmpty()
-                .HasLengthBetween(25, 1500);
+                .IsNotNullOrEmpty();
 
             Ensure.That(userId).IsNotEmpty();
         }

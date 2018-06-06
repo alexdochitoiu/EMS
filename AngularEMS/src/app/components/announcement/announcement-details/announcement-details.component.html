@@ -1,9 +1,28 @@
 <app-navbar></app-navbar>
 <div class="bg-announcement">
-  <div class="title-announcement">
-    Announcements<br>
-    <span *ngIf="isAvailable">{{ announcement.Title }}</span></div>
+  <div *ngIf="isAvailable" class="title-announcement">
+    {{ announcement.Title }}
+  </div>
 </div>
-<div class="body-container">
-
+<div *ngIf="isAvailable" class="body-container">
+    <div class="severity">Severity: <span [style.color]="getColor()">{{ severity }}</span></div>
+    <div class="photo-gallery">
+      <div class="row">
+          <ks-modal-gallery [modalImages]="images"></ks-modal-gallery>
+      </div>
+    </div>
+    <div class="description">
+      <div class="row">
+        <div class="posted-by">
+          Posted by 
+          <a (click)="navigateToUserProfile(announcement.AuthorUsername)">
+            {{ announcement.AuthorUsername }}
+          </a>
+        </div>
+        <div class="posted-at">{{ announcement.PostedAt }}</div>
+      </div>
+      <p>
+        {{ announcement.Description }}
+      </p>
+    </div>
 </div>

@@ -10,5 +10,6 @@ namespace Data.Core.Interfaces
         Task<ApplicationUser> GetByIdAsync(Guid id);
         Task<IEnumerable<ApplicationUser>> GetByAgeAsync(int age);
         Task<ApplicationUser> GetByEmailAsync(string email);
+        Task<ApplicationUser> GetByUsernameAsync(string username);
     }
 }

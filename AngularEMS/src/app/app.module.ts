@@ -11,6 +11,9 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { AngularFireModule } from 'angularfire2';
 import { AngularFirestoreModule } from 'angularfire2/firestore';
 import { AngularFireAuthModule } from 'angularfire2/auth';
+import 'hammerjs';
+import 'mousetrap';
+import {ModalGalleryModule} from 'angular-modal-gallery';
 import { environment } from '../environments/environment';
 
 import { AppComponent } from './app.component';
@@ -46,6 +49,7 @@ import { AnnouncementDetailsComponent } from './components/announcement/announce
     AnnouncementDetailsComponent
   ],
   imports: [
+    ModalGalleryModule.forRoot(),
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule, // imports firebase/firestore, only needed for database features
     AngularFireAuthModule, // imports firebase/auth, only needed for auth features

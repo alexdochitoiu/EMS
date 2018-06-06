@@ -18,7 +18,8 @@ body.modal-open {
   margin: 0 auto;
   padding: 0 15px;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-  min-height: 2000px;
+  height: auto;
+  overflow: hidden;
 }
 
 .bg-search {
@@ -111,4 +112,56 @@ body.modal-open {
   color: white;
   text-align: center;
   background: rgba(0, 0, 0, 0.5);
+}
+
+.photo-gallery > div > ks-modal-gallery > ks-plain-gallery > .plain-container {
+  display: initial !important;
+}
+
+.photo-gallery > div > ks-modal-gallery > ks-plain-gallery > .plain-container > img {
+  position: relative;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 5px;
+  margin: 5px;
+  width: 220px !important;
+  height: 180px !important;
+  cursor: pointer;
+  object-fit: contain;
+  z-index: 1;
+}
+
+.photo-gallery > div > ks-modal-gallery > ks-plain-gallery > .plain-container > img:hover {
+  box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.5);
+}
+
+.bg-user-profile {
+  height: 150px;
+  padding-top: 50px;
+  background-image: url("/assets/wallpaper3.jpg");
+  background-color: rgba(255, 255, 255, 0.75);
+  background-position: right top;
+  background-attachment: fixed;
+}
+
+@media (max-width: 1023px) {
+  .photo-gallery {
+      width: auto;
+      float: none;
+  }
+}
+@media (max-width: 425px) {
+  .photo-gallery {
+    width: 100% !important;
+  }
+  .photo-gallery > div > ks-modal-gallery {
+    margin: 0 auto;
+  }
+  .photo-gallery > div > ks-modal-gallery > ks-plain-gallery > .plain-container {
+    width: 100%;
+    display: inline-grid !important;
+  }
+  .photo-gallery > div > ks-modal-gallery > ks-plain-gallery > .plain-container > img {
+      margin: 5px auto !important;
+  }
 }

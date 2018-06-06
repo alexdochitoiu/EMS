@@ -1,3 +1,40 @@
-<p>
-  user-profile works!
-</p>
+<app-navbar></app-navbar>
+<div class="bg-user-profile">
+  <div class="title-announcement">
+    Alex Dochitoiu's Profile
+  </div>
+</div>
+<img class="profile-image" [src]="profilePhoto" />
+<div *ngIf="isAvailable" class="body-container">
+  <table class="table table-user-information">
+    <tbody>
+      <tr>
+        <td><i class="fa fa-envelope"></i> Email</td>
+        <td>{{ user.Email }}</td>
+      </tr>
+      <tr>
+        <td><i class="fa fa-user"></i> Username </td>
+        <td>{{ user.Username }}</td>
+      </tr>
+      <tr>
+        <td><i class="fa fa-phone"></i> Phone number </td>
+        <td>{{ user.Phone }}</td>
+      </tr>
+      <tr>
+        <td><i class="fa fa-transgender" style="font-weight: 800;"></i> Gender </td>
+        <td>{{ user.Gender }}</td>
+      </tr>      
+      <tr>
+        <td><i class="fa fa-calendar"></i> Date of Birth</td>
+        <td>{{ user.DateOfBirth }}</td>
+      </tr>
+      <tr>
+          <td><i class="fa fa-map-marker"></i> Address</td>
+          <td>
+            {{ user.address }}
+          </td>
+        </tr>
+    </tbody>
+  </table>
+  <button type="button" class="btn btn-primary edit-profile-btn">Edit profile</button>
+</div>
