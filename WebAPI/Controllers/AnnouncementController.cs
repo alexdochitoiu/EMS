@@ -6,7 +6,6 @@ using Data.Core.Domain.Entities;
 using Data.Core.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using WebAPI.Infrastructure;
 using WebAPI.Models.AnnouncementModels;
 
 namespace WebAPI.Controllers

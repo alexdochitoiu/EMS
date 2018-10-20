@@ -17,9 +17,9 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'forgot-password', component: ForgotPasswordComponent },
+  { path: 'announcements', component: AnnouncementsComponent },
+  { path: 'announcements/:id', component: AnnouncementDetailsComponent },
   { path: 'users/:username', component: UserProfileComponent, canActivate: [AuthGuard] },
-  { path: 'announcements', component: AnnouncementsComponent, canActivate: [AuthGuard] },
-  { path: 'announcements/:id', component: AnnouncementDetailsComponent, canActivate: [AuthGuard] },
 
   { path: '404', component: NotFoundComponent },
   { path: '**', redirectTo: '404' }

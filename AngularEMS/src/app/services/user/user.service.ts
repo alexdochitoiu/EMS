@@ -48,6 +48,7 @@ export class UserService {
       .signInWithPopup(provider)
       .then(res => {
         resolve(res);
+        console.log(res);
       }, err => {
         reject(err);
       })

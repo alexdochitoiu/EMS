@@ -40,7 +40,7 @@ namespace WebAPI.Controllers
                 {
                     Errors = new List<string>(new[] {invalidErrorMessage})
                 });
-
+            
             invalidErrorMessage = "Your password and confirmation password do not match.";
             if (registerCredentials.Password != registerCredentials.ConfirmPassword)
                 return BadRequest(new RegisterResultModel
@@ -108,15 +108,15 @@ namespace WebAPI.Controllers
             if (user.EmailConfirmed) return BadRequest("Email already verified");
 
             var result = await _userManager.ConfirmEmailAsync(user, emailToken);
-            if (result.Succeeded) return Ok("Email verified");
-
-            return BadRequest("Invalid email verification token");
+            return result.Succeeded ? 
+                    Ok("Email verified") 
+                    : (IActionResult) BadRequest("Invalid email verification token");
         }
 
         [HttpPost("login", Name="Login")]
         public async Task<IActionResult> LoginAsync([FromBody]LoginCredentialsModel loginCredentials)
         {
-            var invalidErrorMessage = "Invalid username or password";
+            const string invalidErrorMessage = "Invalid username or password";
             if (string.IsNullOrWhiteSpace(loginCredentials?.EmailOrUsername))
                 return BadRequest(invalidErrorMessage);
 
@@ -133,19 +133,39 @@ namespace WebAPI.Controllers
 
             var isValidPassword = await _userManager.CheckPasswordAsync(user, loginCredentials.Password);
 
-            if (!isValidPassword)
-                return BadRequest(new LoginResultModel
+            return !isValidPassword
+                ? BadRequest(new LoginResultModel
                 {
                     Errors = new List<string>(new[] { invalidErrorMessage })
+                })
+                : (IActionResult) Ok(new LoginResultModel
+                {
+                    FirstName = user.FirstName,
+                    Email = user.Email,
+                    LastName = user.LastName,
+                    Username = user.UserName,
+                    Token = user.GenerateJwtToken()
                 });
+        }
+
+        [HttpPost("login/external", Name = "ExternalLogin")]
+        public async Task<IActionResult> ExternalLoginAsync([FromBody]ExternalLoginModel externalLoginModel)
+        {
+            var isEmail = externalLoginModel.EmailOrUsername.Contains("@");
+
+            var user = isEmail ?
+                await _userManager.FindByEmailAsync(externalLoginModel.EmailOrUsername) :
+                await _userManager.FindByNameAsync(externalLoginModel.EmailOrUsername);
+
+            var errors = user == null ? new List<string>(new[] {"User not registered"}) : null;
 
             return Ok(new LoginResultModel
             {
-                FirstName = user.FirstName,
-                Email = user.Email,
-                LastName = user.LastName,
-                Username = user.UserName,
-                Token = user.GenerateJwtToken()
+                Email = isEmail ? externalLoginModel.EmailOrUsername : null,
+                FirstName = externalLoginModel.FirstName,
+                LastName = externalLoginModel.LastName,
+                Username = !isEmail ? externalLoginModel.EmailOrUsername : null,
+                Errors = errors
             });
         }
     }

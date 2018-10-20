@@ -86,6 +86,7 @@ namespace WebAPI.Infrastructure
         public static void AddJwtAuthentication(this IServiceCollection services)
         {
             services.AddAuthentication()
+                
                 .AddJwtBearer(options =>
                 {
                     options.TokenValidationParameters = new TokenValidationParameters

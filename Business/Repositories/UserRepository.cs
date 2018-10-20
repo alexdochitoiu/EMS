@@ -41,9 +41,9 @@ namespace Business.Repositories
         {
             return await _context.Users
                 .Include(t => t.Address)
-                .ThenInclude(a => a.Country)
+                    .ThenInclude(a => a.Country)
                 .Include(t => t.Address)
-                .ThenInclude(a => a.City)
+                    .ThenInclude(a => a.City)
                 .FirstOrDefaultAsync(t => t.NormalizedEmail == email.ToUpper());
         }
 
