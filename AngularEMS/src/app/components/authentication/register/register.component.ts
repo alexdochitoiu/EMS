@@ -1,6 +1,9 @@
 import { NgForm } from '@angular/forms/src/directives';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { Component, ViewChild, AfterViewInit } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
+import { Router } from '@angular/router';
+
 import { UserRegisterModel } from '../../../services/user/user.model';
 import { UserService } from '../../../services/user/user.service';
 import { AuthService } from '../../../services/auth/auth.service';
@@ -10,33 +13,45 @@ import { AuthService } from '../../../services/auth/auth.service';
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css']
 })
-export class RegisterComponent implements OnInit {
+export class RegisterComponent implements AfterViewInit {
 
   user: UserRegisterModel;
-  event: MouseEvent;
   errors: Array<string>;
   successRegistered = false;
 
+  @ViewChild('content') content;
+  private modalRef: NgbModalRef;
+
   constructor(private userService: UserService,
-              private authService: AuthService) {
+              private authService: AuthService,
+              private modalService: NgbModal,
+              private router: Router) {
     if (this.authService.isLoggedIn()) {
       this.authService.logout();
     }
     this.user = new UserRegisterModel();
-    this.event = new MouseEvent('click', {bubbles: true});
   }
 
-  @ViewChild('register') registerModal;
-
-  ngOnInit() {
-    
+  ngAfterViewInit() {
     console.log('Modal register form opening...');
-    this.showRegisterForm();
+    setTimeout(() => { this.open(this.content); });
     this.resetForm();
   }
 
-  showRegisterForm() {
-    this.registerModal.nativeElement.dispatchEvent(this.event);
+  ngOnDestroy() {
+    if (this.modalRef !== null) this.modalRef.close()
+  }
+
+  open(content) {
+    this.modalRef = this.modalService.open(content);
+    this.modalRef.result.then(
+      () => {
+        console.log('When user closes'); 
+      }, 
+      () => {         
+        console.log('Backdrop click')
+      }
+    );
   }
 
   resetForm(form?: NgForm) {

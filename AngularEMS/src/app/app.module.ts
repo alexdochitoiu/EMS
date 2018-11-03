@@ -13,7 +13,7 @@ import { AngularFirestoreModule } from 'angularfire2/firestore';
 import { AngularFireAuthModule } from 'angularfire2/auth';
 import 'hammerjs';
 import 'mousetrap';
-import {ModalGalleryModule} from 'angular-modal-gallery';
+import { ModalGalleryModule } from '@ks89/angular-modal-gallery';
 import { environment } from '../environments/environment';
 
 import { AppComponent } from './app.component';

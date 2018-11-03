@@ -3,7 +3,7 @@ import { Announcement } from '../../../services/announcement/announcement.model'
 import { ActivatedRoute, Router } from '@angular/router';
 import { AnnouncementService } from '../../../services/announcement/announcement.service';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Image, PlainGalleryConfig, AdvancedLayout, PlainGalleryStrategy, LineLayout } from 'angular-modal-gallery';
+import { Image, PlainGalleryConfig, AdvancedLayout, PlainGalleryStrategy, LineLayout } from '@ks89/angular-modal-gallery';
 
 @Component({
   selector: 'app-announcement-details',

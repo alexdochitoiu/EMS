@@ -1,15 +1,15 @@
 <app-home></app-home>
-<button #register id="openRegisterForm" [hidden]="true" data-dismiss="modal" data-toggle="modal" data-target="#registerModal" data-backdrop="static" data-keyboard="false">Register</button><!-- Modal -->
 
-<div class="modal fade" id="registerModal" tabindex="-1" role="dialog" aria-labelledby="registerModal" aria-hidden="true">
+<div tabindex="-1" role="dialog" aria-labelledby="registerModal" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <form #userRegistrationForm="ngForm" (ngSubmit)="onSubmit(userRegistrationForm)" ngNativeValidate>
-        <!--Content-->
+        <!--Content-->    
+        <ng-template #content let-modal> 
         <div class="modal-content form-elegant">
             <!--Header-->
             <div class="modal-header text-center">
-                <h3 class="modal-title w-100 dark-grey-text font-weight-bold my-3" id="registerModal"><strong>Sign up</strong></h3>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close" routerLink='/'>
+                <h3 class="modal-title w-100 dark-grey-text font-weight-bold my-3"><strong>Sign up</strong></h3>
+                <button type="button" class="close" aria-label="Close" (click)="modal.close()">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -65,9 +65,10 @@
             </div>
             <!--Footer-->
             <div class="modal-footer mx-5 pt-3 mb-1">
-                <p class="font-small grey-text d-flex justify-content-end">Already a member? <a routerLink="/login" data-dismiss="modal" class="blue-text ml-1"> Sign In</a></p>
+                <p class="font-small grey-text d-flex justify-content-end">Already a member? <a (click)="modal.close()" routerLink="/login" class="blue-text ml-1"> Sign In</a></p>
             </div>
         </div>
+        </ng-template>
         <!--/.Content-->
       </form>
     </div>

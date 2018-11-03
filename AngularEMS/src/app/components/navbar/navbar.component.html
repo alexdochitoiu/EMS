@@ -9,7 +9,7 @@
 </nav>
 <nav class="navbar navbar-expand-lg navbar-light bg-light nav-height-100">
   <div class="container">
-    <a class="navbar-brand" routerLink='/home'><img width="100" src="../../../assets/ems_logo2.png"/></a>
+    <a class="navbar-brand" routerLink='/'><img width="100" src="../../../assets/ems_logo2.png"/></a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -35,8 +35,8 @@
         </li>
       </ul>
       <div *ngIf="!loggedIn" class="auth-btns">
-          <button routerLink="/register" class="btn btn-secondary my-2 my-sm-0" type="submit" data-toggle="modal" data-target="#registerModal" data-dismiss="modal">Register</button>
-          <button routerLink="/login" class="btn btn-success my-2 my-sm-0" type="submit" data-toggle="modal" data-target="#loginModal" data-dismiss="modal">Login</button>
+          <button routerLink="/register" class="btn btn-secondary my-2 my-sm-0" type="submit">Register</button>
+          <button routerLink="/login" class="btn btn-success my-2 my-sm-0" type="submit">Login</button>
       </div>
       <div *ngIf="loggedIn" class="auth-btns loggedIn">
           <span>

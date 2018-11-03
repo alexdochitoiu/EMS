@@ -1,17 +1,15 @@
 <app-home></app-home>
-
-<button #login id="openLoginForm" [hidden]="true" data-toggle="modal" data-target="#loginModal" data-backdrop="static" data-keyboard="false">Login</button>
-
 <!-- Modal -->
-<div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModal" aria-hidden="true">
+<div tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <form #userLoginForm="ngForm" ngNativeValidate>
-        <!--Content-->
+        <!--Content-->        
+        <ng-template #content let-modal> 
         <div class="modal-content form-elegant">
             <!--Header-->
             <div class="modal-header text-center">
-                <h3 class="modal-title w-100 dark-grey-text font-weight-bold my-3" id="loginModal"><strong>Sign in</strong></h3>
-                <button #closeBtn type="button" class="close" data-dismiss="modal" aria-label="Close" routerLink='/'>
+                <h3 class="modal-title w-100 dark-grey-text font-weight-bold"><strong>Sign in</strong></h3>
+                <button type="button" class="close" (click)="modal.close()">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -28,7 +26,7 @@
                     <i class="fa fa-lock prefix grey-text"></i>
                     <input type="password" id="password-login" class="form-control" name="Password" #Password="ngModel" [(ngModel)]="user.Password" required>
                     <label for="password-login">Your password</label>
-                    <p class="font-small blue-text d-flex justify-content-end"><a routerLink="/forgot-password" data-dismiss="modal"  class="blue-text ml-1">Forgot Password?</a></p>
+                    <p class="font-small blue-text d-flex justify-content-end"><a routerLink="/forgot-password" (click)="modal.close()" class="blue-text ml-1">Forgot Password?</a></p>
                 </div>
 
                 <div *ngFor="let error of errors" class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -54,9 +52,10 @@
             </div>
             <!--Footer-->
             <div class="modal-footer mx-5 pt-3 mb-1">
-                <p class="font-small grey-text d-flex justify-content-end">Not a member? <a routerLink="/register" data-dismiss="modal" class="blue-text ml-1"> Sign Up</a></p>
+                <p class="font-small grey-text d-flex justify-content-end">Not a member? <a routerLink="/register" (click)="modal.close()" class="blue-text ml-1"> Sign Up</a></p>
             </div>
         </div>
+        </ng-template>
         <!--/.Content-->
       </form>
     </div>

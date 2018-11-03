@@ -33,11 +33,11 @@
 .btn-google-plus {
   background-color: #d34836;
 }
-.modal-dialog .form-elegant .social-buttons-login .btn {
+.social-buttons-login > .btn {
   display: inline-block;
   padding: 6px 50px;
   height: 35px;
-  margin:10px 0 0 2%;
+  margin: 10px 0 0 2%;
   flex-grow: 1;
   width: calc(100% * (1/3) - 11px);
 }

@@ -12,14 +12,39 @@ import { UserProfileComponent } from './components/user-profile/user-profile.com
 import { AnnouncementDetailsComponent } from './components/announcement/announcement-details/announcement-details.component';
 
 const routes: Routes = [
-  { path: '', component: HomeComponent },
-  { path: 'home', component: HomeComponent },
-  { path: 'login', component: LoginComponent },
-  { path: 'register', component: RegisterComponent },
-  { path: 'forgot-password', component: ForgotPasswordComponent },
-  { path: 'announcements', component: AnnouncementsComponent },
-  { path: 'announcements/:id', component: AnnouncementDetailsComponent },
-  { path: 'users/:username', component: UserProfileComponent, canActivate: [AuthGuard] },
+  { 
+    path: '', 
+    component: HomeComponent 
+  },
+  { 
+    path: 'home', 
+    component: HomeComponent 
+  },
+  { 
+    path: 'login', 
+    component: LoginComponent
+  },
+  { 
+    path: 'register', 
+    component: RegisterComponent
+  },
+  { 
+    path: 'forgot-password', 
+    component: ForgotPasswordComponent 
+  },
+  { 
+    path: 'announcements', 
+    component: AnnouncementsComponent 
+  },
+  { 
+    path: 'announcements/:id', 
+    component: AnnouncementDetailsComponent 
+  },
+  { 
+    path: 'users/:username', 
+    component: UserProfileComponent, 
+    canActivate: [AuthGuard] 
+  },
 
   { path: '404', component: NotFoundComponent },
   { path: '**', redirectTo: '404' }

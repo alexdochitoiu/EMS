@@ -1,14 +1,13 @@
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
 import { InfrastructureService } from '../infra/infra.service';
+import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  constructor(private router: Router,
-              private infra: InfrastructureService) { }
+  constructor(private infra: InfrastructureService) { }
 
   login(token: string, email: string, photoURL: string) {
     localStorage.setItem(this.infra.TOKEN_KEY, token);    

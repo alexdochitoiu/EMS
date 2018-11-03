@@ -2,9 +2,8 @@ import { Injectable } from '@angular/core';
 import { InfrastructureService } from '../infra/infra.service';
 import { Announcement } from './announcement.model';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/map';
-import { Title } from '@angular/platform-browser';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -19,16 +18,16 @@ export class AnnouncementService {
   getAllAnnouncements(): Observable<Array<Announcement>> {
     this.url = this.infra.URL + '/api/announcements';
     return this.http.get<Array<Announcement>>(this.url)
-      .map(array => array
+      .pipe(map(array => array
         .map((a: any) => 
-          new Announcement(a.id, a.title, a.description, a.user, a.created, a.severity)));              
+          new Announcement(a.id, a.title, a.description, a.user, a.created, a.severity))));              
   }
 
   getAnnouncement(id: string): Observable<Announcement> {
     this.url = this.infra.URL + '/api/announcements/' + id;
     return this.http.get<Announcement>(this.url)
-      .map((a: any) =>
-        new Announcement(a.id, a.title, a.description, a.user, a.created, a.severity));
+      .pipe(map((a: any) =>
+        new Announcement(a.id, a.title, a.description, a.user, a.created, a.severity)));
   }
   
   getUsersAnnouncements(userId: string): Observable<Array<Announcement>> {

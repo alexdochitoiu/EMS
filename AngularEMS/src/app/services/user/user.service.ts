@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { UserRegisterModel, UserLoginModel, UserModel } from './user.model';
 import { InfrastructureService } from '../infra/infra.service';
-import 'rxjs/add/operator/map';
 import { AngularFireAuth } from 'angularfire2/auth';
 import * as firebase from 'firebase/app';
 
@@ -20,12 +20,12 @@ export class UserService {
 
   registerUser(user: UserRegisterModel) {
     this.url = this.infra.URL + '/api/account/register';
-    return this.http.post(this.url, user).map((response: Response) => <any>response);
+    return this.http.post(this.url, user).pipe(map((response: Response) => <any>response));
   }
   
   loginUser(user: UserLoginModel) {
     this.url = this.infra.URL + '/api/account/login';
-    return this.http.post(this.url, user).map((response: Response) => <any>response);
+    return this.http.post(this.url, user).pipe(map((response: Response) => <any>response));
   }
 
   userByEmail(email: string) {
@@ -36,9 +36,9 @@ export class UserService {
   userByUsername(username: string): Observable<UserModel> {
     this.url = this.infra.URL + '/api/users/' + username;
     return this.http.get(this.url)
-      .map((u: any) => 
+      .pipe(map((u: any) => 
         new UserModel(u.firstName, u.lastName, u.username, u.email, 
-          u.gender, u.dateOfBirth, u.phoneNumber, u.address));
+          u.gender, u.dateOfBirth, u.phoneNumber, u.address)));
   }
   
   doFacebookLogin(){
