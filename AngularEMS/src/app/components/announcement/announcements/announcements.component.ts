@@ -12,6 +12,7 @@ export class AnnouncementsComponent implements OnInit {
 
   grid = false;
   announcements: Array<Announcement>;
+  announcementsAvailable: boolean;
 
   constructor(private announcementService: AnnouncementService) {
     this.getAnnouncements();
@@ -38,10 +39,11 @@ export class AnnouncementsComponent implements OnInit {
     this.announcementService.getAllAnnouncements().subscribe(
       (response: any) => {
         this.announcements = response;
+        this.announcementsAvailable = this.announcements.length > 0;
         console.log(response);
       },
       (errorResponse: HttpErrorResponse) => {
-        console.log(errorResponse);
+        console.log(`Error: ${errorResponse}`);
       }
     );
   }

@@ -9,7 +9,7 @@
             <!--Header-->
             <div class="modal-header text-center">
                 <h3 class="modal-title w-100 dark-grey-text font-weight-bold my-3"><strong>Sign up</strong></h3>
-                <button type="button" class="close" aria-label="Close" (click)="modal.close()">
+                <button type="button" class="close" aria-label="Close" (click)="modalRef.close()">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -65,7 +65,7 @@
             </div>
             <!--Footer-->
             <div class="modal-footer mx-5 pt-3 mb-1">
-                <p class="font-small grey-text d-flex justify-content-end">Already a member? <a (click)="modal.close()" routerLink="/login" class="blue-text ml-1"> Sign In</a></p>
+                <p class="font-small grey-text d-flex justify-content-end">Already a member? <a (click)="modalRef.close()" routerLink="/login" class="blue-text ml-1"> Sign In</a></p>
             </div>
         </div>
         </ng-template>

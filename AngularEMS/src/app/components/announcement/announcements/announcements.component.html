@@ -2,25 +2,35 @@
 <div class="bg-announcement">
   <div class="title-announcement">Announcements</div>
 </div>
-<div class="pag-div">
+<div *ngIf="announcementsAvailable">
+  <div class="pag-div">
     <pagination-controls (pageChange)="p = $event"></pagination-controls>
-</div>  
-<div class="grid-list">
+  </div>  
+  <div class="grid-list">
     <a (click)="gridMode(false)" [style.color]="listActive()"><i class="fa fa-bars"></i></a>
     <a (click)="gridMode(true)" [style.color]="gridActive()"><i class="fa fa-th"></i></a>
-</div>
-<div class="container">
+  </div>
+  <div class="container">
     <div *ngIf="grid" class="row">
-      <app-announcement-box class="col-4" *ngFor="let item of announcements | paginate: { itemsPerPage: 12, currentPage: p }" 
-                        [announcement]="item">
+      <app-announcement-box 
+        class="col-4" 
+        *ngFor="let item of announcements | paginate: { itemsPerPage: 12, currentPage: p }" 
+        [announcement]="item"
+      >
       </app-announcement-box>
     </div>
     <div *ngIf="!grid">
-      <app-announcement-box *ngFor="let item of announcements | paginate: { itemsPerPage: 10, currentPage: p }" 
-        [announcement]="item">
+      <app-announcement-box 
+        *ngFor="let item of announcements | paginate: { itemsPerPage: 10, currentPage: p }" 
+        [announcement]="item"
+      >
       </app-announcement-box>
     </div>
-</div>
-<div class="pag-div">
+  </div>
+  <div class="pag-div">
     <pagination-controls (pageChange)="p = $event"></pagination-controls>
-</div>  
+  </div>  
+</div>
+<div *ngIf="!announcementsAvailable">
+  <h3>No announcements available</h3>
+</div>
