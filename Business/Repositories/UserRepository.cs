@@ -5,6 +5,7 @@ using Data.Core.Domain.Entities.Identity;
 using Data.Core.Interfaces;
 using Data.Persistence;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace Business.Repositories
 {
@@ -55,6 +56,16 @@ namespace Business.Repositories
                 .Include(t => t.Address)
                     .ThenInclude(a => a.City)
                 .FirstOrDefaultAsync(t => t.NormalizedUserName == username.ToUpper());
+        }
+
+        public async Task<EntityEntry<UserToken>> AddUserTokenAsync(UserToken userToken)
+        {
+            return await _context.UserTokens.AddAsync(userToken);
+        }
+
+        public async Task<UserToken> GetUserTokenAsync(Guid userId)
+        {
+            return await _context.UserTokens.FirstOrDefaultAsync(u => u.UserId == userId);
         }
     }
 }

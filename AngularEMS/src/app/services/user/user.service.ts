@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
-import { UserRegisterModel, UserLoginModel, UserModel } from './user.model';
+import { UserRegisterModel, UserLoginModel, UserModel, ExternalUserModel } from './user.model';
 import { InfrastructureService } from '../infra/infra.service';
 import { AngularFireAuth } from 'angularfire2/auth';
 import * as firebase from 'firebase/app';
@@ -22,7 +22,7 @@ export class UserService {
     this.url = this.infra.URL + '/api/account/register';
     return this.http.post(this.url, user).pipe(map((response: Response) => <any>response));
   }
-  
+
   loginUser(user: UserLoginModel) {
     this.url = this.infra.URL + '/api/account/login';
     return this.http.post(this.url, user).pipe(map((response: Response) => <any>response));
@@ -36,51 +36,54 @@ export class UserService {
   userByUsername(username: string): Observable<UserModel> {
     this.url = this.infra.URL + '/api/users/' + username;
     return this.http.get(this.url)
-      .pipe(map((u: any) => 
-        new UserModel(u.firstName, u.lastName, u.username, u.email, 
+      .pipe(map((u: any) =>
+        new UserModel(u.firstName, u.lastName, u.username, u.email,
           u.gender, u.dateOfBirth, u.phoneNumber, u.address)));
   }
-  
-  doFacebookLogin(){
+
+  doFacebookLogin() {
     return new Promise<any>((resolve, reject) => {
-      let provider = new firebase.auth.FacebookAuthProvider();
+      const provider = new firebase.auth.FacebookAuthProvider();
       this.afAuth.auth
       .signInWithPopup(provider)
       .then(res => {
         resolve(res);
-        console.log(res);
       }, err => {
         reject(err);
-      })
+      });
     });
   }
 
   doGoogleLogin() {
     return new Promise<any>((resolve, reject) => {
-      let provider = new firebase.auth.GoogleAuthProvider();
+      const provider = new firebase.auth.GoogleAuthProvider();
       provider.addScope('profile');
       provider.addScope('email');
       this.afAuth.auth
       .signInWithPopup(provider)
       .then(res => {
         resolve(res);
-      }, err => {;
+      }, err => {
         reject(err);
-      })
+      });
     });
   }
 
   doTwitterLogin() {
     return new Promise<any>((resolve, reject) => {
-      let provider = new firebase.auth.TwitterAuthProvider();
+      const provider = new firebase.auth.TwitterAuthProvider();
       this.afAuth.auth
       .signInWithPopup(provider)
       .then(res => {
         resolve(res);
-      }, err => {;
+      }, err => {
         reject(err);
-      })
+      });
     });
   }
-  
+
+  registerExternalUser(externalUser: ExternalUserModel) {
+    this.url = this.infra.URL + '/api/account/login/external';
+    return this.http.post(this.url, externalUser).pipe(map((response: Response) => <any>response));
+  }
 }

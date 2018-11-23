@@ -45,7 +45,7 @@ namespace Data.Core.Domain.Entities.Identity
         public void Update(string firstName, string lastName, GenderEnum gender, DateTime dateOfBirth,
             string email, string username, string phone, Address address)
         {
-            Validate(email, username, phone);
+            Validate(email);
 
             FirstName = firstName;
             LastName = lastName;
@@ -58,11 +58,9 @@ namespace Data.Core.Domain.Entities.Identity
             Modified = DateTime.Now;
         }
 
-        private static void Validate(string email, string username, string phone)
+        private static void Validate(string email)
         {
             Ensure.That(email).IsNotNullOrEmpty();
-            Ensure.That(username).IsNotNullOrEmpty();
-            Ensure.That(phone).IsNotNullOrEmpty();
         }
     }
 }

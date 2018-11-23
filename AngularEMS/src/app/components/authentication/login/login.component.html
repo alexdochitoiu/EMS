@@ -1,63 +1,59 @@
 <app-home></app-home>
 <!-- Modal -->
-<div tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <form #userLoginForm="ngForm" ngNativeValidate>
-        <!--Content-->        
-        <ng-template #content let-modal> 
-        <div class="modal-content form-elegant">
-            <!--Header-->
-            <div class="modal-header text-center">
-                <h3 class="modal-title w-100 dark-grey-text font-weight-bold"><strong>Sign in</strong></h3>
-                <button type="button" class="close" (click)="modalRef.close()">
+<ng-template #content let-modal>
+    <form #userLoginForm="ngForm" ngNativeValidate>
+    <!--Content-->        
+    <div class="modal-content form-elegant">
+        <!--Header-->
+        <div class="modal-header text-center">
+            <h3 class="modal-title w-100 dark-grey-text font-weight-bold"><strong>Sign in</strong></h3>
+            <button type="button" class="close" (click)="modalRef.close()">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <!--Body-->
+        <div class="modal-body mx-4">
+            <!--Body-->
+            <div class="md-form mb-5">
+                <i class="fa fa-envelope prefix grey-text"></i>
+                <input type="text" id="email-or-username-login" class="form-control" name="EmailOrUsername" #EmailOrUsername="ngModel" [(ngModel)]="user.EmailOrUsername" required>
+                <label for="email-or-username-login">Your email or username</label>
+            </div>
+
+            <div class="md-form pb-3">
+                <i class="fa fa-lock prefix grey-text"></i>
+                <input type="password" id="password-login" class="form-control" name="Password" #Password="ngModel" [(ngModel)]="user.Password" required>
+                <label for="password-login">Your password</label>
+                <p class="font-small blue-text d-flex justify-content-end"><a routerLink="/forgot-password" class="blue-text ml-1">Forgot Password?</a></p>
+            </div>
+
+            <div *ngFor="let error of errors" class="alert alert-danger alert-dismissible fade show" role="alert">
+                <p>{{ error }}</p>
+                <button (click)="removeError(error)" type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <!--Body-->
-            <div class="modal-body mx-4">
-                <!--Body-->
-                <div class="md-form mb-5">
-                    <i class="fa fa-envelope prefix grey-text"></i>
-                    <input type="text" id="email-or-username-login" class="form-control" name="EmailOrUsername" #EmailOrUsername="ngModel" [(ngModel)]="user.EmailOrUsername" required>
-                    <label for="email-or-username-login">Your email or username</label>
-                </div>
 
-                <div class="md-form pb-3">
-                    <i class="fa fa-lock prefix grey-text"></i>
-                    <input type="password" id="password-login" class="form-control" name="Password" #Password="ngModel" [(ngModel)]="user.Password" required>
-                    <label for="password-login">Your password</label>
-                    <p class="font-small blue-text d-flex justify-content-end"><a routerLink="/forgot-password" (click)="modalRef.close()" class="blue-text ml-1">Forgot Password?</a></p>
-                </div>
-
-                <div *ngFor="let error of errors" class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <p>{{ error }}</p>
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-
-                <div class="text-center mb-3">
-                    <button type="submit" (click)="onSubmit(userLoginForm)" class="btn btn-success btn-block btn-rounded z-depth-1a">Sign in</button>
-                </div>
-                <p class="font-small dark-grey-text text-right d-flex justify-content-center mb-3 pt-2"> or Sign in with:</p>
-
-                <div class="row my-3 d-flex justify-content-center social-buttons-login">
-                    <!--Facebook-->
-                    <button (click)="facebookLogin()" type="button" class="btn btn-facebook z-depth-1a"><i class="fa fa-facebook text-center"></i></button>
-                    <!--Twitter-->
-                    <button (click)="twitterLogin()" type="button" class="btn btn-twitter z-depth-1a"><i class="fa fa-twitter"></i></button>
-                    <!--Google +-->
-                    <button (click)="googleLogin()" type="button" class="btn btn-google-plus z-depth-1a"><i class="fa fa-google-plus"></i></button>
-                </div>
+            <div class="text-center mb-3">
+                <button type="submit" (click)="onSubmit(userLoginForm)" class="btn btn-success btn-block btn-rounded z-depth-1a">Sign in</button>
             </div>
-            <!--Footer-->
-            <div class="modal-footer mx-5 pt-3 mb-1">
-                <p class="font-small grey-text d-flex justify-content-end">Not a member? <a routerLink="/register" (click)="modalRef.close()" class="blue-text ml-1"> Sign Up</a></p>
+            <p class="font-small dark-grey-text text-right d-flex justify-content-center mb-3 pt-2"> or Sign in with:</p>
+
+            <div class="row my-3 d-flex justify-content-center social-buttons-login">
+                <!--Facebook-->
+                <button (click)="facebookLogin()" type="button" class="btn btn-facebook z-depth-1a"><i class="fa fa-facebook text-center"></i></button>
+                <!--Twitter-->
+                <button (click)="twitterLogin()" type="button" class="btn btn-twitter z-depth-1a"><i class="fa fa-twitter"></i></button>
+                <!--Google +-->
+                <button (click)="googleLogin()" type="button" class="btn btn-google-plus z-depth-1a"><i class="fa fa-google-plus"></i></button>
             </div>
         </div>
-        </ng-template>
-        <!--/.Content-->
-      </form>
+        <!--Footer-->
+        <div class="modal-footer mx-5 pt-3 mb-1">
+            <p class="font-small grey-text d-flex justify-content-end">Not a member? <a routerLink="/register" (click)="modalRef.close()" class="blue-text ml-1"> Sign Up</a></p>
+        </div>
     </div>
-</div>
+    <!--/.Content-->
+    </form>
+</ng-template>
 <!-- Modal -->

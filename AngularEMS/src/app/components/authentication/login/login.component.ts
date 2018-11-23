@@ -1,10 +1,10 @@
-import { Component, AfterViewInit, ViewChild } from '@angular/core';
+import { Component, AfterViewInit, ViewChild, OnDestroy } from '@angular/core';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { NgForm } from '@angular/forms/src/directives';
 import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 
-import { UserLoginModel } from '../../../services/user/user.model';
+import { UserLoginModel, ExternalUserModel } from '../../../services/user/user.model';
 import { UserService } from '../../../services/user/user.service';
 import { AuthService } from '../../../services/auth/auth.service';
 import { InfrastructureService } from '../../../services/infra/infra.service';
@@ -14,7 +14,7 @@ import { InfrastructureService } from '../../../services/infra/infra.service';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent implements AfterViewInit  {
+export class LoginComponent implements AfterViewInit, OnDestroy {
 
   errors: Array<string>;
   user: UserLoginModel;
@@ -37,21 +37,23 @@ export class LoginComponent implements AfterViewInit  {
       return;
     }
     console.log('Modal login form opening...');
-    setTimeout(() => { this.open(this.content); });
+    this.open(this.content);
   }
 
   ngOnDestroy() {
-    if (this.modalRef) this.modalRef.close();
+    if (this.modalRef) {
+      this.modalRef.close();
+    }
   }
 
   open(content) {
     this.modalRef = this.modalService.open(content);
     this.modalRef.result.then(
       () => {
-        console.log('When user closes'); 
-      }, 
-      () => {         
-        console.log('Backdrop click')
+        console.log('When user closes');
+      },
+      () => {
+        console.log('Backdrop click');
       }
     );
   }
@@ -74,37 +76,69 @@ export class LoginComponent implements AfterViewInit  {
   googleLogin() {
     this.userService.doGoogleLogin()
       .then(
-      (response: any) => {        
-        console.log(response);
-        this.authService.login(response.credential.idToken, response.user.email, response.user.photoURL);
-        this.router.navigate(['/']);
+      (response: any) => {
+        const externalUser: ExternalUserModel = {
+          Provider: 'Google',
+          FirstName: response.additionalUserInfo.profile.given_name,
+          LastName: response.additionalUserInfo.profile.family_name,
+          Email: response.additionalUserInfo.profile.email,
+          PhotoUrl: response.additionalUserInfo.profile.picture,
+          Token: response.credential.accessToken,
+        };
+        this.userService.registerExternalUser(externalUser).toPromise().then(
+          (res) => {
+            console.log(res);
+            this.authService.login(
+              response.credential.accessToken,
+              response.additionalUserInfo.profile.email,
+              response.additionalUserInfo.profile.picture
+            );
+            this.router.navigate(['/']);
+          },
+          (err: HttpErrorResponse) => this.errors = err.error.errors,
+        );
+        console.log(externalUser);
       },
       (errorResponse: HttpErrorResponse) => {
         this.errors = errorResponse.error;
         console.log(errorResponse);
       }
-    );    
+    );
   }
 
   facebookLogin() {
     this.userService.doFacebookLogin()
       .then(
-      (response: any) => {        
-        console.log(response);
-        this.authService.login(response.credential.accessToken, response.additionalUserInfo.profile.email, response.user.photoURL);
-        this.router.navigate(['/']);
+      (response: any) => {
+        const externalUser: ExternalUserModel = {
+          Provider: 'Facebook',
+          FirstName: response.additionalUserInfo.profile.first_name,
+          LastName: response.additionalUserInfo.profile.last_name,
+          Email: response.additionalUserInfo.profile.email,
+          PhotoUrl: response.additionalUserInfo.profile.picture.data.url,
+          Token: response.credential.accessToken,
+        };
+        this.userService.registerExternalUser(externalUser).toPromise().then(
+          (res) => {
+            console.log(res);
+            this.authService.login(response.credential.accessToken, response.additionalUserInfo.profile.email, response.user.photoURL);
+            this.router.navigate(['/']);
+          },
+          (err: HttpErrorResponse) => this.errors = err.error.errors,
+        );
+        console.log(externalUser);
       },
       (errorResponse: HttpErrorResponse) => {
         this.errors = new Array(errorResponse.message);
         console.log(errorResponse);
       }
-    ); 
+    );
   }
 
   twitterLogin() {
     this.userService.doTwitterLogin()
       .then(
-      (response: any) => {        
+      (response: any) => {
         console.log(response);
         this.authService.login(response.credential.accessToken, response.additionalUserInfo.username, response.user.photoURL);
         this.router.navigate(['/']);
@@ -113,6 +147,10 @@ export class LoginComponent implements AfterViewInit  {
         this.errors = new Array(errorResponse.message);
         console.log(errorResponse);
       }
-    ); 
+    );
+  }
+
+  removeError(error) {
+    this.errors = this.errors.filter(e => e !== error);
   }
 }

@@ -41,3 +41,12 @@ export class UserModel {
     this.Address = address;
   }
 }
+
+export class ExternalUserModel {
+  Provider: string;
+  FirstName: string;
+  LastName: string;
+  Email: string;
+  PhotoUrl: string;
+  Token: string;
+}

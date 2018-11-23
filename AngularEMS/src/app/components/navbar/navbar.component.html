@@ -35,8 +35,8 @@
         </li>
       </ul>
       <div *ngIf="!loggedIn" class="auth-btns">
-          <button routerLink="/register" class="btn btn-secondary my-2 my-sm-0" type="submit">Register</button>
-          <button routerLink="/login" class="btn btn-success my-2 my-sm-0" type="submit">Login</button>
+          <button (click)="goToRoute('/register')" class="btn btn-secondary my-2 my-sm-0" type="submit">Register</button>
+          <button (click)="goToRoute('/login')" class="btn btn-success my-2 my-sm-0" type="submit">Login</button>
       </div>
       <div *ngIf="loggedIn" class="auth-btns loggedIn">
           <span>

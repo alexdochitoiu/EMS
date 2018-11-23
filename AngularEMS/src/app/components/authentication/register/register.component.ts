@@ -1,6 +1,6 @@
 import { NgForm } from '@angular/forms/src/directives';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { Component, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 
@@ -13,7 +13,7 @@ import { AuthService } from '../../../services/auth/auth.service';
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css']
 })
-export class RegisterComponent implements AfterViewInit {
+export class RegisterComponent implements AfterViewInit, OnDestroy {
 
   user: UserRegisterModel;
   errors: Array<string>;
@@ -34,22 +34,24 @@ export class RegisterComponent implements AfterViewInit {
 
   ngAfterViewInit() {
     console.log('Modal register form opening...');
-    setTimeout(() => { this.open(this.content); });
+    this.open(this.content);
     this.resetForm();
   }
 
   ngOnDestroy() {
-    if (this.modalRef !== null) this.modalRef.close()
+    if (this.modalRef !== null) {
+      this.modalRef.close();
+    }
   }
 
   open(content) {
     this.modalRef = this.modalService.open(content);
     this.modalRef.result.then(
       () => {
-        console.log('When user closes'); 
-      }, 
-      () => {         
-        console.log('Backdrop click')
+        console.log('When user closes');
+      },
+      () => {
+        console.log('Backdrop click');
       }
     );
   }
@@ -65,6 +67,10 @@ export class RegisterComponent implements AfterViewInit {
     this.user.Phone = '';
     this.successRegistered = false;
     this.errors = null;
+  }
+
+  removeError(error) {
+    this.errors = this.errors.filter(e => e !== error);
   }
 
   onSubmit(form: NgForm) {

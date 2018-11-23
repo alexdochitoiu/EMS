@@ -14,19 +14,18 @@ export class AnnouncementBoxComponent implements AfterViewInit {
   constructor(private router: Router) { }
 
   ngAfterViewInit() {
-    switch(this.announcement.Severity) {
+    switch (this.announcement.Severity) {
       case 0: this.icon.nativeElement.style.color = 'red'; break;
       case 1: this.icon.nativeElement.style.color = 'orange'; break;
-      default: this.icon.nativeElement.style.color = '#0d9e73'; break;
-    
+      default: this.icon.nativeElement.style.color = 'yellow'; break;
     }
   }
 
   navigateToUserProfile(username: string) {
-    this.router.navigate(['users', username])
+    this.router.navigate(['users', username]);
   }
 
   navigateToAnnouncementDetails(id: string) {
-    this.router.navigate(['announcements', id])
+    this.router.navigate(['announcements', id]);
   }
 }

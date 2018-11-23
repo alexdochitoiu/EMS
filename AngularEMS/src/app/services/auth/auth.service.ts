@@ -10,7 +10,7 @@ export class AuthService {
   constructor(private infra: InfrastructureService) { }
 
   login(token: string, email: string, photoURL: string) {
-    localStorage.setItem(this.infra.TOKEN_KEY, token);    
+    localStorage.setItem(this.infra.TOKEN_KEY, token);
     localStorage.setItem(this.infra.EMAIL_KEY, email);
     localStorage.setItem(this.infra.PHOTO_URL_KEY, photoURL);
   }
@@ -24,7 +24,7 @@ export class AuthService {
   }
 
   isLoggedIn(): boolean {
-    let token = localStorage.getItem(this.infra.TOKEN_KEY)
+    const token = localStorage.getItem(this.infra.TOKEN_KEY);
     return  token !== null && token !== '';
   }
 
