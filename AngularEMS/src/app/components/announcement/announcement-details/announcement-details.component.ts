@@ -3,7 +3,7 @@ import { Announcement } from '../../../services/announcement/announcement.model'
 import { ActivatedRoute, Router } from '@angular/router';
 import { AnnouncementService } from '../../../services/announcement/announcement.service';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Image, PlainGalleryConfig, AdvancedLayout, PlainGalleryStrategy, LineLayout } from '@ks89/angular-modal-gallery';
+import { Image } from '@ks89/angular-modal-gallery';
 
 @Component({
   selector: 'app-announcement-details',
@@ -12,51 +12,17 @@ import { Image, PlainGalleryConfig, AdvancedLayout, PlainGalleryStrategy, LineLa
 })
 export class AnnouncementDetailsComponent implements OnInit {
 
-  isAvailable: boolean;
-  announcement: Announcement;
-  severity: string;
-
   constructor(private route: ActivatedRoute,
               private announcementService: AnnouncementService,
               private router: Router) {
-    this.route.params.subscribe(params => 
-    {
+    this.route.params.subscribe(params => {
       this.getAnnouncement(params['id']);
-    }); 
+    });
   }
 
-  ngOnInit() { 
-  }
-
-  public getAnnouncement(id: string) {
-    this.announcementService.getAnnouncement(id).subscribe(
-      (response: any) => {
-        this.announcement = response;
-        switch(this.announcement.Severity) {
-          case 0: this.severity = 'Critical'; break;
-          case 1: this.severity = 'Major'; break;
-          case 2: this.severity = 'Minor'; break;
-          default: this.severity = 'Unknown'; break;
-        }
-        this.isAvailable = true;
-      },
-      (errorResponse: HttpErrorResponse) => {
-        console.log(errorResponse);
-      }
-    );
-  }
-
-  public getColor() {
-    switch(this.announcement.Severity) {
-      case 0: return 'red'; 
-      case 1: return 'orange';
-      default: return '#0d9e73';
-    }
-  }  
-
-  navigateToUserProfile(username: string) {
-    this.router.navigate(['users', username])
-  }
+  isAvailable: boolean;
+  announcement: Announcement;
+  severity: string;
 
   images: Image[] = [
     new Image(
@@ -105,4 +71,37 @@ export class AnnouncementDetailsComponent implements OnInit {
       }
     )
   ];
+
+  ngOnInit() {
+  }
+
+  public getAnnouncement(id: string) {
+    this.announcementService.getAnnouncement(id).subscribe(
+      (response: any) => {
+        this.announcement = response;
+        switch (this.announcement.Severity) {
+          case 0: this.severity = 'Critical'; break;
+          case 1: this.severity = 'Major'; break;
+          case 2: this.severity = 'Minor'; break;
+          default: this.severity = 'Unknown'; break;
+        }
+        this.isAvailable = true;
+      },
+      (errorResponse: HttpErrorResponse) => {
+        console.log(errorResponse);
+      }
+    );
+  }
+
+  public getColor() {
+    switch (this.announcement.Severity) {
+      case 0: return 'red';
+      case 1: return 'orange';
+      default: return '#0d9e73';
+    }
+  }
+
+  navigateToUserProfile(username: string) {
+    this.router.navigate(['users', username]);
+  }
 }

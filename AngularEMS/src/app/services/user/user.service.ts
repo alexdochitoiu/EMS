@@ -28,6 +28,16 @@ export class UserService {
     return this.http.post(this.url, user).pipe(map((response: Response) => <any>response));
   }
 
+  verifyEmail(userId: string, emailToken: string) {
+    this.url = this.infra.URL + '/api/account/verify/email/' + userId + '/' + emailToken;
+    return this.http.get(this.url, { responseType: 'text'});
+  }
+
+  forgotPassword(emailOrUsername: string) {
+    this.url = this.infra.URL + '/api/account/forgot-password';
+    return this.http.post(this.url, emailOrUsername).pipe(map((response: Response) => <any>response));
+  }
+
   userByEmail(email: string) {
     this.url = this.infra.URL + '/api/users/' + email;
     return this.http.get(this.url);

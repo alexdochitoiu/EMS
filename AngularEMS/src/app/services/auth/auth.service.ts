@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { InfrastructureService } from '../infra/infra.service';
-import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 @Injectable({
   providedIn: 'root'

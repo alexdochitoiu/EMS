@@ -1,4 +1,4 @@
-﻿namespace WebAPI.Infrastructure.Email.SendGrid
+﻿namespace WebAPI.Infrastructure.Email
 {
     public class SendEmailResponse
     {

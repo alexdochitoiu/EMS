@@ -1,6 +1,6 @@
-﻿namespace WebAPI.Infrastructure.Email.SendGrid
+﻿namespace WebAPI.Infrastructure.Email.Models
 {
-    public class SendGridEmailDetails
+    public class EmailDetails
     {
         public string FromName { get; set; }
         public string FromEmail { get; set; }

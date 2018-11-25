@@ -1,0 +1,22 @@
+i.fa-check-square {
+    color: #0d9e73;
+    font-size: 4em;
+    top: -2px;
+    opacity: 0.6;
+    grid-column: 1;
+}
+i.fa-times-circle {
+    color: #e2444c;
+    font-size: 4em;
+    top: -2px;
+    opacity: 0.6;    
+    grid-column: 1;
+}
+.mb-5 h5 {
+    grid-column: 2;
+    margin-top: 10px;
+    margin-left: 70px;
+}
+.mb-5 {
+    display: grid;
+}

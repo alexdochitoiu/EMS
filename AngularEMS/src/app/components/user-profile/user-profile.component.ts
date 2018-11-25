@@ -20,10 +20,9 @@ export class UserProfileComponent implements OnInit {
               private authService: AuthService,
               private userService: UserService) {
     this.profilePhoto = this.authService.getPhotoUrl();
-    this.route.params.subscribe(params => 
-      {
-        this.getUser(params['username']);
-      }); 
+    this.route.params.subscribe(params => {
+      this.getUser(params['username']);
+    });
    }
 
   ngOnInit() {

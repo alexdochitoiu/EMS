@@ -1,5 +1,8 @@
 import { Component, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { NgForm } from '@angular/forms';
+import { UserService } from 'src/app/services/user/user.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-forgot-password',
@@ -8,13 +11,14 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 })
 export class ForgotPasswordComponent implements AfterViewInit, OnDestroy {
 
-  constructor(private modalService: NgbModal) {}
-
   @ViewChild('content') content;
   private modalRef: NgbModalRef;
 
+  constructor(private modalService: NgbModal,
+    private userService: UserService) {}
+
   ngAfterViewInit() {
-    setTimeout(() => { this.open(this.content); });
+    this.open(this.content);
   }
 
   ngOnDestroy() {
@@ -31,6 +35,17 @@ export class ForgotPasswordComponent implements AfterViewInit, OnDestroy {
       },
       () => {
         console.log('Backdrop click');
+      }
+    );
+  }
+
+  onSubmit(form: NgForm) {
+    this.userService.forgotPassword(form.value).subscribe(
+      (response: any) => {
+        console.log(response);
+      },
+      (errorResponse: HttpErrorResponse) => {
+        console.log(errorResponse);
       }
     );
   }

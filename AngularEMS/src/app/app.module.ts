@@ -30,6 +30,7 @@ import { AnnouncementBoxComponent } from './components/announcement/announcement
 import { AnnouncementsComponent } from './components/announcement/announcements/announcements.component';
 import { UserProfileComponent } from './components/user-profile/user-profile.component';
 import { AnnouncementDetailsComponent } from './components/announcement/announcement-details/announcement-details.component';
+import { VerifyEmailComponent } from './components/authentication/verify-email/verify-email.component';
 
 @NgModule({
   declarations: [
@@ -46,7 +47,8 @@ import { AnnouncementDetailsComponent } from './components/announcement/announce
     AnnouncementBoxComponent,
     AnnouncementsComponent,
     UserProfileComponent,
-    AnnouncementDetailsComponent
+    AnnouncementDetailsComponent,
+    VerifyEmailComponent
   ],
   imports: [
     ModalGalleryModule.forRoot(),

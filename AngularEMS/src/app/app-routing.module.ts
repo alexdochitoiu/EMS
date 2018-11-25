@@ -10,42 +10,46 @@ import { NotFoundComponent } from './components/not-found/not-found.component';
 import { AnnouncementsComponent } from './components/announcement/announcements/announcements.component';
 import { UserProfileComponent } from './components/user-profile/user-profile.component';
 import { AnnouncementDetailsComponent } from './components/announcement/announcement-details/announcement-details.component';
+import { VerifyEmailComponent } from './components/authentication/verify-email/verify-email.component';
 
 const routes: Routes = [
-  { 
-    path: '', 
-    component: HomeComponent 
+  {
+    path: '',
+    component: HomeComponent
   },
-  { 
-    path: 'home', 
-    component: HomeComponent 
+  {
+    path: 'home',
+    component: HomeComponent
   },
-  { 
-    path: 'login', 
+  {
+    path: 'login',
     component: LoginComponent
   },
-  { 
-    path: 'register', 
+  {
+    path: 'register',
     component: RegisterComponent
   },
-  { 
-    path: 'forgot-password', 
-    component: ForgotPasswordComponent 
+  {
+    path: 'verify/email/:userId/:emailToken',
+    component: VerifyEmailComponent
   },
-  { 
-    path: 'announcements', 
-    component: AnnouncementsComponent 
+  {
+    path: 'forgot-password',
+    component: ForgotPasswordComponent
   },
-  { 
-    path: 'announcements/:id', 
-    component: AnnouncementDetailsComponent 
+  {
+    path: 'announcements',
+    component: AnnouncementsComponent
   },
-  { 
-    path: 'users/:username', 
-    component: UserProfileComponent, 
-    canActivate: [AuthGuard] 
+  {
+    path: 'announcements/:id',
+    component: AnnouncementDetailsComponent
   },
-
+  {
+    path: 'users/:username',
+    component: UserProfileComponent,
+    canActivate: [AuthGuard]
+  },
   { path: '404', component: NotFoundComponent },
   { path: '**', redirectTo: '404' }
 ];

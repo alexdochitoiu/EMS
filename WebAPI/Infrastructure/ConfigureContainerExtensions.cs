@@ -9,7 +9,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Swashbuckle.AspNetCore.Swagger;
-using WebAPI.Infrastructure.Email.SendGrid;
+using WebAPI.Infrastructure.Email.Interfaces;
+using WebAPI.Infrastructure.Email.SMTP;
 using WebAPI.Mappings;
 using WebAPI.Seeders;
 
@@ -48,12 +49,12 @@ namespace WebAPI.Infrastructure
             services.AddSingleton(mapper);
         }
 
-        public static void AddTrasitentServices(this IServiceCollection services)
+        public static void AddTransientServices(this IServiceCollection services)
         {
             services.AddTransient<CountriesSeeder>();
             services.AddTransient<CitiesSeeder>();
             services.AddTransient<IDatabaseSeeder, DatabaseSeeder>();
-            services.AddTransient<IEmailSender, SendGridEmailSender>();
+            services.AddTransient<IEmailSender, SmtpEmailSender>();
         }
 
         public static void AddSwagger(this IServiceCollection services)

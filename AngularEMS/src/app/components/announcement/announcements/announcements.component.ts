@@ -26,12 +26,12 @@ export class AnnouncementsComponent implements OnInit {
   }
 
   gridActive() {
-    if (this.grid) return '#054935';
+    if (this.grid) { return '#054935'; }
     return '';
   }
 
   listActive() {
-    if (!this.grid) return '#054935';
+    if (!this.grid) { return '#054935'; }
     return '';
   }
 

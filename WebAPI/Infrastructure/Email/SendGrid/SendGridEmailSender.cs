@@ -4,14 +4,16 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using SendGrid;
 using SendGrid.Helpers.Mail;
+using WebAPI.Infrastructure.Email.Interfaces;
+using WebAPI.Infrastructure.Email.Models;
 
 namespace WebAPI.Infrastructure.Email.SendGrid
 {
     public class SendGridEmailSender : IEmailSender
     {
-        public async Task<SendEmailResponse> SendEmailAsync(SendGridEmailDetails details)
+        public async Task<SendEmailResponse> SendEmailAsync(EmailDetails details)
         {
-            var apiKey = IocContainer.Configuration["SendGrid:Key"];
+            var apiKey = IocContainer.Configuration["Email:SendGrid:Key"];
             var client = new SendGridClient(apiKey);
             var from = new EmailAddress(details.FromEmail, details.FromName);
             var to = new EmailAddress(details.ToEmail, details.ToName);
@@ -25,7 +27,7 @@ namespace WebAPI.Infrastructure.Email.SendGrid
 
             if (details.IsHtml)
             {
-                msg.TemplateId = IocContainer.Configuration["SendGrid:TemplateId"];
+                msg.TemplateId = IocContainer.Configuration["Email:SendGrid:TemplateId"];
                 msg.AddSubstitution("{Title}", details.HtmlTitle);
                 msg.AddSubstitution("{Content1}", details.HtmlContent1);
                 msg.AddSubstitution("{Content2}", details.HtmlContent2);

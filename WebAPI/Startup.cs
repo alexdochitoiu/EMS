@@ -23,7 +23,7 @@ namespace WebAPI
             _logger.LogDebug($"Total services initially: {services.Count}");
             services.AddLogging();
             services.AddDbContext();
-            services.AddTrasitentServices();
+            services.AddTransientServices();
             services.AddAutoMapper();
             services.AddUnitOfWork();
             services.SetRegisterPolicy();

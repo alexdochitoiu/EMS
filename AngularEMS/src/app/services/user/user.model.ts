@@ -20,6 +20,10 @@ export class UserLoginModel {
   Password: string;
 }
 
+export class ForgotPasswordModel {
+  EmailOrUsername: string;
+}
+
 export class UserModel {
   FirstName: string;
   LastName: string;

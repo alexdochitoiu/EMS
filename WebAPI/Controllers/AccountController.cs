@@ -12,8 +12,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using WebAPI.Infrastructure;
 using WebAPI.Infrastructure.Email;
-using WebAPI.Infrastructure.Email.SendGrid;
+using WebAPI.Infrastructure.Email.Interfaces;
 using WebAPI.Models.AccountModels;
+using ExternalLoginModel = WebAPI.Models.AccountModels.ExternalLoginModel;
+using ForgotPasswordModel = WebAPI.Models.AccountModels.ForgotPasswordModel;
 
 namespace WebAPI.Controllers
 {
@@ -40,19 +42,24 @@ namespace WebAPI.Controllers
         [HttpPost("register", Name = "Register")]
         public async Task<IActionResult> RegisterAsync([FromBody] RegisterCredentialsModel registerCredentials)
         {
+            _logger.LogInformation($"A new user is registering... Info: {registerCredentials}");
             var invalidErrorMessage = "Please provide all required details to register for an account!";
             if (registerCredentials == null)
-                return BadRequest(new RegisterResultModel
-                {
-                    Errors = new List<string>(new[] {invalidErrorMessage})
-                });
-            
-            invalidErrorMessage = "Your password and confirmation password do not match.";
-            if (registerCredentials.Password != registerCredentials.ConfirmPassword)
+            {
                 return BadRequest(new RegisterResultModel
                 {
                     Errors = new List<string>(new[] { invalidErrorMessage })
                 });
+            }
+
+            invalidErrorMessage = "Your password and confirmation password do not match.";
+            if (registerCredentials.Password != registerCredentials.ConfirmPassword)
+            {
+                return BadRequest(new RegisterResultModel
+                {
+                    Errors = new List<string>(new[] { invalidErrorMessage })
+                });
+            }
 
             var country = await _unitOfWork.Countries.GetByNameAsync(registerCredentials.Country);
             var city = await _unitOfWork.Cities.GetByNameAsync(registerCredentials.City);
@@ -76,18 +83,21 @@ namespace WebAPI.Controllers
             var result = await _userManager.CreateAsync(user, registerCredentials.Password);
 
             if (!result.Succeeded)
+            {
                 return BadRequest(new RegisterResultModel
                 {
                     Errors = new List<string>(result.Errors.Select(err => err.Description))
                 });
+            }
 
             var emailConfirmationToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            var clientUrl = IocContainer.Configuration["CommonSettings:ClientURL"];
             var confirmationUrl =
-                $"http://{Request.Host.Value}/api/account/verify/email/" +
+                $"{clientUrl}/verify/email/" +
                 $"{HttpUtility.UrlEncode(user.Id.ToString())}/" +
                 $"{HttpUtility.UrlEncode(emailConfirmationToken)}";
-
-            var sendEmailResponse = await EmsEmailSender.SendVerificationEmailAsync(user.FirstName, user.Email, confirmationUrl, _emailSender);
+            
+            var sendEmailResponse = await EmsEmailSender.SendVerificationEmailAsync(user.UserName, user.Email, confirmationUrl, _emailSender);
 
             return Ok(new RegisterResultModel
             {
@@ -97,26 +107,93 @@ namespace WebAPI.Controllers
                 Username = user.UserName,
                 Email = user.Email,
                 Errors = null,
-                Warnings = !sendEmailResponse.Succeeded ?
-                        new List<string>(
-                            new[] {$"Cannot send email verification!\nCause: { sendEmailResponse.ErrorMessage }"}) :
-                        null
+                Warnings = !sendEmailResponse.Succeeded 
+                        ? new List<string>(
+                            new[] {$"Cannot send email verification!\nCause: { sendEmailResponse.ErrorMessage }"}) 
+                        : null
             });
         }
 
         [HttpGet("verify/email/{userId}/{emailToken}", Name = "VerifyEmail")]
         public async Task<IActionResult> VerifyEmailAsync(string userId, string emailToken)
         {
+            if (!Guid.TryParse(userId, out _))
+            {
+                return BadRequest("Something went wrong. Invalid user id!");
+            }
+
             emailToken = emailToken.Replace("%2f", "/").Replace("%2F", "/");
 
             var user = await _userManager.FindByIdAsync(userId);
-            if (user == null) return BadRequest("User not found");
-            if (user.EmailConfirmed) return BadRequest("Email already verified");
+            if (user == null)
+            {
+                return BadRequest("Something went wrong. User not found!");
+            }
+
+            if (user.EmailConfirmed)
+            {
+                return BadRequest("The e-mail was already verified!");
+            }
 
             var result = await _userManager.ConfirmEmailAsync(user, emailToken);
-            return result.Succeeded 
-                    ? Ok("Email verified") 
-                    : (IActionResult) BadRequest("Invalid email verification token");
+            return result.Succeeded
+                    ? Ok("E-mail was successfully verified!")
+                    : (IActionResult)BadRequest("Invalid email verification token!");
+        }
+
+        [HttpPost("forgot-password", Name = "ForgotPassword")]
+        public async Task<IActionResult> ForgotPasswordAsync([FromBody] ForgotPasswordModel model)
+        {
+            var isEmail = model.EmailOrUsername.Contains('@');
+
+            var user = isEmail
+                ? await _userManager.FindByEmailAsync(model.EmailOrUsername)
+                : await _userManager.FindByNameAsync(model.EmailOrUsername);
+
+            if (user == null)
+            {
+                return BadRequest("Account not registered with this e-mail");
+            }
+
+            var resetPasswordToken = await _userManager.GeneratePasswordResetTokenAsync(user);
+            var clientUrl = IocContainer.Configuration["CommonSettings:ClientURL"];
+            var resetPasswordUrl =
+                $"{clientUrl}/reset/password/" +
+                $"{HttpUtility.UrlEncode(user.Id.ToString())}/" +
+                $"{HttpUtility.UrlEncode(resetPasswordToken)}";
+
+            var sendEmailResponse = await EmsEmailSender.SendPasswordResetEmailAsync(user.UserName, user.Email, resetPasswordUrl, _emailSender);
+            return sendEmailResponse.Succeeded
+                ? (IActionResult) Ok("Email was successfully sent")
+                : BadRequest($"Problem with sending the email. \nCause { sendEmailResponse.ErrorMessage }");
+        }
+
+        [HttpGet("reset/password/{userId}/{resetPasswordToken}", Name = "ResetPassword")]
+        public async Task<IActionResult> ResetPasswordAsync(string userId, string resetPasswordToken, [FromBody] ResetPasswordModel model)
+        {
+            if (!Guid.TryParse(userId, out _))
+            {
+                return BadRequest("Something went wrong. Invalid user id!");
+            }
+
+            resetPasswordToken = resetPasswordToken.Replace("%2f", "/").Replace("%2F", "/");
+
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null) return BadRequest("User not found");
+
+            var error = new IdentityError
+            {
+                Description = "Your password and confirmation password do not match."
+            };
+            if (model.Password != model.ConfirmPassword)
+            {
+                return BadRequest(error);
+            }
+
+            var response = await _userManager.ResetPasswordAsync(user, resetPasswordToken, model.Password);
+            return response.Succeeded 
+                ? (IActionResult) Ok(response) 
+                : BadRequest(response);
         }
 
         [HttpPost("login", Name="Login")]
@@ -156,7 +233,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost("login/external", Name = "ExternalLogin")]
-        public async Task<IActionResult> ExternalLoginAsync([FromBody]ExternalLoginModel externalLoginModel)
+        public async Task<IActionResult> ExternalLoginAsync([FromBody] ExternalLoginModel externalLoginModel)
         {
             // Verify if user already exists in database
             var user = await _userManager.FindByEmailAsync(externalLoginModel.Email);            
@@ -226,7 +303,7 @@ namespace WebAPI.Controllers
 
             var errors = userToken == null
                 ? new List<string>(new[] { "This e-mail was already registered using our signing up form." })
-                : new List<string>(new[] { $"This e-mail is already signed up by a {userToken.LoginProvider} account." });
+                : new List<string>(new[] { $"This e-mail is already signed up by a { userToken.LoginProvider } account." });
 
             return BadRequest(new LoginResultModel
             {
