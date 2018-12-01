@@ -24,6 +24,11 @@ export class ForgotPasswordModel {
   EmailOrUsername: string;
 }
 
+export class ResetPasswordModel {
+  Password: string;
+  ConfirmPassword: string;
+}
+
 export class UserModel {
   FirstName: string;
   LastName: string;

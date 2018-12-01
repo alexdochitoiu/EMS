@@ -27,8 +27,15 @@
                 <p class="font-small blue-text d-flex justify-content-end"><a routerLink="/forgot-password" class="blue-text ml-1">Forgot Password?</a></p>
             </div>
 
+            <div *ngIf="verifyEmailIndex == -1" class="alert alert-success" role="alert">
+                <h6 class="alert-heading"><b>E-mail confirmation resent</b></h6>
+                <hr>
+                <p>Check again your e-mail inbox in order to confirm your e-mail.</p>
+            </div>
+
             <div *ngFor="let error of errors" class="alert alert-danger alert-dismissible fade show" role="alert">
                 <p>{{ error }}</p>
+                <p *ngIf="verifyEmailIndex >= 0">Click <a (click)="resendVerificationMail(userLoginForm)"><b style="color: rgb(54, 54, 54);">here</b></a> to resend a new verification mail link.</p>
                 <button (click)="removeError(error)" type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>

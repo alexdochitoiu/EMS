@@ -31,6 +31,8 @@ import { AnnouncementsComponent } from './components/announcement/announcements/
 import { UserProfileComponent } from './components/user-profile/user-profile.component';
 import { AnnouncementDetailsComponent } from './components/announcement/announcement-details/announcement-details.component';
 import { VerifyEmailComponent } from './components/authentication/verify-email/verify-email.component';
+import { ResetPasswordComponent } from './components/authentication/reset-password/reset-password.component';
+import { PopupMessageComponent } from './components/popup-message/popup-message.component';
 
 @NgModule({
   declarations: [
@@ -48,7 +50,9 @@ import { VerifyEmailComponent } from './components/authentication/verify-email/v
     AnnouncementsComponent,
     UserProfileComponent,
     AnnouncementDetailsComponent,
-    VerifyEmailComponent
+    VerifyEmailComponent,
+    ResetPasswordComponent,
+    PopupMessageComponent
   ],
   imports: [
     ModalGalleryModule.forRoot(),

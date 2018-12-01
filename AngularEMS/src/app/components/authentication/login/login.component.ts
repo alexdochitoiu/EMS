@@ -18,6 +18,7 @@ export class LoginComponent implements AfterViewInit, OnDestroy {
 
   errors: Array<string>;
   user: UserLoginModel;
+  verifyEmailIndex: number;
 
   constructor(private userService: UserService,
               private authService: AuthService,
@@ -58,6 +59,22 @@ export class LoginComponent implements AfterViewInit, OnDestroy {
     );
   }
 
+  resendVerificationMail(form: NgForm) {
+    this.userService.resendVerificationMail({ EmailOrUsername: form.value.EmailOrUsername })
+      .subscribe(
+      (response: any) => {
+        console.log(response);
+        this.errors = [];
+        this.verifyEmailIndex = -1;
+      },
+      (errorResponse: HttpErrorResponse) => {
+        this.errors = errorResponse.error.errors;
+        this.verifyEmailIndex = -1;
+        console.log(errorResponse);
+      }
+    );
+  }
+
   onSubmit(form: NgForm) {
     console.log(form.value);
     this.userService.loginUser(form.value)
@@ -68,6 +85,7 @@ export class LoginComponent implements AfterViewInit, OnDestroy {
       },
       (errorResponse: HttpErrorResponse) => {
         this.errors = errorResponse.error.errors;
+        this.verifyEmailIndex = this.errors.indexOf('E-mail was not confirmed');
         console.log(errorResponse);
       }
     );

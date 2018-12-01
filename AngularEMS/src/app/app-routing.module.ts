@@ -11,6 +11,7 @@ import { AnnouncementsComponent } from './components/announcement/announcements/
 import { UserProfileComponent } from './components/user-profile/user-profile.component';
 import { AnnouncementDetailsComponent } from './components/announcement/announcement-details/announcement-details.component';
 import { VerifyEmailComponent } from './components/authentication/verify-email/verify-email.component';
+import { ResetPasswordComponent } from './components/authentication/reset-password/reset-password.component';
 
 const routes: Routes = [
   {
@@ -36,6 +37,10 @@ const routes: Routes = [
   {
     path: 'forgot-password',
     component: ForgotPasswordComponent
+  },
+  {
+    path: 'reset/password/:userId/:resetPasswordToken',
+    component: ResetPasswordComponent
   },
   {
     path: 'announcements',

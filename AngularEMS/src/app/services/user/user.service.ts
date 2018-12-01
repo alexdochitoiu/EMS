@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
-import { UserRegisterModel, UserLoginModel, UserModel, ExternalUserModel } from './user.model';
+import { UserRegisterModel, UserLoginModel, UserModel, ExternalUserModel, ResetPasswordModel } from './user.model';
 import { InfrastructureService } from '../infra/infra.service';
 import { AngularFireAuth } from 'angularfire2/auth';
 import * as firebase from 'firebase/app';
@@ -33,9 +33,19 @@ export class UserService {
     return this.http.get(this.url, { responseType: 'text'});
   }
 
-  forgotPassword(emailOrUsername: string) {
+  forgotPassword(model: any) {
     this.url = this.infra.URL + '/api/account/forgot-password';
-    return this.http.post(this.url, emailOrUsername).pipe(map((response: Response) => <any>response));
+    return this.http.post(this.url, model).pipe(map((response: Response) => <any>response));
+  }
+
+  resetPassword(userId: string, resetPasswordToken: string, resetPasswordModel: ResetPasswordModel) {
+    this.url = this.infra.URL + '/api/account/reset/password/' + userId + '/' + resetPasswordToken;
+    return this.http.post(this.url, resetPasswordModel).pipe(map((response: Response) => <any>response));
+  }
+
+  resendVerificationMail(model: any) {
+    this.url = this.infra.URL + '/api/account/resend-verification-mail';
+    return this.http.post(this.url, model).pipe(map((response: Response) => <any>response));
   }
 
   userByEmail(email: string) {

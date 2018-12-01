@@ -114,6 +114,34 @@ namespace WebAPI.Controllers
             });
         }
 
+        [HttpPost("resend-verification-mail", Name = "ResendVerificationMail")]
+        public async Task<IActionResult> ResendVerificationMailAsync([FromBody] ForgotPasswordModel model)
+        {
+            var isEmail = model.EmailOrUsername.Contains('@');
+
+            var user = isEmail
+                ? await _userManager.FindByEmailAsync(model.EmailOrUsername)
+                : await _userManager.FindByNameAsync(model.EmailOrUsername);
+
+            if (user == null)
+            {
+                return BadRequest("Account not registered with this e-mail");
+            }
+
+            var emailConfirmationToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            var clientUrl = IocContainer.Configuration["CommonSettings:ClientURL"];
+            var confirmationUrl =
+                $"{clientUrl}/verify/email/" +
+                $"{HttpUtility.UrlEncode(user.Id.ToString())}/" +
+                $"{HttpUtility.UrlEncode(emailConfirmationToken)}";
+
+            var sendEmailResponse = await EmsEmailSender.SendVerificationEmailAsync(user.UserName, user.Email, confirmationUrl, _emailSender);
+
+            return sendEmailResponse.Succeeded ?
+                   (IActionResult) Ok(sendEmailResponse) :
+                   BadRequest(sendEmailResponse);
+        }
+
         [HttpGet("verify/email/{userId}/{emailToken}", Name = "VerifyEmail")]
         public async Task<IActionResult> VerifyEmailAsync(string userId, string emailToken)
         {
@@ -164,11 +192,11 @@ namespace WebAPI.Controllers
 
             var sendEmailResponse = await EmsEmailSender.SendPasswordResetEmailAsync(user.UserName, user.Email, resetPasswordUrl, _emailSender);
             return sendEmailResponse.Succeeded
-                ? (IActionResult) Ok("Email was successfully sent")
-                : BadRequest($"Problem with sending the email. \nCause { sendEmailResponse.ErrorMessage }");
+                ? (IActionResult) Ok(sendEmailResponse)
+                : BadRequest($"{ sendEmailResponse.ErrorMessage }");
         }
 
-        [HttpGet("reset/password/{userId}/{resetPasswordToken}", Name = "ResetPassword")]
+        [HttpPost("reset/password/{userId}/{resetPasswordToken}", Name = "ResetPassword")]
         public async Task<IActionResult> ResetPasswordAsync(string userId, string resetPasswordToken, [FromBody] ResetPasswordModel model)
         {
             if (!Guid.TryParse(userId, out _))
@@ -199,7 +227,7 @@ namespace WebAPI.Controllers
         [HttpPost("login", Name="Login")]
         public async Task<IActionResult> LoginAsync([FromBody]LoginCredentialsModel loginCredentials)
         {
-            const string invalidErrorMessage = "Invalid username or password";
+            var invalidErrorMessage = "Invalid username or password";
             if (string.IsNullOrWhiteSpace(loginCredentials?.EmailOrUsername))
                 return BadRequest(invalidErrorMessage);
 
@@ -214,6 +242,15 @@ namespace WebAPI.Controllers
                 {
                     Errors = new List<string>(new[] { invalidErrorMessage })
                 });
+
+            if (!user.EmailConfirmed)
+            {
+                invalidErrorMessage = "E-mail was not confirmed";
+                return BadRequest(new LoginResultModel
+                {
+                    Errors = new List<string>(new[] {invalidErrorMessage})
+                });
+            }
 
             var isValidPassword = await _userManager.CheckPasswordAsync(user, loginCredentials.Password);
 
