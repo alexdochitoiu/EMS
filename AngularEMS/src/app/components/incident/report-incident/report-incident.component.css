@@ -1,0 +1,26 @@
+.report-incident-form {
+    width: 85%;
+    margin: 0 auto;
+    margin-top: 30px;
+}
+
+.custom-icon {
+    margin: 0 5px;
+    font-size: 16px;
+    color: rgb(124, 124, 124);
+    transition: 1s;
+}
+
+.custom-icon:hover {
+    color: rgb(158, 158, 158);
+}
+
+agm-map {
+    height: 500px;
+}
+
+.wrapper {
+    justify-content: center;
+    align-items: center;
+    display: flex;
+}

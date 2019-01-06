@@ -88,7 +88,7 @@ export class RegisterComponent implements AfterViewInit, OnDestroy {
       },
       (errorResponse: HttpErrorResponse) => {
         this.errors = errorResponse.error.errors;
-        console.log(errorResponse.error.errors);
+        console.log(errorResponse);
       }
     );
   }

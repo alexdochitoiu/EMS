@@ -7,6 +7,7 @@ namespace Data.Core.Interfaces
     {
         IUserRepository Users { get; }
         IAnnouncementRepository Announcements { get; }
+        IIncidentRepository Incidents { get; }
         ICountryRepository Countries { get; }
         ICityRepository Cities { get; }
         Task<int> CompleteAsync();

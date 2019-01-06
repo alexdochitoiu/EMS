@@ -11,6 +11,7 @@ namespace Business
 
         public IUserRepository Users { get; }
         public IAnnouncementRepository Announcements { get; }
+        public IIncidentRepository Incidents { get; }
         public ICountryRepository Countries { get; }
         public ICityRepository Cities { get; }
 
@@ -20,6 +21,7 @@ namespace Business
             
             Users = new UserRepository(_context);
             Announcements = new AnnouncementRepository(_context);
+            Incidents = new IncidentRepository(_context);
             Countries = new CountryRepository(_context);
             Cities = new CityRepository(_context);
         }

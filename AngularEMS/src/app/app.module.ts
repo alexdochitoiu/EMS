@@ -33,6 +33,9 @@ import { AnnouncementDetailsComponent } from './components/announcement/announce
 import { VerifyEmailComponent } from './components/authentication/verify-email/verify-email.component';
 import { ResetPasswordComponent } from './components/authentication/reset-password/reset-password.component';
 import { PopupMessageComponent } from './components/popup-message/popup-message.component';
+import { ReportIncidentComponent } from './components/incident/report-incident/report-incident.component';
+import { InputsModule } from '@progress/kendo-angular-inputs';
+
 
 @NgModule({
   declarations: [
@@ -52,7 +55,8 @@ import { PopupMessageComponent } from './components/popup-message/popup-message.
     AnnouncementDetailsComponent,
     VerifyEmailComponent,
     ResetPasswordComponent,
-    PopupMessageComponent
+    PopupMessageComponent,
+    ReportIncidentComponent
   ],
   imports: [
     ModalGalleryModule.forRoot(),
@@ -69,7 +73,8 @@ import { PopupMessageComponent } from './components/popup-message/popup-message.
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyDNQIPldFqdwuHN9MN6RpVia1sYqUrVq54'
     }),
-    NgxPaginationModule
+    NgxPaginationModule,
+    InputsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

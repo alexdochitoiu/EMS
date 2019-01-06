@@ -1,7 +1,6 @@
-import { Component, AfterViewInit, OnDestroy, ViewChild, NgZone } from '@angular/core';
+import { Component, AfterViewInit, OnDestroy, ViewChild } from '@angular/core';
 import { UserService } from 'src/app/services/user/user.service';
-import { AuthService } from 'src/app/services/auth/auth.service';
-import { Router, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { NgForm } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';

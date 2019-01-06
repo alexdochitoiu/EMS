@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, ViewChild, OnDestroy } from '@angular/core';
+import { Component, AfterViewInit, ViewChild, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { NgForm } from '@angular/forms/src/directives';
 import { Router } from '@angular/router';
@@ -19,13 +19,16 @@ export class LoginComponent implements AfterViewInit, OnDestroy {
   errors: Array<string>;
   user: UserLoginModel;
   verifyEmailIndex: number;
+  verifyEmailSent: boolean;
 
   constructor(private userService: UserService,
               private authService: AuthService,
               private router: Router,
               private infra: InfrastructureService,
-              private modalService: NgbModal) {
+              private modalService: NgbModal,
+              private cd: ChangeDetectorRef) {
     this.user = new UserLoginModel();
+    this.verifyEmailSent = false;
   }
 
   @ViewChild('content') content;
@@ -38,7 +41,7 @@ export class LoginComponent implements AfterViewInit, OnDestroy {
       return;
     }
     console.log('Modal login form opening...');
-    this.open(this.content);
+    setTimeout(() => this.open(this.content));
   }
 
   ngOnDestroy() {
@@ -65,12 +68,11 @@ export class LoginComponent implements AfterViewInit, OnDestroy {
       (response: any) => {
         console.log(response);
         this.errors = [];
-        this.verifyEmailIndex = -1;
+        this.verifyEmailSent = true;
       },
       (errorResponse: HttpErrorResponse) => {
-        this.errors = errorResponse.error.errors;
-        this.verifyEmailIndex = -1;
         console.log(errorResponse);
+        this.errors = errorResponse.error.errors;
       }
     );
   }

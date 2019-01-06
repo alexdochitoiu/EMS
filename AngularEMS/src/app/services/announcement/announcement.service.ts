@@ -19,8 +19,8 @@ export class AnnouncementService {
     this.url = this.infra.URL + '/api/announcements';
     return this.http.get<Array<Announcement>>(this.url)
       .pipe(map(array => array
-        .map((a: any) => 
-          new Announcement(a.id, a.title, a.description, a.user, a.created, a.severity))));              
+        .map((a: any) =>
+          new Announcement(a.id, a.title, a.description, a.user, a.created, a.severity))));
   }
 
   getAnnouncement(id: string): Observable<Announcement> {
@@ -29,7 +29,7 @@ export class AnnouncementService {
       .pipe(map((a: any) =>
         new Announcement(a.id, a.title, a.description, a.user, a.created, a.severity)));
   }
-  
+
   getUsersAnnouncements(userId: string): Observable<Array<Announcement>> {
     this.url = this.infra.URL + '/api/users/' + userId + '/announcements';
     return this.http.get<Array<Announcement>>(this.url);

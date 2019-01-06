@@ -27,7 +27,7 @@
                 <p class="font-small blue-text d-flex justify-content-end"><a routerLink="/forgot-password" class="blue-text ml-1">Forgot Password?</a></p>
             </div>
 
-            <div *ngIf="verifyEmailIndex == -1" class="alert alert-success" role="alert">
+            <div *ngIf="verifyEmailSent" class="alert alert-success" role="alert">
                 <h6 class="alert-heading"><b>E-mail confirmation resent</b></h6>
                 <hr>
                 <p>Check again your e-mail inbox in order to confirm your e-mail.</p>

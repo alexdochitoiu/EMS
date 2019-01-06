@@ -21,7 +21,9 @@ export class SearchComponent implements OnInit {
 
   public defaultCityItem: City = {
     name: 'Select city',
-    abbreviation: 'NA'
+    abbreviation: 'NA',
+    latitude: '0',
+    longitude: '0'
   };
 
   public dataCountries: Array<Country> = new Array<Country>();
@@ -37,16 +39,17 @@ export class SearchComponent implements OnInit {
     this.getCountries();
   }
 
-  handleCountryChange(value) {
+  handleCountryChange(value: Country) {
     this.selectedCountry = value;
     this.selectedCity = undefined;
+    this.dataCities = null;
 
     if (value !== this.defaultCountryItem) {
         this.getCities(value.name);
     }
   }
 
-  handleCityChange(value) {
+  handleCityChange(value: City) {
     this.selectedCity = value;
   }
 
@@ -64,10 +67,11 @@ export class SearchComponent implements OnInit {
   public getCities(countryName: string) {
     this.cityService.getAllCities(countryName).subscribe(
       (response: any) => {
-          this.dataCities = response;
+        this.dataCities = response;
+        console.log(this.dataCities);
       },
       (errorResponse: HttpErrorResponse) => {
-          console.log(errorResponse);
+        console.log(errorResponse);
       }
     );
   }

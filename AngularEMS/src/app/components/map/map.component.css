@@ -1,14 +1,111 @@
 agm-map {
-  height: 350px;
+  height: 550px;
 }
 
 .map-text {  
   color: rgb(200, 200, 200);
-  padding: 15px 50px;
-  font-size: 22px;
+  padding: 15px 10px;
+  font-size: 18px;
   font-family: 'Montserrat', sans-serif;
 }
 
 .map-text i {
   padding: 0 10px;
+}
+
+#report-incident-btn {
+  padding: 5px 10px;
+  font-size: 12px;
+}
+
+.info-window-wrapper {
+  width: 250px;
+}
+
+.centered {
+  text-align: center;
+}
+
+a {
+  color: rgb(66, 154, 255) !important;
+}
+
+a:hover {
+  color: rgb(0, 84, 180) !important;
+}
+
+.severity {
+  border: 1px solid lightgray;
+  padding: 3px 10px;
+  margin-left: 8px;
+  color: white;
+}
+
+.margin-0 {
+  margin: 0 !important;
+}
+
+.pos-relative {
+  position: relative;
+}
+
+.md-form label {
+  position: relative;
+}
+
+.md-form input[type=text] {
+  border: 1px solid rgb(206, 212, 218);
+  margin: 10px 0;
+}
+
+.md-form .form-control {
+  padding: 6px 10px;
+}
+
+.k-checkbox-label {
+  cursor: pointer;
+}
+
+.filter-box {
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  padding: 15px 15px;
+  padding-bottom: 0;
+  margin-bottom: 10px;
+}
+
+.chip {
+  display: inline-block;
+  height: 32px;
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(0,0,0,.6);
+  line-height: 32px;
+  padding: 0 12px;
+  -webkit-border-radius: 16px;
+  border-radius: 16px;
+  background-color: #eceff1;
+  margin-bottom: 1rem;
+  margin-right: 1rem;
+  cursor: pointer;
+  -webkit-transition: all .3s linear;
+  -o-transition: all .3s linear;
+  transition: all .3s linear;
+}
+
+.close-chip {
+  color: rgba(0, 0, 0, 0.6);
+  transition: 0.5s all ease-out;
+}
+
+.close-chip:hover {
+  color: rgba(0, 0, 0, 0.9);
+}
+
+#reset {
+  background-color: #0d9e73;
+  color: rgba(255, 255, 255, .9);
+}
+#reset:hover {
+  text-decoration: underline;
+  color: rgba(255, 255, 255, 1);
 }

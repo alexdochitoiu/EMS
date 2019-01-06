@@ -1,0 +1,124 @@
+<app-navbar></app-navbar>
+<div class="bg-announcement">
+  <div class="title-announcement">
+    Report an incident
+  </div>
+</div>
+<div class="body-container">
+  <div class="report-incident-form">
+    <form (ngSubmit)="onSubmit()" ngNativeValidate>
+
+      <div class="form-group">
+        <label for="summary"><b>Summary</b></label>
+        <input [(ngModel)]="incident.Summary" name="summary" required type="text" class="form-control" id="summary" aria-describedby="summaryHelp" placeholder="Enter summary">
+        <small id="summary" class="form-text text-muted">Please try to be as explicit as possible!</small>
+      </div>
+
+      <hr/>
+
+      <div class="form-group">
+        <label for="description"><b>Description</b></label>
+        <textarea [(ngModel)]="incident.Description" name="description" required class="form-control" id="description" aria-describedby="descriptionHelp" rows="5"></textarea>
+      </div>
+
+      <hr/>
+
+      <div class="form-group">
+        <label for="severity"><b>Severity</b></label>
+        <div class="radio">
+          <label><input [checked] type="radio" name="severity" [value]="2" [(ngModel)]="incident.Severity"> Minor</label>
+          <span aria-hidden="true"
+            triggers="mouseenter:mouseleave"
+            placement="right"
+            ngbPopover="Vivamus sagittis lacus vel augue laoreet rutrum faucibus." 
+            popoverTitle="Minor severity level">
+            <i class="fa fa-info-circle custom-icon"></i>
+          </span>
+        </div>
+        <div class="radio">
+          <label><input type="radio" name="severity" [value]="1" [(ngModel)]="incident.Severity"> Major</label>
+          <span aria-hidden="true"
+            triggers="mouseenter:mouseleave"
+            placement="right"
+            ngbPopover="Vivamus sagittis lacus vel augue laoreet rutrum faucibus." 
+            popoverTitle="Major severity level">
+            <i class="fa fa-info-circle custom-icon"></i>
+          </span>
+        </div>
+        <div class="radio">
+          <label><input type="radio" name="severity" [value]="0" [(ngModel)]="incident.Severity"> Critical</label>
+          <span aria-hidden="true"
+            triggers="mouseenter:mouseleave"
+            placement="right"
+            ngbPopover="Vivamus sagittis lacus vel augue laoreet rutrum faucibus." 
+            popoverTitle="Critical severity level">
+            <i class="fa fa-info-circle custom-icon"></i>
+          </span>
+        </div>
+      </div>
+
+      <hr/>
+
+      <div class="form-group">
+        <label for="severity"><b>The incident happened near your location?  </b></label>
+        <kendo-switch
+          [(ngModel)]="checked"        
+          [onLabel]="'Yes'"
+          [offLabel]="'No'"
+          style="margin-left: 10px"
+          name="switch"
+        >
+        </kendo-switch>
+        <br />
+        <span *ngIf="!checked">        
+          <i class="fa fa-map-marker custom-icon"></i>
+          Click on map to set the position where the incident happened
+        </span>
+        <agm-map       
+          (mapClick)="mapClicked($event)"
+          [zoom]="16" 
+          [disableDefaultUI]="false"
+          [zoomControl]="false"
+          [latitude]="currentLat" [longitude]="currentLng">
+          <agm-marker 
+            *ngIf="checked"
+            [latitude]="currentLat"
+            [longitude]="currentLng"
+            [iconUrl]="currentPositionIcon"
+          >      
+            <agm-info-window>
+              <strong>Your position</strong>
+            </agm-info-window>      
+          </agm-marker>
+          <agm-marker 
+            *ngIf="!checked"
+            [latitude]="incidentLat"
+            [longitude]="incidentLng"
+          >      
+            <agm-info-window>
+              <strong>Selected position</strong>
+            </agm-info-window>      
+          </agm-marker>
+        </agm-map>
+      </div>
+      <div *ngIf="errorMessage" class="alert alert-danger alert-dismissible fade show" role="alert">
+        <p>{{ errorMessage }}</p>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div *ngIf="successMessage" class="alert alert-success" role="alert">
+          <h6 class="alert-heading"><strong>Incident reported</strong></h6>
+          <hr>
+          <p>{{ successMessage }}</p>
+          <a routerLink="/">Back to home</a>
+      </div>
+      <hr/>
+
+      <div class="form-group wrapper">
+        <button class="btn btn-secondary my-2 my-sm-0" type="submit">Submit</button>
+      </div>  
+
+    </form>
+  </div>
+</div>

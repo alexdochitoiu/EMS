@@ -6,6 +6,7 @@ namespace WebAPI.Models.UserModels
 {
     public class DisplayUserModel
     {
+        public Guid Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public GenderEnum Gender { get; set; }

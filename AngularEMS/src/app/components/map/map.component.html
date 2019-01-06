@@ -1,4 +1,149 @@
-<div class="body-container">
-  <div class="map-text"><i class="fa fa-map-marker"></i>20 results found</div>
-  <agm-map [latitude]="lat" [longitude]="lng"></agm-map>
+<div class="body-container">  
+  <div style="float: right">
+    <button routerLink="/incidents/report" class="btn btn-secondary" id="report-incident-btn">
+      <i class="fa fa-exclamation-triangle" style="margin-right: 3px"></i>
+      Report an incident
+    </button>
+    <button 
+      (click)="openFilterModal(content)" 
+      class="btn btn-secondary" 
+      id="report-incident-btn">      
+      <i class="fa fa-cogs" style="margin-right: 3px"></i>
+      Filter
+    </button>    
+  </div>
+  <div *ngIf="incidents && incidents.length" class="map-text"><i class="fa fa-map-marker"></i>{{ incidents.length }} incidents found near you</div>
+  <div *ngIf="!incidents || !incidents.length" class="map-text"><i class="fa fa-map-marker"></i>No reported incidents near you</div>
+  <div class="filter-box">
+    <div class="chip" id="reset" (click)="resetToDefault()">
+      Reset to default
+    </div>
+    <div class="chip">
+      Range | {{kmRadius}}
+    </div>
+    <div class="chip">
+      {{severityChip}}
+    </div>
+    <div *ngIf="summaryContains" class="chip">
+      Summary | {{summaryContains && ('"'+summaryContains+'"')}}
+      <i class="fa fa-times close-chip" (click)="summaryContains = null; applyFilters()"></i>
+    </div>
+    <div *ngIf="reportedBy" class="chip">
+      Reported by | {{reportedBy && ('"'+reportedBy+'"')}}
+      <i class="fa fa-times close-chip" (click)="reportedBy = null; applyFilters()"></i>
+    </div>
+  </div>
+  <agm-map [zoom]="16" [latitude]="currentLat" [longitude]="currentLng">
+    <agm-marker 
+      [latitude]="currentLat"
+      [longitude]="currentLng"
+      [iconUrl]="currentPositionIcon"
+    >
+      <agm-info-window>
+        <strong>Your position</strong>
+      </agm-info-window>      
+    </agm-marker>
+    <agm-circle [latitude]="currentLat" [longitude]="currentLng" 
+      [radius]="kmRadius * 1000"
+      [fillColor]="'red'">
+    </agm-circle>
+    <agm-marker 
+      *ngFor="let incident of incidents; let i = index"
+      [latitude]="incident.Latitude"
+      [longitude]="incident.Longitude"
+      [iconUrl]="incident.Severity === 'Minor' ? minorSeverityIcon 
+        : incident.Severity === 'Major' ? majorSeverityIcon : null"
+    >
+      <agm-info-window>
+        <div class="info-window-wrapper">
+          <div class="centered"><strong>{{incident.Title}}</strong></div>
+          <hr />
+          <p>{{incident.Description}}</p>
+          <p>Severity:<span class="severity" [style.background]="getBGColor(incident)">{{incident.Severity}}</span></p>
+          <p>
+            <small>
+              Reported by 
+              <a [routerLink]='"/users/"+incident.ReporterName'>
+                {{incident.ReporterName}}
+              </a>
+            </small>
+          </p>
+          <hr />
+          <div class="centered">
+            <a [routerLink]='"/incidents/"+incident.IncidentId'>Click for details</a>
+          </div>
+        </div>
+      </agm-info-window>      
+    </agm-marker>
+  </agm-map>
 </div>
+
+<!-- Modal -->
+<div tabindex="-1">
+  <div class="modal-dialog">
+    <ng-template #content let-modal>
+    <div class="modal-content form-elegant">
+      <!--Header-->
+      <div class="modal-header text-center">
+        <h3 class="modal-title w-100 dark-grey-text font-weight-bold my-3">
+          <i class="fa fa-cogs" style="margin-right: 10px"></i>
+          <strong>Filter incidents</strong>
+        </h3>
+        <button type="button" class="close" (click)="modalRef.close()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <!--Body-->
+      <div class="modal-body mx-4">
+        <div class="md-form mb-5">
+          <strong>Range (km): </strong>
+          <kendo-slider
+            [min]="min"
+            [max]="max"
+            [smallStep]="smallStep"
+            [(ngModel)]="rangeValue"
+            style="width: 100%"
+          ></kendo-slider>
+          <h6>Selected range: {{rangeValue}}</h6>
+
+          <hr>
+          
+          <div class="pos-relative">
+            <strong class="margin-0">Severity:</strong>
+            <div class="pos-relative">
+              <input type="checkbox" id="minor" class="k-checkbox" checked="checked" 
+              [(ngModel)]="severityMinor">
+              <label class="k-checkbox-label" for="minor">Minor</label>
+            </div>            
+            <div class="pos-relative">
+              <input type="checkbox" id="major" class="k-checkbox" checked="checked"
+              [(ngModel)]="severityMajor">
+              <label class="k-checkbox-label" for="major">Major</label>
+            </div>
+            <div class="pos-relative">
+              <input type="checkbox" id="critical" class="k-checkbox" checked="checked"
+              [(ngModel)]="severityCritical">
+              <label class="k-checkbox-label" for="critical">Critical</label>
+            </div>
+          </div>
+          <hr>
+          <strong style="margin-top: 10px">Summary:</strong>
+          <div class="input-group">
+            <input type="text" class="form-control" placeholder="Summary contains ..."
+            [(ngModel)]="summaryContains">
+          </div>
+          <strong>Reporter:</strong>
+          <div class="input-group">
+            <input type="text" class="form-control" placeholder="Reported by ..."
+            [(ngModel)]="reportedBy">
+          </div>
+        </div>
+        <div class="text-center mb-3">
+          <button (click)="applyFilters()" class="btn btn-success btn-block btn-rounded z-depth-1a">Apply</button>
+        </div>
+      </div>
+    </div>
+    </ng-template>
+  </div>
+</div>
+<!-- Modal -->

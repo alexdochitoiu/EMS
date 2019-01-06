@@ -1,6 +1,4 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace WebAPI.Migrations
 {
@@ -8,6 +6,7 @@ namespace WebAPI.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            /*
             migrationBuilder.CreateTable(
                 name: "Countries",
                 columns: table => new
@@ -360,6 +359,8 @@ namespace WebAPI.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
+           
+            */
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

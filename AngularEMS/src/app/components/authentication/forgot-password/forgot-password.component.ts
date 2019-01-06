@@ -11,7 +11,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 })
 export class ForgotPasswordComponent implements AfterViewInit, OnDestroy {
 
-  @ViewChild('content') content;
+  @ViewChild('content') content: any;
   private modalRef: NgbModalRef;
   private hidden: boolean;
   private success: boolean;
@@ -32,7 +32,7 @@ export class ForgotPasswordComponent implements AfterViewInit, OnDestroy {
     }
   }
 
-  open(content) {
+  open(content: any) {
     this.modalRef = this.modalService.open(content);
     this.modalRef.result.then(
       () => {

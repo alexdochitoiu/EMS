@@ -56,8 +56,22 @@ body.modal-open {
   border-color: #085F45 !important;
 }
 
+.k-button.k-primary, .k-slider .k-draghandle, .k-switch-on .k-switch-handle {
+  background: #0d9e73 !important;
+  border-color: #085F45 !important;
+}
+
+.k-slider .k-slider-selection {
+  background: #0d9e73 !important;
+}
+
 .k-dateinput-wrap .k-input, .k-dropdown-wrap .k-input, .k-picker-wrap .k-input, .k-multiselect-wrap .k-input, .k-numeric-wrap .k-input {
   padding: 24px 12px;
+}
+
+.k-checkbox:checked + .k-checkbox-label::before {
+  background: #0d9e73 !important;
+  border-color: #085F45 !important;
 }
 
 .btn.btn-success[disabled],
@@ -148,6 +162,25 @@ body.modal-open {
 .modal-dialog {
   animation-name: popup-animation !important;
   animation-duration: 0.2s !important;
+}
+
+.k-textbox::selection, .k-input::selection, .k-textarea::selection {
+  background: grey;
+}
+
+span .k-switch-label-on {
+  color: #0d9e73;
+}
+
+.k-button.k-primary, .k-slider .k-draghandle, .k-switch-on .k-switch-handle {
+  border-color: #0d9e73;
+  background-color: #0d9e73;
+}
+
+.k-button.k-primary:hover, .k-button.k-primary.k-state-hover, .k-action-buttons .k-primary:hover, .k-action-buttons .k-primary.k-state-hvoer, .k-slider .k-draghandle:hover, .k-switch-on:hover .k-switch-handle {
+  border-color: #085F45;
+  background-color: #085F45;
+  color: #085F45;
 }
 
 @keyframes popup-animation {

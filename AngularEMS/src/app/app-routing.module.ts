@@ -12,6 +12,7 @@ import { UserProfileComponent } from './components/user-profile/user-profile.com
 import { AnnouncementDetailsComponent } from './components/announcement/announcement-details/announcement-details.component';
 import { VerifyEmailComponent } from './components/authentication/verify-email/verify-email.component';
 import { ResetPasswordComponent } from './components/authentication/reset-password/reset-password.component';
+import { ReportIncidentComponent } from './components/incident/report-incident/report-incident.component';
 
 const routes: Routes = [
   {
@@ -55,6 +56,12 @@ const routes: Routes = [
     component: UserProfileComponent,
     canActivate: [AuthGuard]
   },
+  {
+    path: 'incidents/report',
+    component: ReportIncidentComponent
+  },
+
+
   { path: '404', component: NotFoundComponent },
   { path: '**', redirectTo: '404' }
 ];
