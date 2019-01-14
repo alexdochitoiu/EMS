@@ -11,6 +11,7 @@ using Microsoft.IdentityModel.Tokens;
 using Swashbuckle.AspNetCore.Swagger;
 using WebAPI.Infrastructure.Email.Interfaces;
 using WebAPI.Infrastructure.Email.SMTP;
+using WebAPI.Infrastructure.SMS;
 using WebAPI.Mappings;
 using WebAPI.Seeders;
 
@@ -55,6 +56,7 @@ namespace WebAPI.Infrastructure
             services.AddTransient<CitiesSeeder>();
             services.AddTransient<IDatabaseSeeder, DatabaseSeeder>();
             services.AddTransient<IEmailSender, SmtpEmailSender>();
+            services.AddTransient<ISmsSender, EmsSmsSender>();
         }
 
         public static void AddSwagger(this IServiceCollection services)

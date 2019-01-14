@@ -12,8 +12,14 @@
       Filter
     </button>    
   </div>
-  <div *ngIf="incidents && incidents.length" class="map-text"><i class="fa fa-map-marker"></i>{{ incidents.length }} incidents found near you</div>
-  <div *ngIf="!incidents || !incidents.length" class="map-text"><i class="fa fa-map-marker"></i>No reported incidents near you</div>
+  <div *ngIf="!city">
+    <div *ngIf="incidents && incidents.length" class="map-text"><i class="fa fa-map-marker"></i>{{ incidents.length }} incidents found near you</div>
+    <div *ngIf="!incidents || !incidents.length" class="map-text"><i class="fa fa-map-marker"></i>No reported incidents near you</div>    
+  </div>
+  <div *ngIf="city">
+    <div *ngIf="incidents && incidents.length" class="map-text"><i class="fa fa-map-marker"></i>{{ incidents.length }} incidents found in {{ city.name }}</div>
+    <div *ngIf="!incidents || !incidents.length" class="map-text"><i class="fa fa-map-marker"></i>No reported incidents in {{ city.name }}</div>    
+  </div>
   <div class="filter-box">
     <div class="chip" id="reset" (click)="resetToDefault()">
       Reset to default
@@ -33,7 +39,10 @@
       <i class="fa fa-times close-chip" (click)="reportedBy = null; applyFilters()"></i>
     </div>
   </div>
-  <agm-map [zoom]="16" [latitude]="currentLat" [longitude]="currentLng">
+  <agm-map 
+    [zoom]="city ? 12 : 14" 
+    [latitude]="city ? city.latitude : currentLat" 
+    [longitude]="city ? city.longitude : currentLng">
     <agm-marker 
       [latitude]="currentLat"
       [longitude]="currentLng"
@@ -43,8 +52,10 @@
         <strong>Your position</strong>
       </agm-info-window>      
     </agm-marker>
-    <agm-circle [latitude]="currentLat" [longitude]="currentLng" 
-      [radius]="kmRadius * 1000"
+    <agm-circle 
+      [latitude]="city ? city.latitude : currentLat" 
+      [longitude]="city ? city.longitude : currentLng" 
+      [radius]="city ? 10000 : kmRadius * 1000"
       [fillColor]="'red'">
     </agm-circle>
     <agm-marker 
@@ -76,6 +87,18 @@
       </agm-info-window>      
     </agm-marker>
   </agm-map>
+  <div id="loading" *ngIf="loading">
+    <ngx-loading 
+      [show]="true" 
+      [config]="{
+        animationType: ngxLoadingAnimationTypes.wanderingCubes, 
+        primaryColour: '#ffffff', 
+        secondaryColour: '#ccc', 
+        backdropBorderRadius: '3px'
+      }"
+      [template]="loadingTemplate">
+    </ngx-loading>
+  </div>
 </div>
 
 <!-- Modal -->

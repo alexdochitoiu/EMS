@@ -1,0 +1,28 @@
+#customize-style {
+    border-top: 10px solid #0d9e73;
+    margin-top: -28px;
+    background: #464948;
+}
+
+.social-icon:hover {
+    border-color: #464948 !important;
+    color: #464948 !important;
+    background: white;
+}
+
+.navbar-nav {
+    flex-direction: row;
+}
+
+@media (max-width: 575px) {
+    #customize-style {
+        margin-top: -7px;
+    }
+}
+
+@media (max-width: 768px) {
+    .navbar-nav {
+        align-items: center;
+        justify-content: center;
+    }
+}

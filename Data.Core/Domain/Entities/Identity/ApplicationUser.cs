@@ -14,6 +14,8 @@ namespace Data.Core.Domain.Entities.Identity
         public Address Address { get; private set; }
         public DateTime Created { get; private set; }
         public DateTime Modified { get; private set; }
+        public double LastLongitude { get; private set; }
+        public double LastLatitude { get; private set; }
         public IEnumerable<Announcement> Announcements { get; private set; }
 
         public int Age
@@ -30,7 +32,7 @@ namespace Data.Core.Domain.Entities.Identity
 
 
         public static ApplicationUser Create(string firstName, string lastName, GenderEnum gender, DateTime dateOfBirth,
-            string email, string username, string phone, Address address)
+            string email, string username, string phone, Address address, double lastLongitude, double lastLatitude)
         {
             var user = new ApplicationUser
             {
@@ -38,12 +40,12 @@ namespace Data.Core.Domain.Entities.Identity
                 Announcements = new List<Announcement>(),
                 Created = DateTime.Now
             };
-            user.Update(firstName, lastName, gender, dateOfBirth, email, username, phone, address);
+            user.Update(firstName, lastName, gender, dateOfBirth, email, username, phone, address, lastLongitude, lastLatitude);
             return user;
         }
 
         public void Update(string firstName, string lastName, GenderEnum gender, DateTime dateOfBirth,
-            string email, string username, string phone, Address address)
+            string email, string username, string phone, Address address, double lastLongitude, double lastLatitude)
         {
             Validate(email);
 
@@ -55,12 +57,23 @@ namespace Data.Core.Domain.Entities.Identity
             UserName = username;
             PhoneNumber = phone;
             Address = address;
+            LastLatitude = lastLatitude;
+            LastLongitude = lastLongitude;
             Modified = DateTime.Now;
         }
 
         private static void Validate(string email)
         {
             Ensure.That(email).IsNotNullOrEmpty();
+        }
+
+        public bool IsNear(double centerLat, double centerLng, double km)
+        {
+            const double ky = 40000 / 360;
+            var kx = Math.Cos(Math.PI * centerLat / 180.0) * ky;
+            var dx = Math.Abs(centerLng - this.LastLongitude) * kx;
+            var dy = Math.Abs(centerLat - this.LastLatitude) * ky;
+            return Math.Sqrt(dx * dx + dy * dy) <= km;
         }
     }
 }

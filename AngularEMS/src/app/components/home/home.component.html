@@ -1,3 +1,4 @@
 <app-navbar></app-navbar>
-<app-search></app-search>
-<app-map></app-map>
+<app-search (selected)="selectedCity = $event"></app-search>
+<app-map [city]="selectedCity"></app-map>
+<app-footer></app-footer>

@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 
 import { CountryService } from '../../services/country/country.service';
 import { Country } from '../../services/country/country.model';
@@ -32,8 +32,11 @@ export class SearchComponent implements OnInit {
   public selectedCountry: Country;
   public selectedCity: City;
 
+  @Output() selected = new EventEmitter<City>();
+
   constructor(private countryService: CountryService,
-              private cityService: CityService) {  }
+              private cityService: CityService) {
+  }
 
   ngOnInit() {
     this.getCountries();
@@ -68,11 +71,19 @@ export class SearchComponent implements OnInit {
     this.cityService.getAllCities(countryName).subscribe(
       (response: any) => {
         this.dataCities = response;
-        console.log(this.dataCities);
+        // console.log(this.dataCities);
       },
       (errorResponse: HttpErrorResponse) => {
         console.log(errorResponse);
       }
     );
+  }
+
+  public searchIncidents(city: City) {
+    if (city) {
+      this.selected.emit(city);
+      this.selectedCountry = this.defaultCountryItem;
+      this.selectedCity = this.defaultCityItem;
+    }
   }
 }

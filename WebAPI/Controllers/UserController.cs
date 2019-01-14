@@ -5,11 +5,12 @@ using AutoMapper;
 using Data.Core.Domain.Entities;
 using Data.Core.Domain.Entities.Identity;
 using Data.Core.Interfaces;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using WebAPI.Infrastructure;
 using WebAPI.Models.AnnouncementModels;
+using WebAPI.Models.IncidentModels;
 using WebAPI.Models.UserModels;
 
 namespace WebAPI.Controllers
@@ -19,15 +20,15 @@ namespace WebAPI.Controllers
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly ILogger _logger;
 
         public UserController(IUnitOfWork unitOfWork, 
             IMapper mapper, 
-            UserManager<ApplicationUser> userManager)
+            ILogger<IncidentController> logger)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
-            _userManager = userManager;
+            _logger = logger;
         }
 
         // GET api/users
@@ -145,6 +146,29 @@ namespace WebAPI.Controllers
             }
         }
 
+        // GET api/users/radius
+        [HttpGet("radius", Name = "AllUsersWithinARadius")]
+        [ProducesResponseType(typeof(List<DisplayUserModel>), 200)]
+        public async Task<ActionResult> AllUsersWithinARadius([FromQuery] IncidentQueryParamsModel queryModel)
+        {
+            try
+            {
+                var centerLat = Convert.ToDouble(queryModel.CenterLatitude);
+                var centerLng = Convert.ToDouble(queryModel.CenterLongitude);
+                var km = Convert.ToDouble(queryModel.Kilometers);
+                var nearbyUsers = await _unitOfWork
+                    .Users
+                    .GetUsersWithinARadiusAsync(centerLat, centerLng, km);
+                var displayUsers = _mapper.Map<List<DisplayUserModel>>(nearbyUsers);
+                return Ok(displayUsers);
+            }
+            catch (Exception exp)
+            {
+                _logger.LogCritical(exp.Message);
+                return BadRequest(exp.Message);
+            }
+        }
+
         // POST api/users
         [HttpPost(Name="CreateUser")]
         [ProducesResponseType(typeof(DisplayUserModel), 201)]
@@ -163,7 +187,9 @@ namespace WebAPI.Controllers
                     model.Email,
                     model.Username,
                     model.Phone,
-                    address);
+                    address,
+                    Convert.ToDouble(model.CurrentLongitude),
+                    Convert.ToDouble(model.CurrentLatitude));
                 await _unitOfWork.Users.AddAsync(user);
                 await _unitOfWork.CompleteAsync();
                 var displayUser = _mapper.Map<DisplayUserModel>(user);
@@ -192,7 +218,9 @@ namespace WebAPI.Controllers
                     model.Email,
                     model.Username,
                     model.Phone,
-                    null);
+                    null,
+                    Convert.ToDouble(model.CurrentLongitude),
+                    Convert.ToDouble(model.CurrentLatitude));
                 await _unitOfWork.Users.EditAsync(user, id);
                 await _unitOfWork.CompleteAsync();
                 var displayUser = _mapper.Map<DisplayUserModel>(user);

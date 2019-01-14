@@ -44,7 +44,7 @@ export class RegisterComponent implements AfterViewInit, OnDestroy {
     }
   }
 
-  open(content) {
+  open(content: any) {
     this.modalRef = this.modalService.open(content);
     this.modalRef.result.then(
       () => {
@@ -74,22 +74,30 @@ export class RegisterComponent implements AfterViewInit, OnDestroy {
   }
 
   onSubmit(form: NgForm) {
-    console.log(form.value);
-    this.userService.registerUser(form.value)
-      .subscribe(
-      (response: any) => {
-        console.log('Response:' + response);
-        if (response.succeeded === true) {
-          console.log(response.warnings);
-          this.resetForm(form);
-          this.successRegistered = true;
-          console.log('User signed up with success!');
+    navigator.geolocation.getCurrentPosition(pos => {
+      const crd = pos.coords;
+      const registerModel = {
+        ...form.value,
+        currentLongitude: String(crd.longitude),
+        currentLatitude: String(crd.latitude)
+      };
+      console.log(registerModel);
+      this.userService.registerUser(registerModel)
+        .subscribe(
+        (response: any) => {
+          console.log('Response:' + response);
+          if (response.succeeded === true) {
+            console.log(response.warnings);
+            this.resetForm(form);
+            this.successRegistered = true;
+            console.log('User signed up with success!');
+          }
+        },
+        (errorResponse: HttpErrorResponse) => {
+          this.errors = errorResponse.error.errors;
+          console.log(errorResponse);
         }
-      },
-      (errorResponse: HttpErrorResponse) => {
-        this.errors = errorResponse.error.errors;
-        console.log(errorResponse);
-      }
-    );
+      );
+    });
   }
 }

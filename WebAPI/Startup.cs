@@ -58,6 +58,7 @@ namespace WebAPI
             });
             var records = dbSeeder.SeedAsync().Result;
             _logger.LogInformation($"Total records was seed in database: {records}");
+
             app.UseMvc();
         }
     }

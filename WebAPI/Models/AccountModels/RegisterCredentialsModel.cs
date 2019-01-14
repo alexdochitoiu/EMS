@@ -10,8 +10,7 @@ namespace WebAPI.Models.AccountModels
         public string LastName { get; set; }
         public string Username { get; set; }
         public string Email { get; set; }
-
-
+        
         [DataType(DataType.Password)]
         public string Password { get; set; }
 
@@ -29,5 +28,8 @@ namespace WebAPI.Models.AccountModels
         public string Street { get; set; }
         public string Number { get; set; }
         public string ZipCode { get; set; }
+
+        public string CurrentLongitude { get; set; }
+        public string CurrentLatitude { get; set; }
     }
 }

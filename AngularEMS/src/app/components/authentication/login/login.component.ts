@@ -78,46 +78,59 @@ export class LoginComponent implements AfterViewInit, OnDestroy {
   }
 
   onSubmit(form: NgForm) {
-    console.log(form.value);
-    this.userService.loginUser(form.value)
-      .subscribe(
-      (response: any) => {
-        this.authService.login(response.token, response.email, this.infra.DEFAULT_PHOTO_URL);
-        this.router.navigate(['/']);
-      },
-      (errorResponse: HttpErrorResponse) => {
-        this.errors = errorResponse.error.errors;
-        this.verifyEmailIndex = this.errors.indexOf('E-mail was not confirmed');
-        console.log(errorResponse);
-      }
-    );
+    navigator.geolocation.getCurrentPosition(pos => {
+      const crd = pos.coords;
+      const loginModel = {
+        ...form.value,
+        currentLongitude: String(crd.longitude),
+        currentLatitude: String(crd.latitude)
+      };
+      console.log(loginModel);
+      this.userService.loginUser(loginModel)
+        .subscribe(
+        (response: any) => {
+          this.authService.login(response.token, response.email, this.infra.DEFAULT_PHOTO_URL);
+          this.router.navigate(['/']);
+        },
+        (errorResponse: HttpErrorResponse) => {
+          this.errors = errorResponse.error.errors;
+          this.verifyEmailIndex = this.errors.indexOf('E-mail was not confirmed');
+          console.log(errorResponse);
+        }
+      );
+    });
   }
 
   googleLogin() {
     this.userService.doGoogleLogin()
       .then(
       (response: any) => {
-        const externalUser: ExternalUserModel = {
-          Provider: 'Google',
-          FirstName: response.additionalUserInfo.profile.given_name,
-          LastName: response.additionalUserInfo.profile.family_name,
-          Email: response.additionalUserInfo.profile.email,
-          PhotoUrl: response.additionalUserInfo.profile.picture,
-          Token: response.credential.accessToken,
-        };
-        this.userService.registerExternalUser(externalUser).toPromise().then(
-          (res) => {
-            console.log(res);
-            this.authService.login(
-              response.credential.accessToken,
-              response.additionalUserInfo.profile.email,
-              response.additionalUserInfo.profile.picture
-            );
-            this.router.navigate(['/']);
-          },
-          (err: HttpErrorResponse) => this.errors = err.error.errors,
-        );
-        console.log(externalUser);
+        navigator.geolocation.getCurrentPosition(pos => {
+          const crd = pos.coords;
+          const externalUser: ExternalUserModel = {
+            Provider: 'Google',
+            FirstName: response.additionalUserInfo.profile.given_name,
+            LastName: response.additionalUserInfo.profile.family_name,
+            Email: response.additionalUserInfo.profile.email,
+            PhotoUrl: response.additionalUserInfo.profile.picture,
+            Token: response.credential.accessToken,
+            CurrentLongitude: String(crd.longitude),
+            CurrentLatitude: String(crd.latitude)
+          };
+          this.userService.registerExternalUser(externalUser).toPromise().then(
+            (res) => {
+              console.log(res);
+              this.authService.login(
+                response.credential.accessToken,
+                response.additionalUserInfo.profile.email,
+                response.additionalUserInfo.profile.picture
+              );
+              this.router.navigate(['/']);
+            },
+            (err: HttpErrorResponse) => this.errors = err.error.errors,
+          );
+          console.log(externalUser);
+        });
       },
       (errorResponse: HttpErrorResponse) => {
         this.errors = errorResponse.error;
@@ -130,23 +143,28 @@ export class LoginComponent implements AfterViewInit, OnDestroy {
     this.userService.doFacebookLogin()
       .then(
       (response: any) => {
-        const externalUser: ExternalUserModel = {
-          Provider: 'Facebook',
-          FirstName: response.additionalUserInfo.profile.first_name,
-          LastName: response.additionalUserInfo.profile.last_name,
-          Email: response.additionalUserInfo.profile.email,
-          PhotoUrl: response.additionalUserInfo.profile.picture.data.url,
-          Token: response.credential.accessToken,
-        };
-        this.userService.registerExternalUser(externalUser).toPromise().then(
-          (res) => {
-            console.log(res);
-            this.authService.login(response.credential.accessToken, response.additionalUserInfo.profile.email, response.user.photoURL);
-            this.router.navigate(['/']);
-          },
-          (err: HttpErrorResponse) => this.errors = err.error.errors,
-        );
-        console.log(externalUser);
+        navigator.geolocation.getCurrentPosition(pos => {
+          const crd = pos.coords;
+          const externalUser: ExternalUserModel = {
+            Provider: 'Facebook',
+            FirstName: response.additionalUserInfo.profile.first_name,
+            LastName: response.additionalUserInfo.profile.last_name,
+            Email: response.additionalUserInfo.profile.email,
+            PhotoUrl: response.additionalUserInfo.profile.picture.data.url,
+            Token: response.credential.accessToken,
+            CurrentLongitude: String(crd.longitude),
+            CurrentLatitude: String(crd.latitude)
+          };
+          this.userService.registerExternalUser(externalUser).toPromise().then(
+            (res) => {
+              console.log(res);
+              this.authService.login(response.credential.accessToken, response.additionalUserInfo.profile.email, response.user.photoURL);
+              this.router.navigate(['/']);
+            },
+            (err: HttpErrorResponse) => this.errors = err.error.errors,
+          );
+          console.log(externalUser);
+        });
       },
       (errorResponse: HttpErrorResponse) => {
         this.errors = new Array(errorResponse.message);

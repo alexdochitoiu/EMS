@@ -1,16 +1,18 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, AfterViewInit, ViewChild, Input } from '@angular/core';
 import { Incident } from 'src/app/services/map/map.model';
 import { IncidentService } from 'src/app/services/map/incident.service';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Router } from '@angular/router';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { City } from 'src/app/services/city/city.model';
+import { ngxLoadingAnimationTypes, NgxLoadingComponent } from 'ngx-loading';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-map',
   templateUrl: './map.component.html',
   styleUrls: ['./map.component.css']
 })
-export class MapComponent implements OnInit {
+export class MapComponent implements AfterViewInit {
 
   incidents: Incident[];
 
@@ -51,7 +53,7 @@ export class MapComponent implements OnInit {
 
   options = {
     enableHighAccuracy: true,
-    timeout: 5000,
+    timeout: 60000,
     maximumAge: 0
   };
 
@@ -71,18 +73,50 @@ export class MapComponent implements OnInit {
   public summaryContains: string;
   public reportedBy: string;
 
+  public incidentSubscription: Subscription;
+
   public severityChip: string;
+  private _city: City;
+  @Input()
+  set city(city: City) {
+    this._city = city;
+    if (city) {
+      this.fetchIncidents()
+      .add(() => {
+        if (!this.severityMinor) {
+          this.incidents = this.incidents.filter(i => i.Severity !== 'Minor');
+        }
+        if (!this.severityMajor) {
+          this.incidents = this.incidents.filter(i => i.Severity !== 'Major');
+        }
+        if (!this.severityCritical) {
+          this.incidents = this.incidents.filter(i => i.Severity !== 'Critical');
+        }
+        if (this.summaryContains) {
+          this.incidents = this.incidents.filter(i => i.Title.includes(this.summaryContains));
+        }
+        if (this.reportedBy) {
+          this.incidents = this.incidents.filter(i => i.ReporterName.includes(this.reportedBy));
+        }
+      });
+    }
+  }
+  get city(): City { return this._city; }
+
+  public ngxLoadingAnimationTypes = ngxLoadingAnimationTypes;
+  public loading: boolean;
 
   constructor(private incidentService: IncidentService,
-    private router: Router,
     private modalService: NgbModal) {
     this.severityChip = 'Severity | ' +
       (this.severityMinor && 'Minor ' || '') +
       (this.severityMajor && 'Major ' || '') +
       (this.severityCritical && 'Critical' || '');
+
+    this.loading = true;
   }
 
-  ngOnInit() {
+  ngAfterViewInit() {
     // Set marker to current position
     navigator.geolocation.getCurrentPosition(pos => {
       const crd = pos.coords;
@@ -90,6 +124,7 @@ export class MapComponent implements OnInit {
       this.currentLng = crd.longitude;
       console.log(`Current position: lat ${this.currentLat} lng ${this.currentLng}`);
       // Fetch incidents and display on map
+      console.log('Called here too');
       this.fetchIncidents();
     }, this.error, this.options);
   }
@@ -111,7 +146,7 @@ export class MapComponent implements OnInit {
   }
 
   error(err: { code: any; message: any; }) {
-    console.warn(`ERROR(${err.code}): ${err.message}`);
+    console.warn(`Geolocation ERROR(${err.code}): ${err.message}`);
   }
 
   openFilterModal(content: any) {
@@ -126,6 +161,9 @@ export class MapComponent implements OnInit {
     this.kmRadius = this.rangeValue;
     this.modalRef.close();
 
+    this.loading = true;
+
+    console.log('Called here too (2)');
     this.fetchIncidents()
     .add(() => {
       if (!this.severityMinor) {
@@ -146,33 +184,45 @@ export class MapComponent implements OnInit {
     });
   }
 
-  resetToDefault() {
-    console.log('reset filters');
-    this.kmRadius = 1.5;
-    this.severityMinor = true;
-    this.severityMajor = true;
-    this.severityCritical = true;
-    this.severityChip = 'Severity | ' +
-      (this.severityMinor && 'Minor ' || '') +
-      (this.severityMajor && 'Major ' || '') +
-      (this.severityCritical && 'Critical' || '');
-    this.summaryContains = null;
-    this.reportedBy = null;
-    this.fetchIncidents();
+  async resetToDefault() {
+    console.log('Called here too (3)');
+    await new Promise((resolve, reject) => {
+      this.loading = true;
+      this.city = null;
+      this.incidents = [];
+      this.kmRadius = 1.5;
+      this.severityMinor = this.severityMajor = this.severityCritical = true;
+      this.severityChip = 'Severity | ' +
+        (this.severityMinor && 'Minor ' || '') +
+        (this.severityMajor && 'Major ' || '') +
+        (this.severityCritical && 'Critical' || '');
+      this.summaryContains = null;
+      this.reportedBy = null;
+      resolve();
+    }).then(() => this.fetchIncidents());
   }
 
   fetchIncidents() {
-    return this.incidentService.getAllIncidentsWithinARadius(
-      this.currentLat,
-      this.currentLng,
-      this.kmRadius)
+    let lat = this.currentLat, lng = this.currentLng;
+    if (this.city) {
+      lat = parseFloat(this.city.latitude);
+      lng = parseFloat(this.city.longitude);
+      this.kmRadius = 10;
+    }
+    console.log(this.city, this.kmRadius);
+    if (this.incidentSubscription && !this.incidentSubscription.closed) {
+      this.incidentSubscription.unsubscribe();
+    }
+    return this.incidentSubscription = this.incidentService.getAllIncidentsWithinARadius(lat, lng, this.kmRadius)
       .subscribe(
       (response: any) => {
         this.incidents = response;
-        console.log(response);
+        console.log('Incidents: ', this.incidents);
+        this.loading = false;
       },
       (errorResponse: HttpErrorResponse) => {
         console.log(`Error (Incidents): ${errorResponse}`);
+        this.loading = false;
       }
     );
   }

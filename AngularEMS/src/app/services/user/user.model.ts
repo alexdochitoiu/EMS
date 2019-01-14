@@ -58,4 +58,6 @@ export class ExternalUserModel {
   Email: string;
   PhotoUrl: string;
   Token: string;
+  CurrentLongitude: string;
+  CurrentLatitude: string;
 }

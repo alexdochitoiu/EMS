@@ -14,5 +14,6 @@ namespace Data.Core.Interfaces
         Task<ApplicationUser> GetByUsernameAsync(string username);
         Task<EntityEntry<UserToken>> AddUserTokenAsync(UserToken userToken);
         Task<UserToken> GetUserTokenAsync(Guid userId);
+        Task<List<ApplicationUser>> GetUsersWithinARadiusAsync(double centerLat, double centerLng, double km);
     }
 }

@@ -35,6 +35,7 @@ import { ResetPasswordComponent } from './components/authentication/reset-passwo
 import { PopupMessageComponent } from './components/popup-message/popup-message.component';
 import { ReportIncidentComponent } from './components/incident/report-incident/report-incident.component';
 import { InputsModule } from '@progress/kendo-angular-inputs';
+import { NgxLoadingModule } from 'ngx-loading';
 
 
 @NgModule({
@@ -74,7 +75,8 @@ import { InputsModule } from '@progress/kendo-angular-inputs';
       apiKey: 'AIzaSyDNQIPldFqdwuHN9MN6RpVia1sYqUrVq54'
     }),
     NgxPaginationModule,
-    InputsModule
+    InputsModule,
+    NgxLoadingModule
   ],
   providers: [],
   bootstrap: [AppComponent]

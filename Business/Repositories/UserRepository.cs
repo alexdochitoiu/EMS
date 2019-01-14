@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Data.Core.Domain.Entities.Identity;
 using Data.Core.Interfaces;
@@ -56,6 +57,17 @@ namespace Business.Repositories
                 .Include(t => t.Address)
                     .ThenInclude(a => a.City)
                 .FirstOrDefaultAsync(t => t.NormalizedUserName == username.ToUpper());
+        }
+
+        public Task<List<ApplicationUser>> GetUsersWithinARadiusAsync(double centerLat, double centerLng, double km)
+        {
+            return _context.Users
+                .Include(t => t.Address)
+                    .ThenInclude(a => a.Country)
+                .Include(t => t.Address)
+                    .ThenInclude(a => a.City)
+                .Where(i => i.IsNear(centerLat, centerLng, km))
+                .ToListAsync();
         }
 
         public async Task<EntityEntry<UserToken>> AddUserTokenAsync(UserToken userToken)

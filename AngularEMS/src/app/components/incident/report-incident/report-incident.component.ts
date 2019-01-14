@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { MouseEvent as AGMMouseEvent } from '@agm/core';
-import { NgForm } from '@angular/forms';
 import { CreateIncidentModel } from 'src/app/services/map/map.model';
 import { IncidentService } from 'src/app/services/map/incident.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { UserService } from 'src/app/services/user/user.service';
 import { AuthService } from 'src/app/services/auth/auth.service';
-import { Router } from '@angular/router';
+import { AlertService } from 'src/app/services/alert/alert.service';
+import { InfrastructureService } from 'src/app/services/infra/infra.service';
 
 @Component({
   selector: 'app-report-incident',
@@ -48,7 +48,8 @@ export class ReportIncidentComponent implements OnInit {
   constructor(private incidentService: IncidentService,
     private userService: UserService,
     private authService: AuthService,
-    private router: Router) {
+    private alertService: AlertService,
+    private infrastructure: InfrastructureService) {
     this.incident = new CreateIncidentModel();
     this.incident.Severity = 2;
   }
@@ -82,8 +83,32 @@ export class ReportIncidentComponent implements OnInit {
         this.incident.ReporterId = response.id;
         await this.incidentService.createIncident(this.incident)
           .subscribe(
-          (res: any) => {
+          async (res: any) => {
             this.successMessage = 'The incident was successfully reported!';
+            const severity =
+              this.incident.Severity === 0 ? 'Critical' :
+              this.incident.Severity === 1 ? 'Major' : 'Minor';
+            const incidentLink = `${this.infrastructure.HOST_ADDRESS}/incidents/${res.id}`;
+            let bodyMessage = 'An incident have been reported near you:';
+            bodyMessage += `\n- Summary: '${this.incident.Summary}'`;
+            bodyMessage += `\n- Severity: '${severity}'\n`;
+            bodyMessage += `\nClick the follow link to see details: ${incidentLink}`;
+            const alertModel = {
+              radius: '1.5',
+              latitude: String(this.incident.Latitude),
+              longitude: String(this.incident.Longitude),
+              message: bodyMessage
+            };
+            await this.alertService.alertNearbyUsers(alertModel)
+            .subscribe(
+              (alertResponse: any) => {
+                console.log('Users successfully alerted via SMS:', alertResponse, alertModel);
+              },
+              (alertErrorResponse: HttpErrorResponse) => {
+                this.errorMessage = alertErrorResponse.error;
+                console.log('Alert call function error: ', alertErrorResponse);
+              }
+            );
           },
           (errorResponse: HttpErrorResponse) => {
             this.errorMessage = errorResponse.error;
@@ -97,7 +122,7 @@ export class ReportIncidentComponent implements OnInit {
     );
   }
 
-  error(err) {
+  error(err: { code: any; message: any; }) {
     console.warn(`ERROR(${err.code}): ${err.message}`);
   }
 }

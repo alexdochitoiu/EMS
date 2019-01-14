@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { City } from 'src/app/services/city/city.model';
 
 @Component({
   selector: 'app-home',
@@ -7,9 +8,9 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HomeComponent implements OnInit {
 
+  public selectedCity: City;
   constructor() { }
 
   ngOnInit() {
   }
-
 }

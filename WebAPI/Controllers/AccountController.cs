@@ -78,7 +78,9 @@ namespace WebAPI.Controllers
                 registerCredentials.Email,
                 registerCredentials.Username,
                 registerCredentials.Phone,
-                address);
+                address,
+                Convert.ToDouble(registerCredentials.CurrentLongitude),
+                Convert.ToDouble(registerCredentials.CurrentLatitude));
 
             var result = await _userManager.CreateAsync(user, registerCredentials.Password);
 
@@ -98,7 +100,7 @@ namespace WebAPI.Controllers
                 $"{HttpUtility.UrlEncode(emailConfirmationToken)}";
             
             var sendEmailResponse = await EmsEmailSender.SendVerificationEmailAsync(user.UserName, user.Email, confirmationUrl, _emailSender);
-
+            
             return Ok(new RegisterResultModel
             {
                 Token = user.GenerateJwtToken(),
@@ -254,6 +256,15 @@ namespace WebAPI.Controllers
 
             var isValidPassword = await _userManager.CheckPasswordAsync(user, loginCredentials.Password);
 
+            if (isValidPassword)
+            {
+                user.Update(user.FirstName, user.LastName, user.Gender, user.DateOfBirth,
+                    user.Email, user.UserName, user.PhoneNumber, user.Address, 
+                    Convert.ToDouble(loginCredentials.CurrentLongitude), 
+                    Convert.ToDouble(loginCredentials.CurrentLatitude));
+                await _userManager.UpdateAsync(user);
+            }
+
             return !isValidPassword
                 ? BadRequest(new LoginResultModel
                 {
@@ -287,7 +298,9 @@ namespace WebAPI.Controllers
                     email,
                     username,
                     null,
-                    null);
+                    null,
+                    Convert.ToDouble(externalLoginModel.CurrentLongitude),
+                    Convert.ToDouble(externalLoginModel.CurrentLatitude));
 
                 user.EmailConfirmed = true;
 

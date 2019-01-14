@@ -6,6 +6,7 @@ import { Injectable } from '@angular/core';
 export class InfrastructureService {
 
   public readonly URL = 'http://localhost:61330';
+  public readonly HOST_ADDRESS = 'http://localhost:4200';
   public readonly TOKEN_KEY = 'auth_token';
   public readonly EMAIL_KEY = 'auth_email';
   public readonly PHOTO_URL_KEY = 'auth_photo_url';
