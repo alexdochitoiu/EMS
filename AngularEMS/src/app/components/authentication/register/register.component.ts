@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { UserRegisterModel } from '../../../services/user/user.model';
 import { UserService } from '../../../services/user/user.service';
 import { AuthService } from '../../../services/auth/auth.service';
+import { ngxLoadingAnimationTypes } from 'ngx-loading';
 
 @Component({
   selector: 'app-register',
@@ -19,8 +20,11 @@ export class RegisterComponent implements AfterViewInit, OnDestroy {
   errors: Array<string>;
   successRegistered = false;
 
-  @ViewChild('content') content;
+  @ViewChild('content') content: any;
   private modalRef: NgbModalRef;
+
+  public ngxLoadingAnimationTypes = ngxLoadingAnimationTypes;
+  public loading: boolean;
 
   constructor(private userService: UserService,
               private authService: AuthService,
@@ -30,6 +34,7 @@ export class RegisterComponent implements AfterViewInit, OnDestroy {
       this.authService.logout();
     }
     this.user = new UserRegisterModel();
+    this.loading = false;
   }
 
   ngAfterViewInit() {
@@ -69,11 +74,12 @@ export class RegisterComponent implements AfterViewInit, OnDestroy {
     this.errors = null;
   }
 
-  removeError(error) {
+  removeError(error: string) {
     this.errors = this.errors.filter(e => e !== error);
   }
 
   onSubmit(form: NgForm) {
+    this.loading = true;
     navigator.geolocation.getCurrentPosition(pos => {
       const crd = pos.coords;
       const registerModel = {
@@ -91,6 +97,7 @@ export class RegisterComponent implements AfterViewInit, OnDestroy {
             this.resetForm(form);
             this.successRegistered = true;
             console.log('User signed up with success!');
+            this.loading = false;
           }
         },
         (errorResponse: HttpErrorResponse) => {

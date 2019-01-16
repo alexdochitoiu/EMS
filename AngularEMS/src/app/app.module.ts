@@ -36,6 +36,7 @@ import { PopupMessageComponent } from './components/popup-message/popup-message.
 import { ReportIncidentComponent } from './components/incident/report-incident/report-incident.component';
 import { InputsModule } from '@progress/kendo-angular-inputs';
 import { NgxLoadingModule } from 'ngx-loading';
+import { AgmDirectionModule } from 'agm-direction';
 
 
 @NgModule({
@@ -72,8 +73,9 @@ import { NgxLoadingModule } from 'ngx-loading';
     FormsModule,
     AppRoutingModule,
     AgmCoreModule.forRoot({
-      apiKey: 'AIzaSyDNQIPldFqdwuHN9MN6RpVia1sYqUrVq54'
+      apiKey: 'AIzaSyCt0ESIUAMdoIqotUXzsAQplKQNrCmoeEw'
     }),
+    AgmDirectionModule,
     NgxPaginationModule,
     InputsModule,
     NgxLoadingModule

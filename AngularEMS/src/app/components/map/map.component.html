@@ -1,16 +1,16 @@
 <div class="body-container">  
   <div style="float: right">
     <button routerLink="/incidents/report" class="btn btn-secondary" id="report-incident-btn">
-      <i class="fa fa-exclamation-triangle" style="margin-right: 3px"></i>
+      <i class="fa fa-exclamation-triangle" style="margin-right: 3px; color: yellow;"></i>
       Report an incident
     </button>
     <button 
-      (click)="openFilterModal(content)" 
-      class="btn btn-secondary" 
-      id="report-incident-btn">      
-      <i class="fa fa-cogs" style="margin-right: 3px"></i>
-      Filter
-    </button>    
+      (click)="displayNearHospitals()" 
+      class="btn btn-secondary"
+      id="display-hospitals-btn">  
+      <i class="fa fa-heartbeat" style="margin-right: 3px; color: red;"></i>
+      Display nearby hospitals
+    </button>
   </div>
   <div *ngIf="!city">
     <div *ngIf="incidents && incidents.length" class="map-text"><i class="fa fa-map-marker"></i>{{ incidents.length }} incidents found near you</div>
@@ -37,6 +37,15 @@
     <div *ngIf="reportedBy" class="chip">
       Reported by | {{reportedBy && ('"'+reportedBy+'"')}}
       <i class="fa fa-times close-chip" (click)="reportedBy = null; applyFilters()"></i>
+    </div>
+    <div style="float: right">
+      <button 
+        (click)="openFilterModal(content)" 
+        class="btn btn-secondary" 
+        id="report-incident-btn">      
+        <i class="fa fa-cogs" style="margin-right: 3px"></i>
+        Filter
+      </button>    
     </div>
   </div>
   <agm-map 
@@ -86,6 +95,28 @@
         </div>
       </agm-info-window>      
     </agm-marker>
+
+    <!-- Display Nearby Hospitals Markers -->
+    <agm-marker 
+      *ngFor="let hospital of nearbyHospitals"
+      [latitude]="hospital.Latitude"
+      [longitude]="hospital.Longitude"
+      [iconUrl]="hospitalMarker"
+      (markerClick)="setDestinationPoint(hospital.Latitude, hospital.Longitude)"
+    >
+      <agm-info-window>
+        <div class="info-window-wrapper">
+          <div class="centered"><strong>{{hospital.Name}}</strong></div>
+          <hr />
+        </div>
+      </agm-info-window>  
+    </agm-marker>
+    <!-- ------------------------------ -->
+    <agm-direction 
+      *ngIf="destination" 
+      [origin]="origin" 
+      [destination]="destination">
+    </agm-direction>
   </agm-map>
   <div id="loading" *ngIf="loading">
     <ngx-loading 
@@ -93,7 +124,7 @@
       [config]="{
         animationType: ngxLoadingAnimationTypes.wanderingCubes, 
         primaryColour: '#ffffff', 
-        secondaryColour: '#ccc', 
+        secondaryColour: '#0d9e73', 
         backdropBorderRadius: '3px'
       }"
       [template]="loadingTemplate">

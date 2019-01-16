@@ -1,11 +1,12 @@
 import { Component, AfterViewInit, ViewChild, Input } from '@angular/core';
-import { Incident } from 'src/app/services/map/map.model';
+import { Incident, Hospital } from 'src/app/services/map/map.model';
 import { IncidentService } from 'src/app/services/map/incident.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { City } from 'src/app/services/city/city.model';
-import { ngxLoadingAnimationTypes, NgxLoadingComponent } from 'ngx-loading';
+import { ngxLoadingAnimationTypes } from 'ngx-loading';
 import { Subscription } from 'rxjs';
+import { HospitalService } from 'src/app/services/map/hospital.service';
 
 @Component({
   selector: 'app-map',
@@ -106,8 +107,22 @@ export class MapComponent implements AfterViewInit {
   public ngxLoadingAnimationTypes = ngxLoadingAnimationTypes;
   public loading: boolean;
 
+  public nearbyHospitals: Array<Hospital>;
+  hospitalMarker = {
+    url: '../../../assets/hospital-marker.png',
+    scaledSize: {
+      width: 28,
+      height: 42
+    }
+  };
+
+  public origin: any;
+  public destination: any;
+
   constructor(private incidentService: IncidentService,
-    private modalService: NgbModal) {
+    private modalService: NgbModal,
+    private hospitalService: HospitalService) {
+
     this.severityChip = 'Severity | ' +
       (this.severityMinor && 'Minor ' || '') +
       (this.severityMajor && 'Major ' || '') +
@@ -124,7 +139,7 @@ export class MapComponent implements AfterViewInit {
       this.currentLng = crd.longitude;
       console.log(`Current position: lat ${this.currentLat} lng ${this.currentLng}`);
       // Fetch incidents and display on map
-      console.log('Called here too');
+      this.origin = { lat: this.currentLat, lng: this.currentLng };
       this.fetchIncidents();
     }, this.error, this.options);
   }
@@ -225,5 +240,26 @@ export class MapComponent implements AfterViewInit {
         this.loading = false;
       }
     );
+  }
+
+  displayNearHospitals() {
+    this.loading = true;
+    const lat = this.currentLat, lng = this.currentLng;
+    this.hospitalService.getNearbyHospitals(String(lat), String(lng), String(this.kmRadius * 1000))
+    .subscribe(
+      (response: any) => {
+        this.nearbyHospitals = response;
+        this.loading = false;
+        console.log('Nearby hospitals: ', this.nearbyHospitals);
+      },
+      (errorResponse: HttpErrorResponse) => {
+        console.log(`Error (Neaby Hospitals): ${errorResponse}`);
+        this.loading = false;
+      }
+    );
+  }
+
+  setDestinationPoint(lat: any, lng: any) {
+    this.destination = { lat: lat, lng: lng };
   }
 }

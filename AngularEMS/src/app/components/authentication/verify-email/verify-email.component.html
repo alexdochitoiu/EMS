@@ -2,29 +2,29 @@
 <!-- Modal -->
 <div tabindex="-1">
   <div class="modal-dialog">
-      <form>
-      <!--Content-->
-      <ng-template #content let-modal>
-      <div class="modal-content form-elegant">
-          <!--Header-->
-          <div class="modal-header text-center">
-              <h3 class="modal-title w-100 dark-grey-text font-weight-bold my-3"><strong>E-mail confirmation</strong></h3>
-              <button type="button" class="close" (click)="modalRef.close()">
-                  <span aria-hidden="true">&times;</span>
-              </button>
-          </div>
-          <!--Body-->
-          <div class="modal-body mx-4">
-              <!--Body-->
-              <div class="md-form mb-5"> 
-                <i *ngIf="success" class="fa fa-check-square prefix"></i>    
-                <i *ngIf="!success" class="fa fa-times-circle prefix"></i>              
-                <h5>{{ message }}</h5>
-              </div>    
-              <div class="text-center mb-3">
-                  <button routerLink="/" class="btn btn-success btn-block btn-rounded z-depth-1a">Back to home</button>
-              </div>
-          </div>
+    <form>
+    <!--Content-->
+    <ng-template #content let-modal>
+    <div class="modal-content form-elegant">
+        <!--Header-->
+        <div class="modal-header text-center">
+            <h3 class="modal-title w-100 dark-grey-text font-weight-bold my-3"><strong>E-mail confirmation</strong></h3>
+            <button type="button" class="close" (click)="modalRef.close()">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <!--Body-->
+        <div class="modal-body mx-4">
+            <!--Body-->
+            <div class="md-form mb-5"> 
+            <i *ngIf="success" class="fa fa-check-square prefix"></i>    
+            <i *ngIf="!success" class="fa fa-times-circle prefix"></i>              
+            <h5>{{ message }}</h5>
+            </div>    
+            <div class="text-center mb-3">
+                <button routerLink="/" class="btn btn-success btn-block btn-rounded z-depth-1a">Back to home</button>
+            </div>
+        </div>
       </div>
       </ng-template>
       <!--/.Content-->
@@ -32,5 +32,19 @@
   </div>
 </div>
 <!-- Modal -->
+
+<!-- Loading screen -->
+<div id="loading" *ngIf="loading">
+<ngx-loading 
+    [show]="true" 
+    [config]="{
+    animationType: ngxLoadingAnimationTypes.wanderingCubes, 
+    primaryColour: '#ffffff', 
+    secondaryColour: '#0d9e73', 
+    backdropBorderRadius: '3px'
+    }"
+    [template]="loadingTemplate">
+</ngx-loading>
+</div>
 
 

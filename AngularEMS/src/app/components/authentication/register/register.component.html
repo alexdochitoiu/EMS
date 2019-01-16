@@ -67,6 +67,18 @@
             <div class="modal-footer mx-5 pt-3 mb-1">
                 <p class="font-small grey-text d-flex justify-content-end">Already a member? <a (click)="modalRef.close()" routerLink="/login" class="blue-text ml-1"> Sign In</a></p>
             </div>
+            <div id="loading" *ngIf="loading">
+                <ngx-loading 
+                  [show]="true" 
+                  [config]="{
+                    animationType: ngxLoadingAnimationTypes.wanderingCubes, 
+                    primaryColour: '#ffffff', 
+                    secondaryColour: '#0d9e73', 
+                    backdropBorderRadius: '3px'
+                  }"
+                  [template]="loadingTemplate">
+                </ngx-loading>
+            </div>
         </div>
         <!--/.Content-->
       </form>

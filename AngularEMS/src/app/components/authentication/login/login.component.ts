@@ -8,6 +8,7 @@ import { UserLoginModel, ExternalUserModel } from '../../../services/user/user.m
 import { UserService } from '../../../services/user/user.service';
 import { AuthService } from '../../../services/auth/auth.service';
 import { InfrastructureService } from '../../../services/infra/infra.service';
+import { ngxLoadingAnimationTypes } from 'ngx-loading';
 
 @Component({
   selector: 'app-login',
@@ -21,6 +22,9 @@ export class LoginComponent implements AfterViewInit, OnDestroy {
   verifyEmailIndex: number;
   verifyEmailSent: boolean;
 
+  public ngxLoadingAnimationTypes = ngxLoadingAnimationTypes;
+  public loading: boolean;
+
   constructor(private userService: UserService,
               private authService: AuthService,
               private router: Router,
@@ -29,9 +33,10 @@ export class LoginComponent implements AfterViewInit, OnDestroy {
               private cd: ChangeDetectorRef) {
     this.user = new UserLoginModel();
     this.verifyEmailSent = false;
+    this.loading = false;
   }
 
-  @ViewChild('content') content;
+  @ViewChild('content') content: any;
   private modalRef: NgbModalRef;
 
   ngAfterViewInit() {
@@ -50,7 +55,7 @@ export class LoginComponent implements AfterViewInit, OnDestroy {
     }
   }
 
-  open(content) {
+  open(content: any) {
     this.modalRef = this.modalService.open(content);
     this.modalRef.result.then(
       () => {
@@ -78,6 +83,7 @@ export class LoginComponent implements AfterViewInit, OnDestroy {
   }
 
   onSubmit(form: NgForm) {
+    this.loading = true;
     navigator.geolocation.getCurrentPosition(pos => {
       const crd = pos.coords;
       const loginModel = {
@@ -90,18 +96,21 @@ export class LoginComponent implements AfterViewInit, OnDestroy {
         .subscribe(
         (response: any) => {
           this.authService.login(response.token, response.email, this.infra.DEFAULT_PHOTO_URL);
+          this.loading = false;
           this.router.navigate(['/']);
         },
         (errorResponse: HttpErrorResponse) => {
           this.errors = errorResponse.error.errors;
           this.verifyEmailIndex = this.errors.indexOf('E-mail was not confirmed');
           console.log(errorResponse);
+          this.loading = false;
         }
       );
     });
   }
 
   googleLogin() {
+    this.loading = true;
     this.userService.doGoogleLogin()
       .then(
       (response: any) => {
@@ -125,9 +134,13 @@ export class LoginComponent implements AfterViewInit, OnDestroy {
                 response.additionalUserInfo.profile.email,
                 response.additionalUserInfo.profile.picture
               );
+              this.loading = false;
               this.router.navigate(['/']);
             },
-            (err: HttpErrorResponse) => this.errors = err.error.errors,
+            (err: HttpErrorResponse) => {
+              this.errors = err.error.errors;
+              this.loading = false;
+            }
           );
           console.log(externalUser);
         });
@@ -135,11 +148,13 @@ export class LoginComponent implements AfterViewInit, OnDestroy {
       (errorResponse: HttpErrorResponse) => {
         this.errors = errorResponse.error;
         console.log(errorResponse);
+        this.loading = false;
       }
     );
   }
 
   facebookLogin() {
+    this.loading = true;
     this.userService.doFacebookLogin()
       .then(
       (response: any) => {
@@ -159,9 +174,13 @@ export class LoginComponent implements AfterViewInit, OnDestroy {
             (res) => {
               console.log(res);
               this.authService.login(response.credential.accessToken, response.additionalUserInfo.profile.email, response.user.photoURL);
+              this.loading = false;
               this.router.navigate(['/']);
             },
-            (err: HttpErrorResponse) => this.errors = err.error.errors,
+            (err: HttpErrorResponse) => {
+              this.errors = err.error.errors;
+              this.loading = false;
+            }
           );
           console.log(externalUser);
         });
@@ -169,26 +188,30 @@ export class LoginComponent implements AfterViewInit, OnDestroy {
       (errorResponse: HttpErrorResponse) => {
         this.errors = new Array(errorResponse.message);
         console.log(errorResponse);
+        this.loading = false;
       }
     );
   }
 
   twitterLogin() {
+    this.loading = true;
     this.userService.doTwitterLogin()
       .then(
       (response: any) => {
         console.log(response);
+        this.loading = false;
         this.authService.login(response.credential.accessToken, response.additionalUserInfo.username, response.user.photoURL);
         this.router.navigate(['/']);
       },
       (errorResponse: HttpErrorResponse) => {
         this.errors = new Array(errorResponse.message);
+        this.loading = false;
         console.log(errorResponse);
       }
     );
   }
 
-  removeError(error) {
+  removeError(error: string) {
     this.errors = this.errors.filter(e => e !== error);
   }
 }

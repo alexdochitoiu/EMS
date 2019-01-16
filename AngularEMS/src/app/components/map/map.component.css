@@ -18,6 +18,11 @@ agm-map {
   font-size: 12px;
 }
 
+#display-hospitals-btn {
+  padding: 5px 10px;
+  font-size: 12px;
+}
+
 .info-window-wrapper {
   width: 250px;
 }

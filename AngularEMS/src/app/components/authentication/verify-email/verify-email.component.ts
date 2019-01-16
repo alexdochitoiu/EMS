@@ -2,7 +2,8 @@ import { Component, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { UserService } from 'src/app/services/user/user.service';
-import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
+import { HttpErrorResponse } from '@angular/common/http';
+import { ngxLoadingAnimationTypes } from 'ngx-loading';
 
 @Component({
   selector: 'app-verify-email',
@@ -15,20 +16,26 @@ export class VerifyEmailComponent implements AfterViewInit, OnDestroy {
   private modalRef: NgbModalRef;
   message: string;
   success: boolean;
+  public ngxLoadingAnimationTypes = ngxLoadingAnimationTypes;
+  public loading: boolean;
 
   constructor(private route: ActivatedRoute,
     private router: Router,
     private modalService: NgbModal,
-    private userService: UserService) { }
+    private userService: UserService) {
+    this.loading = false;
+  }
 
   ngAfterViewInit() {
     this.route.params.subscribe(params => {
       const userId = params['userId'];
       const token = encodeURIComponent(params['emailToken']);
+      this.loading = true;
       this.userService.verifyEmail(userId, token).subscribe(
         (response: any) => {
           this.success = true;
           this.message = response;
+          this.loading = false;
           this.open(this.content);
         },
         (errorResponse: HttpErrorResponse) => {
@@ -37,6 +44,7 @@ export class VerifyEmailComponent implements AfterViewInit, OnDestroy {
             ? 'Oops! Maybe the server is not open.'
             : errorResponse.error;
           console.log(errorResponse);
+          this.loading = false;
           this.open(this.content);
         }
       );
@@ -49,7 +57,7 @@ export class VerifyEmailComponent implements AfterViewInit, OnDestroy {
     }
   }
 
-  open(content) {
+  open(content: any) {
     this.modalRef = this.modalService.open(content);
     this.modalRef.result.then(
       () => {

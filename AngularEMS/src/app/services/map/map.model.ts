@@ -7,7 +7,8 @@ export class Incident {
   ReporterName: string;
   IncidentId: string;
 
-  public constructor(lat, long, severity, title, description, reporterName, incidentId) {
+  public constructor(lat: number, long: number, severity: string,
+    title: string, description: string, reporterName: string, incidentId: string) {
     this.Latitude = lat;
     this.Longitude = long;
     this.Severity = severity;
@@ -25,4 +26,18 @@ export class CreateIncidentModel {
   Latitude: number;
   Longitude: number;
   ReporterId: any;
+}
+
+export class Hospital {
+  Latitude: number;
+  Longitude: number;
+  Name: string;
+  Vicinity: string;
+
+  public constructor(lat: number, long: number, name: string, vicinity: string) {
+    this.Latitude = lat;
+    this.Longitude = long;
+    this.Name = name;
+    this.Vicinity = vicinity;
+  }
 }
