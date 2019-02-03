@@ -21,6 +21,7 @@ export class LoginComponent implements AfterViewInit, OnDestroy {
   user: UserLoginModel;
   verifyEmailIndex: number;
   verifyEmailSent: boolean;
+  urlToNavigate = '/';
 
   public ngxLoadingAnimationTypes = ngxLoadingAnimationTypes;
   public loading: boolean;
@@ -55,14 +56,19 @@ export class LoginComponent implements AfterViewInit, OnDestroy {
     }
   }
 
+  closeModal(route: string) {
+    this.urlToNavigate = route;
+    this.modalRef.close();
+  }
+
   open(content: any) {
     this.modalRef = this.modalService.open(content);
     this.modalRef.result.then(
       () => {
-        console.log('When user closes');
+        this.router.navigate([this.urlToNavigate]);
       },
       () => {
-        console.log('Backdrop click');
+        this.router.navigate([this.urlToNavigate]);
       }
     );
   }

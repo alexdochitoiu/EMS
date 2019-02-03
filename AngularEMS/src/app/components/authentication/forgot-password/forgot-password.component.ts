@@ -4,6 +4,7 @@ import { NgForm } from '@angular/forms';
 import { UserService } from 'src/app/services/user/user.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ngxLoadingAnimationTypes } from 'ngx-loading';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-forgot-password',
@@ -21,7 +22,8 @@ export class ForgotPasswordComponent implements AfterViewInit, OnDestroy {
   public loading: boolean;
 
   constructor(private modalService: NgbModal,
-    private userService: UserService) {
+    private userService: UserService,
+    private router: Router) {
     this.hidden = true;
     this.loading = false;
   }
@@ -40,10 +42,10 @@ export class ForgotPasswordComponent implements AfterViewInit, OnDestroy {
     this.modalRef = this.modalService.open(content);
     this.modalRef.result.then(
       () => {
-        console.log('When user closes');
+        this.router.navigate(['/']);
       },
       () => {
-        console.log('Backdrop click');
+        this.router.navigate(['/']);
       }
     );
   }

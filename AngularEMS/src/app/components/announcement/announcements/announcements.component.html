@@ -33,8 +33,18 @@
   </div>  
 </div>
 
-<div *ngIf="!announcementsAvailable">
-  <h3>No announcements available</h3>
+
+<div class="no-available" 
+  *ngIf="!announcementsAvailable"
+>
+  <h3><strong>No announcements available</strong></h3>
+  <button 
+    routerLink="/" 
+    class="btn btn-secondary my-2 my-sm-0 back-to-home"
+    >
+      <i class="fa fa-home"></i>
+      Back to home
+  </button>
 </div>
 
 <!-- Loading screen -->

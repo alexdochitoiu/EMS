@@ -26,31 +26,46 @@
       <div class="form-group">
         <label for="severity"><b>Severity</b></label>
         <div class="radio">
-          <label><input [checked] type="radio" name="severity" [value]="2" [(ngModel)]="incident.Severity"> Minor</label>
+          <label>
+            <input [checked] type="radio" name="severity" [value]="2" [(ngModel)]="incident.Severity"
+              (change)="handleSeverityChange(incident.Severity)"
+            > 
+            Minor
+          </label>
           <span aria-hidden="true"
             triggers="mouseenter:mouseleave"
             placement="right"
-            ngbPopover="Vivamus sagittis lacus vel augue laoreet rutrum faucibus." 
+            ngbPopover="Minor incident. People whitin a radius of 500m will be notified." 
             popoverTitle="Minor severity level">
             <i class="fa fa-info-circle custom-icon"></i>
           </span>
         </div>
         <div class="radio">
-          <label><input type="radio" name="severity" [value]="1" [(ngModel)]="incident.Severity"> Major</label>
+          <label>
+            <input type="radio" name="severity" [value]="1" [(ngModel)]="incident.Severity"
+              (change)="handleSeverityChange(incident.Severity)"
+            >
+            Major
+          </label>
           <span aria-hidden="true"
             triggers="mouseenter:mouseleave"
             placement="right"
-            ngbPopover="Vivamus sagittis lacus vel augue laoreet rutrum faucibus." 
+            ngbPopover="Major incident. People whitin a radius of 1.5km will be notified." 
             popoverTitle="Major severity level">
             <i class="fa fa-info-circle custom-icon"></i>
           </span>
         </div>
         <div class="radio">
-          <label><input type="radio" name="severity" [value]="0" [(ngModel)]="incident.Severity"> Critical</label>
+          <label>
+            <input type="radio" name="severity" [value]="0" [(ngModel)]="incident.Severity"
+              (change)="handleSeverityChange(incident.Severity)"
+            > 
+            Critical
+          </label>
           <span aria-hidden="true"
             triggers="mouseenter:mouseleave"
             placement="right"
-            ngbPopover="Vivamus sagittis lacus vel augue laoreet rutrum faucibus." 
+            ngbPopover="Critical incident. People whitin a radius of 3km will be notified." 
             popoverTitle="Critical severity level">
             <i class="fa fa-info-circle custom-icon"></i>
           </span>
@@ -60,7 +75,7 @@
       <hr/>
 
       <div class="form-group">
-        <label for="severity"><b>The incident happened near your location?  </b></label>
+        <label for="severity"><b>The incident happened near your location?</b></label>
         <kendo-switch
           [(ngModel)]="checked"        
           [onLabel]="'Yes'"
@@ -70,6 +85,10 @@
         >
         </kendo-switch>
         <br />
+        <span *ngIf="!checked">        
+          <i class="fa fa-map-marker custom-icon"></i>
+          Click on map to set the position where the incident happened
+        </span>
         <span *ngIf="!checked">        
           <i class="fa fa-map-marker custom-icon"></i>
           Click on map to set the position where the incident happened
@@ -99,6 +118,18 @@
               <strong>Selected position</strong>
             </agm-info-window>      
           </agm-marker>
+
+          <agm-circle 
+            [latitude]="checked ? currentLat : incidentLat" 
+            [longitude]="checked ? currentLng : incidentLng" 
+            [radius]="reportIncidentRadius"
+            [fillColor]="'red'"
+            [editable]="true"
+            (radiusChange)="radiusChange($event)"
+          >
+          </agm-circle>
+
+
         </agm-map>
       </div>
       <div *ngIf="errorMessage" class="alert alert-danger alert-dismissible fade show" role="alert">

@@ -5,12 +5,12 @@
 export const environment = {
   production: false,
   firebase: {
-    apiKey: "AIzaSyA5i_8cC36VkLPh42ALvkSxupeRkFWcMfw",
-    authDomain: "vital-orb-205719.firebaseapp.com",
-    databaseURL: "https://vital-orb-205719.firebaseio.com",
-    projectId: "vital-orb-205719",
-    storageBucket: "",
-    messagingSenderId: "958339372448"
+    apiKey: 'AIzaSyA5i_8cC36VkLPh42ALvkSxupeRkFWcMfw',
+    authDomain: 'vital-orb-205719.firebaseapp.com',
+    databaseURL: 'https://vital-orb-205719.firebaseio.com',
+    projectId: 'vital-orb-205719',
+    storageBucket: '',
+    messagingSenderId: '958339372448'
   }
 };
 

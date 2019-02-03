@@ -44,6 +44,7 @@ export class ReportIncidentComponent implements OnInit {
     timeout: 5000,
     maximumAge: 0
   };
+  public reportIncidentRadius: number;
 
   constructor(private incidentService: IncidentService,
     private userService: UserService,
@@ -52,6 +53,7 @@ export class ReportIncidentComponent implements OnInit {
     private infrastructure: InfrastructureService) {
     this.incident = new CreateIncidentModel();
     this.incident.Severity = 2;
+    this.reportIncidentRadius = 500;
   }
 
   ngOnInit() {
@@ -67,6 +69,18 @@ export class ReportIncidentComponent implements OnInit {
     if (this.checked === true) { return; }
     this.incidentLat = $event.coords.lat;
     this.incidentLng = $event.coords.lng;
+  }
+
+  handleSeverityChange(value: number) {
+    switch (value) {
+      case 0: this.reportIncidentRadius = 3000; break;
+      case 1: this.reportIncidentRadius = 1500; break;
+      default: this.reportIncidentRadius = 500;
+    }
+  }
+
+  radiusChange($event: any) {
+    this.reportIncidentRadius = $event;
   }
 
   async onSubmit() {
@@ -94,7 +108,7 @@ export class ReportIncidentComponent implements OnInit {
             bodyMessage += `\n- Severity: '${severity}'\n`;
             bodyMessage += `\nClick the follow link to see details: ${incidentLink}`;
             const alertModel = {
-              radius: '1.5',
+              radius: String(this.reportIncidentRadius),
               latitude: String(this.incident.Latitude),
               longitude: String(this.incident.Longitude),
               message: bodyMessage

@@ -106,6 +106,7 @@ export class MapComponent implements AfterViewInit {
 
   public ngxLoadingAnimationTypes = ngxLoadingAnimationTypes;
   public loading: boolean;
+  private _opened = false;
 
   public nearbyHospitals: Array<Hospital>;
   hospitalMarker = {
@@ -141,7 +142,10 @@ export class MapComponent implements AfterViewInit {
       // Fetch incidents and display on map
       this.origin = { lat: this.currentLat, lng: this.currentLng };
       this.fetchIncidents();
-    }, this.error, this.options);
+    }, (err: { code: any; message: any; }) => {
+      console.warn(`Geolocation ERROR(${err.code}): ${err.message}`);
+      this.loading = false;
+    }, this.options);
   }
 
   getBGColor(incident: Incident) {
@@ -158,10 +162,6 @@ export class MapComponent implements AfterViewInit {
         break;
     }
     return color;
-  }
-
-  error(err: { code: any; message: any; }) {
-    console.warn(`Geolocation ERROR(${err.code}): ${err.message}`);
   }
 
   openFilterModal(content: any) {
@@ -261,5 +261,9 @@ export class MapComponent implements AfterViewInit {
 
   setDestinationPoint(lat: any, lng: any) {
     this.destination = { lat: lat, lng: lng };
+  }
+
+  private _toggleSidebar() {
+    this._opened = !this._opened;
   }
 }

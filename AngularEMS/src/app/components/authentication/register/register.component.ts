@@ -19,6 +19,7 @@ export class RegisterComponent implements AfterViewInit, OnDestroy {
   user: UserRegisterModel;
   errors: Array<string>;
   successRegistered = false;
+  urlToNavigate = '/';
 
   @ViewChild('content') content: any;
   private modalRef: NgbModalRef;
@@ -39,7 +40,7 @@ export class RegisterComponent implements AfterViewInit, OnDestroy {
 
   ngAfterViewInit() {
     console.log('Modal register form opening...');
-    this.open(this.content);
+    setTimeout(() => this.open(this.content));
     this.resetForm();
   }
 
@@ -49,14 +50,19 @@ export class RegisterComponent implements AfterViewInit, OnDestroy {
     }
   }
 
+  closeModal(route: string) {
+    this.urlToNavigate = route;
+    this.modalRef.close();
+  }
+
   open(content: any) {
     this.modalRef = this.modalService.open(content);
     this.modalRef.result.then(
       () => {
-        console.log('When user closes');
+        this.router.navigate([this.urlToNavigate]);
       },
       () => {
-        console.log('Backdrop click');
+        this.router.navigate([this.urlToNavigate]);
       }
     );
   }
@@ -103,6 +109,7 @@ export class RegisterComponent implements AfterViewInit, OnDestroy {
         (errorResponse: HttpErrorResponse) => {
           this.errors = errorResponse.error.errors;
           console.log(errorResponse);
+          this.loading = false;
         }
       );
     });

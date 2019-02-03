@@ -35,6 +35,23 @@ app-footer {
     position: relative;
 }
 
+.no-available {
+    background-image: url('/assets/no-announcements-available.png');
+    background-size: cover;
+    margin: 15px auto;
+    width: 300px;
+    height: 300px;
+    text-align: center;
+    padding-top: 100px;
+    margin-bottom: 70px;
+}
+
+.back-to-home {
+    top: 135px;
+    position: relative;
+    padding: 7px 20px;
+}
+
 @media (max-width: 425px) {
     .grid-list {
         display: none;

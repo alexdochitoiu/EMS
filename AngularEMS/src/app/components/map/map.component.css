@@ -16,11 +16,13 @@ agm-map {
 #report-incident-btn {
   padding: 5px 10px;
   font-size: 12px;
+  text-transform: initial;
 }
 
 #display-hospitals-btn {
   padding: 5px 10px;
-  font-size: 12px;
+  font-size: 12px;  
+  text-transform: initial;
 }
 
 .info-window-wrapper {
@@ -113,4 +115,24 @@ a:hover {
 #reset:hover {
   text-decoration: underline;
   color: rgba(255, 255, 255, 1);
+}
+
+#open-filter {
+  background-color: #464948;
+  color: rgba(255, 255, 255, .9);
+}
+
+#open-filter:hover {  
+  background-color: #313332;
+}
+
+@media (max-width: 425px) {
+  #report-incident-btn, #display-hospitals-btn {
+    width: 99%;
+    margin: 5px auto;
+  }
+  .map-text {
+    font-size: 0.8em;
+    text-align: center;
+  }
 }

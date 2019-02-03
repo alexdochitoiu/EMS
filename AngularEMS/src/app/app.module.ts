@@ -15,6 +15,10 @@ import 'hammerjs';
 import 'mousetrap';
 import { ModalGalleryModule } from '@ks89/angular-modal-gallery';
 import { environment } from '../environments/environment';
+import { InputsModule } from '@progress/kendo-angular-inputs';
+import { NgxLoadingModule } from 'ngx-loading';
+import { AgmDirectionModule } from 'agm-direction';
+import { SidebarModule } from 'ng-sidebar';
 
 import { AppComponent } from './app.component';
 import { HomeComponent } from './components/home/home.component';
@@ -34,10 +38,6 @@ import { VerifyEmailComponent } from './components/authentication/verify-email/v
 import { ResetPasswordComponent } from './components/authentication/reset-password/reset-password.component';
 import { PopupMessageComponent } from './components/popup-message/popup-message.component';
 import { ReportIncidentComponent } from './components/incident/report-incident/report-incident.component';
-import { InputsModule } from '@progress/kendo-angular-inputs';
-import { NgxLoadingModule } from 'ngx-loading';
-import { AgmDirectionModule } from 'agm-direction';
-
 
 @NgModule({
   declarations: [
@@ -78,7 +78,8 @@ import { AgmDirectionModule } from 'agm-direction';
     AgmDirectionModule,
     NgxPaginationModule,
     InputsModule,
-    NgxLoadingModule
+    NgxLoadingModule,
+    SidebarModule.forRoot()
   ],
   providers: [],
   bootstrap: [AppComponent]

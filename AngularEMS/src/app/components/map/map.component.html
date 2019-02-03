@@ -1,5 +1,5 @@
 <div class="body-container">  
-  <div style="float: right">
+  <div>
     <button routerLink="/incidents/report" class="btn btn-secondary" id="report-incident-btn">
       <i class="fa fa-exclamation-triangle" style="margin-right: 3px; color: yellow;"></i>
       Report an incident
@@ -9,7 +9,7 @@
       class="btn btn-secondary"
       id="display-hospitals-btn">  
       <i class="fa fa-heartbeat" style="margin-right: 3px; color: red;"></i>
-      Display nearby hospitals
+      Nearby hospitals
     </button>
   </div>
   <div *ngIf="!city">
@@ -21,6 +21,12 @@
     <div *ngIf="!incidents || !incidents.length" class="map-text"><i class="fa fa-map-marker"></i>No reported incidents in {{ city.name }}</div>    
   </div>
   <div class="filter-box">
+    <div 
+      class="chip" id="open-filter" 
+      (click)="openFilterModal(content)" 
+    >
+      <i class="fa fa-cogs" style="margin-right: 3px"></i>Filter
+    </div>
     <div class="chip" id="reset" (click)="resetToDefault()">
       Reset to default
     </div>
@@ -37,15 +43,6 @@
     <div *ngIf="reportedBy" class="chip">
       Reported by | {{reportedBy && ('"'+reportedBy+'"')}}
       <i class="fa fa-times close-chip" (click)="reportedBy = null; applyFilters()"></i>
-    </div>
-    <div style="float: right">
-      <button 
-        (click)="openFilterModal(content)" 
-        class="btn btn-secondary" 
-        id="report-incident-btn">      
-        <i class="fa fa-cogs" style="margin-right: 3px"></i>
-        Filter
-      </button>    
     </div>
   </div>
   <agm-map 
@@ -118,6 +115,15 @@
       [destination]="destination">
     </agm-direction>
   </agm-map>
+  <ng-sidebar-container>
+    <ng-sidebar [(opened)]="_opened">
+      <p>Sidebar contents</p>
+    </ng-sidebar>
+  
+    <div ng-sidebar-content>
+      <button (click)="_toggleSidebar()">Toggle sidebar</button>
+    </div>
+  </ng-sidebar-container>
   <div id="loading" *ngIf="loading">
     <ngx-loading 
       [show]="true" 

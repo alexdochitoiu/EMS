@@ -1,3 +1,8 @@
 {
-    "git.ignoreLimitWarning": true
+    "git.ignoreLimitWarning": true,
+    "appService.deploySubpath": "dist\\AngularEMS",
+    "appService.zipIgnorePattern": [
+        "node_modules{,/**}"
+    ],
+    "appService.defaultWebAppToDeploy": "/subscriptions/4b76a2e7-81f9-4c9f-8513-576349098ac2/resourceGroups/EMSResourseGroup/providers/Microsoft.Web/sites/emergency-ms"
 }
