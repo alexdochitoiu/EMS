@@ -1,0 +1,54 @@
+<app-navbar></app-navbar>
+
+<div class="bg-incident">
+  <div class="title-announcement">Incidents</div>
+</div>
+<div *ngIf="incidentsAvailable">
+  <div class="pag-div">
+    <pagination-controls (pageChange)="p = $event"></pagination-controls>
+  </div>  
+  <div class="container">
+    <div class="row">
+      <app-incident-box 
+        class="col-12" 
+        *ngFor="let item of incidents | paginate: { itemsPerPage: 12, currentPage: p }" 
+        [incident]="item"
+      >
+      </app-incident-box>
+    </div>
+  </div>
+  <div class="pag-div">
+    <pagination-controls (pageChange)="p = $event"></pagination-controls>
+  </div>  
+</div>
+
+
+<div class="no-available" 
+  *ngIf="!incidentsAvailable"
+>
+  <h3><strong>No incidents available</strong></h3>
+  <button 
+    routerLink="/" 
+    class="btn btn-secondary my-2 my-sm-0 back-to-home"
+    >
+      <i class="fa fa-home"></i>
+      Back to home
+  </button>
+</div>
+
+<!-- Loading screen -->
+<div id="loading" *ngIf="loading">
+  <ngx-loading 
+    [show]="true" 
+    [config]="{
+    animationType: ngxLoadingAnimationTypes.wanderingCubes, 
+    primaryColour: '#ffffff', 
+    secondaryColour: '#0d9e73', 
+    backdropBorderRadius: '3px'
+    }"
+    [template]="loadingTemplate">
+  </ngx-loading>
+</div>
+    
+
+<app-footer></app-footer>

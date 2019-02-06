@@ -13,6 +13,8 @@ import { AnnouncementDetailsComponent } from './components/announcement/announce
 import { VerifyEmailComponent } from './components/authentication/verify-email/verify-email.component';
 import { ResetPasswordComponent } from './components/authentication/reset-password/reset-password.component';
 import { ReportIncidentComponent } from './components/incident/report-incident/report-incident.component';
+import { IncidentDetailsComponent } from './components/incident/incident-details/incident-details.component';
+import { IncidentsComponent } from './components/incident/incidents/incidents.component';
 
 const routes: Routes = [
   {
@@ -57,10 +59,17 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
-    path: 'incidents/report',
+    path: 'incidents',
+    component: IncidentsComponent
+  },
+  {
+    path: 'incidents/:id',
+    component: IncidentDetailsComponent
+  },
+  {
+    path: 'report-incident',
     component: ReportIncidentComponent
   },
-
 
   { path: '404', component: NotFoundComponent },
   { path: '**', redirectTo: '404' }

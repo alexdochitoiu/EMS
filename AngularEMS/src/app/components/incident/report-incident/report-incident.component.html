@@ -1,5 +1,5 @@
 <app-navbar></app-navbar>
-<div class="bg-announcement">
+<div class="bg-report-incident">
   <div class="title-announcement">
     Report an incident
   </div>
@@ -88,10 +88,11 @@
         <span *ngIf="!checked">        
           <i class="fa fa-map-marker custom-icon"></i>
           Click on map to set the position where the incident happened
+          <br />
         </span>
-        <span *ngIf="!checked">        
-          <i class="fa fa-map-marker custom-icon"></i>
-          Click on map to set the position where the incident happened
+        <span *ngIf="reportIncidentRadius">        
+          <i class="fa fa-map custom-icon"></i>
+          Selected radius: <strong>{{ (reportIncidentRadius/1000).toFixed(3)}} km</strong>
         </span>
         <agm-map       
           (mapClick)="mapClicked($event)"
@@ -128,10 +129,17 @@
             (radiusChange)="radiusChange($event)"
           >
           </agm-circle>
-
-
         </agm-map>
       </div>
+
+      <hr/>
+      
+      <b>Upload photos</b>
+      <app-upload 
+        (fileEvent)="receiveFile($event)"
+        class="upload-box">
+      </app-upload>
+
       <div *ngIf="errorMessage" class="alert alert-danger alert-dismissible fade show" role="alert">
         <p>{{ errorMessage }}</p>
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -144,7 +152,7 @@
           <p>{{ successMessage }}</p>
           <a routerLink="/">Back to home</a>
       </div>
-      <hr/>
+      <hr style="margin-top: 2rem;" />
 
       <div class="form-group wrapper">
         <button class="btn btn-secondary my-2 my-sm-0" type="submit">Submit</button>
@@ -153,3 +161,4 @@
     </form>
   </div>
 </div>
+<app-footer></app-footer>

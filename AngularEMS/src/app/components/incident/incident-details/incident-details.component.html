@@ -1,0 +1,92 @@
+<app-navbar></app-navbar>
+<div class="bg-incident">
+  <div *ngIf="isAvailable" class="title-announcement">
+    {{ incident.title }}
+  </div>
+</div>
+<div *ngIf="isAvailable" class="body-container">
+  <div class="severity">Severity: <span [style.color]="getColor()">{{ severity }}</span></div>
+  <div class="photo-gallery">
+    <img src="../../../../assets/no-image-found.jpeg" *ngIf="!images" />
+    <div *ngIf="images" class="row" style="margin: 15px">
+      <img 
+        *ngFor="let img of images" 
+        [src]="getImageSrc(img)" 
+        class="img-thumbnail" 
+        (click)="openImagePreview(content, getImageSrc(img))"
+      />
+    </div>
+  </div>
+  <div class="description">
+    <div class="row">
+      <div class="posted-by">
+        Reported by 
+        <a (click)="navigateToUserProfile(incident.ReporterName)">
+          {{ incident.reporter.username }}
+        </a>
+      </div>
+      <div class="posted-at">{{ incident.created }}</div>
+    </div>
+    <p>
+      {{ incident.description }}
+    </p>
+  </div>
+  <agm-map
+    class="col"
+    [zoom]="16" 
+    [disableDefaultUI]="false"
+    [zoomControl]="false"
+    [latitude]="incident.latitude" [longitude]="incident.longitude">
+    <agm-marker 
+      [latitude]="incident.latitude"
+      [longitude]="incident.longitude"
+      [iconUrl]="getMarker()"
+    >      
+      <agm-info-window>
+        <strong>Incident position</strong>
+      </agm-info-window>      
+    </agm-marker>
+    
+    <agm-circle 
+      [latitude]="incident.latitude" 
+      [longitude]="incident.longitude" 
+      [radius]="100"
+      [fillColor]="getColor()">
+    </agm-circle>
+  </agm-map>
+</div>
+<div id="loading" *ngIf="loading">
+  <ngx-loading 
+    [show]="true" 
+    [config]="{
+      animationType: ngxLoadingAnimationTypes.wanderingCubes, 
+      primaryColour: '#ffffff', 
+      secondaryColour: '#0d9e73', 
+      backdropBorderRadius: '3px'
+    }"
+    [template]="loadingTemplate">
+  </ngx-loading>
+</div>
+<app-footer></app-footer>
+
+<!-- Modal -->
+<div tabindex="-1">
+  <div class="modal-dialog">
+    <ng-template #content let-modal>
+    <div class="modal-content form-elegant">
+      <!--Header-->
+      <div class="modal-header text-center">
+        <button type="button" class="close" (click)="modalRef.close()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <!--Body-->
+      <div class="modal-body mx-4">
+        <img class="preview-img" [src]="imageSrc" />
+      </div>
+    </div>
+    </ng-template>
+  </div>
+</div>
+<!-- Modal -->
+  

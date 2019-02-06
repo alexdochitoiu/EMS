@@ -1,0 +1,3 @@
+dropzone > .dropzone.dz-wrapper .dz-message {
+    overflow: hidden !important;
+}

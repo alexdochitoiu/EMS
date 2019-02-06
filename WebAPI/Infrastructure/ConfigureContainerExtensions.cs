@@ -54,6 +54,7 @@ namespace WebAPI.Infrastructure
         {
             services.AddTransient<CountriesSeeder>();
             services.AddTransient<CitiesSeeder>();
+            services.AddTransient<AnnouncementsSeeder>();
             services.AddTransient<IDatabaseSeeder, DatabaseSeeder>();
             services.AddTransient<IEmailSender, SmtpEmailSender>();
             services.AddTransient<ISmsSender, EmsSmsSender>();

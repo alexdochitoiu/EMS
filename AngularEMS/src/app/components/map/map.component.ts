@@ -106,7 +106,6 @@ export class MapComponent implements AfterViewInit {
 
   public ngxLoadingAnimationTypes = ngxLoadingAnimationTypes;
   public loading: boolean;
-  private _opened = false;
 
   public nearbyHospitals: Array<Hospital>;
   hospitalMarker = {
@@ -119,6 +118,8 @@ export class MapComponent implements AfterViewInit {
 
   public origin: any;
   public destination: any;
+
+  public hospitalDetailsOpened = false;
 
   constructor(private incidentService: IncidentService,
     private modalService: NgbModal,
@@ -250,6 +251,7 @@ export class MapComponent implements AfterViewInit {
       (response: any) => {
         this.nearbyHospitals = response;
         this.loading = false;
+        this.hospitalDetailsOpened = true;
         console.log('Nearby hospitals: ', this.nearbyHospitals);
       },
       (errorResponse: HttpErrorResponse) => {
@@ -263,7 +265,7 @@ export class MapComponent implements AfterViewInit {
     this.destination = { lat: lat, lng: lng };
   }
 
-  private _toggleSidebar() {
-    this._opened = !this._opened;
+  getColClass() {
+    return this.hospitalDetailsOpened ? 'col-sm-8 padding-0' : 'col padding-0';
   }
 }

@@ -22,6 +22,10 @@
         <li class="nav-item" routerLink='/announcements' [routerLinkActive]="['active']">
           <a class="nav-link">Announcements</a>
         </li>
+        <li class="nav-item" routerLink='/incidents' [routerLinkActive]="['active']">
+          <a class="nav-link">Incidents</a>
+        </li>
+        <!--
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             Guides
@@ -33,6 +37,7 @@
             <a class="dropdown-item" href="#">Something else here</a>
           </div>
         </li>
+        -->
       </ul>
       <div *ngIf="!loggedIn" class="auth-btns">
           <button (click)="goToRoute('/register')" class="btn btn-secondary my-2 my-sm-0" type="submit">Register</button>

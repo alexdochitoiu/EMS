@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Announcement } from '../../../services/announcement/announcement.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AnnouncementService } from '../../../services/announcement/announcement.service';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Image } from '@ks89/angular-modal-gallery';
+import { ngxLoadingAnimationTypes } from 'ngx-loading';
+import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-announcement-details',
@@ -14,7 +15,8 @@ export class AnnouncementDetailsComponent implements OnInit {
 
   constructor(private route: ActivatedRoute,
               private announcementService: AnnouncementService,
-              private router: Router) {
+              private router: Router,
+              private modalService: NgbModal) {
     this.route.params.subscribe(params => {
       this.getAnnouncement(params['id']);
     });
@@ -24,58 +26,21 @@ export class AnnouncementDetailsComponent implements OnInit {
   announcement: Announcement;
   severity: string;
 
-  images: Image[] = [
-    new Image(
-      0,
-      { // modal
-        img: 'https://raw.githubusercontent.com/Ks89/angular-modal-gallery/v4/examples/systemjs/assets/images/gallery/img1.jpg',
-        extUrl: 'http://www.google.com'
-      }
-    ),
-    new Image(
-      1,
-      { // modal
-        img: 'https://raw.githubusercontent.com/Ks89/angular-modal-gallery/v4/examples/systemjs/assets/images/gallery/img2.png',
-        description: 'Description 2'
-      }
-    ),
-    new Image(
-      2,
-      { // modal
-        img: 'https://raw.githubusercontent.com/Ks89/angular-modal-gallery/v4/examples/systemjs/assets/images/gallery/img3.jpg',
-        description: 'Description 3',
-        extUrl: 'http://www.google.com'
-      },
-      { // plain
-        img: 'https://raw.githubusercontent.com/Ks89/angular-modal-gallery/v4/examples/systemjs/assets/images/gallery/thumbs/img3.png',
-        title: 'custom title 2',
-        alt: 'custom alt 2',
-        ariaLabel: 'arial label 2'
-      }
-    ),
-    new Image(
-      3,
-      { // modal
-        img: 'https://raw.githubusercontent.com/Ks89/angular-modal-gallery/v4/examples/systemjs/assets/images/gallery/img4.jpg',
-        description: 'Description 4',
-        extUrl: 'http://www.google.com'
-      }
-    ),
-    new Image(
-      4,
-      { // modal
-        img: 'https://raw.githubusercontent.com/Ks89/angular-modal-gallery/v4/examples/systemjs/assets/images/gallery/img5.jpg'
-      },
-      { // plain
-        img: 'https://raw.githubusercontent.com/Ks89/angular-modal-gallery/v4/examples/systemjs/assets/images/gallery/thumbs/img5.jpg'
-      }
-    )
-  ];
+  public ngxLoadingAnimationTypes = ngxLoadingAnimationTypes;
+  public loading: boolean;
+
+  @ViewChild('content') content: any;
+  private modalRef: NgbModalRef;
 
   ngOnInit() {
   }
 
+  openImagePreview(content: any) {
+    this.modalRef = this.modalService.open(content);
+  }
+
   public getAnnouncement(id: string) {
+    this.loading = true;
     this.announcementService.getAnnouncement(id).subscribe(
       (response: any) => {
         this.announcement = response;
@@ -86,6 +51,7 @@ export class AnnouncementDetailsComponent implements OnInit {
           default: this.severity = 'Unknown'; break;
         }
         this.isAvailable = true;
+        this.loading = false;
       },
       (errorResponse: HttpErrorResponse) => {
         console.log(errorResponse);
@@ -97,7 +63,7 @@ export class AnnouncementDetailsComponent implements OnInit {
     switch (this.announcement.Severity) {
       case 0: return 'red';
       case 1: return 'orange';
-      default: return '#0d9e73';
+      default: return 'yellow';
     }
   }
 

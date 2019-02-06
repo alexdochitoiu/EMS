@@ -1,3 +1,6 @@
 ::ng-deep body {
   background-color: #D8D8D8 !important;
 }
+app-footer {
+  top: 0;
+}

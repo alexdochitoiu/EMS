@@ -24,3 +24,13 @@ agm-map {
     align-items: center;
     display: flex;
 }
+
+.upload-box {
+    position: relative;
+    top: 10px;
+}
+
+app-footer {
+    top: 30px;
+    position: relative;
+}

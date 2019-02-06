@@ -51,6 +51,7 @@ namespace WebAPI
             });
             app.UseCors(corsPolicyBuilder =>
             {
+                corsPolicyBuilder.WithOrigins("http://localhost:4200");
                 corsPolicyBuilder.AllowAnyOrigin();
                 corsPolicyBuilder.AllowAnyMethod();
                 corsPolicyBuilder.AllowAnyHeader();

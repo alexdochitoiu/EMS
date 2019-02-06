@@ -54,11 +54,20 @@ export class UserService {
   }
 
   userByUsername(username: string): Observable<UserModel> {
-    this.url = this.infra.URL + '/api/users/' + username;
+    this.url = this.infra.URL + '/api/users/by-username/' + username;
     return this.http.get(this.url)
       .pipe(map((u: any) =>
-        new UserModel(u.firstName, u.lastName, u.username, u.email,
-          u.gender, u.dateOfBirth, u.phoneNumber, u.address)));
+        new UserModel(
+          u.firstName || 'Undefined',
+          u.lastName || 'Undefined',
+          u.username || 'Undefined',
+          u.email || 'Undefined',
+          u.gender || 'Undefined',
+          u.dateOfBirth || 'Undefined',
+          u.phoneNumber || 'Undefined',
+          u.address || 'Undefined')
+        )
+      );
   }
 
   doFacebookLogin() {

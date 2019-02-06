@@ -1,14 +1,20 @@
 <app-navbar></app-navbar>
 <div class="bg-announcement">
-  <div *ngIf="isAvailable" class="title-announcement">
+  <div *ngIf="isAvailable" class="title-announcement" (click)="openImagePreview(content)">
     {{ announcement.Title }}
   </div>
 </div>
 <div *ngIf="isAvailable" class="body-container">
     <div class="severity">Severity: <span [style.color]="getColor()">{{ severity }}</span></div>
     <div class="photo-gallery">
-      <div class="row">
-          <ks-modal-gallery [modalImages]="images"></ks-modal-gallery>
+      <img src="../../../../assets/no-image-found.jpeg" *ngIf="!images" />
+      <div *ngIf="images" class="row" style="margin: 15px">
+        <img 
+          *ngFor="let img of images" 
+          [src]="getImageSrc(img)" 
+          class="img-thumbnail" 
+          (click)="openImagePreview(content, getImageSrc(img))"
+        />
       </div>
     </div>
     <div class="description">
@@ -26,3 +32,38 @@
       </p>
     </div>
 </div>
+<app-footer></app-footer>
+
+<div id="loading" *ngIf="loading">
+  <ngx-loading 
+    [show]="true" 
+    [config]="{
+      animationType: ngxLoadingAnimationTypes.wanderingCubes, 
+      primaryColour: '#ffffff', 
+      secondaryColour: '#0d9e73', 
+      backdropBorderRadius: '3px'
+    }"
+    [template]="loadingTemplate">
+  </ngx-loading>
+</div>
+
+<!-- Modal -->
+<div tabindex="-1">
+  <div class="modal-dialog">
+    <ng-template #content let-modal>
+    <div class="modal-content form-elegant">
+      <!--Header-->
+      <div class="modal-header text-center">
+        <button type="button" class="close" (click)="modalRef.close()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <!--Body-->
+      <div class="modal-body mx-4">
+        <img height="400" />
+      </div>
+    </div>
+    </ng-template>
+  </div>
+</div>
+<!-- Modal -->

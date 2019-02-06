@@ -42,6 +42,8 @@ namespace WebAPI.Controllers
                 var centerLng = Convert.ToDouble(alertNearbyModel.Longitude);
                 var km = Convert.ToDouble(alertNearbyModel.Radius);
 
+                _logger.LogCritical($"[AlertPeople] KM = {km}");
+
                 var nearbyUsers = await _unitOfWork
                     .Users
                     .GetUsersWithinARadiusAsync(centerLat, centerLng, km);
@@ -50,7 +52,7 @@ namespace WebAPI.Controllers
                 {
                     if (user.PhoneNumber == null) return;
 
-                    await _smsService.SendSms("+4"+user.PhoneNumber, alertNearbyModel.Message);
+                    await _smsService.SendSms("+4" + user.PhoneNumber, alertNearbyModel.Message);
                 });
 
                 var displayUsers = _mapper.Map<List<DisplayUserModel>>(nearbyUsers);

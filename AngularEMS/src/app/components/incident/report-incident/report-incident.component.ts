@@ -7,6 +7,7 @@ import { UserService } from 'src/app/services/user/user.service';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { AlertService } from 'src/app/services/alert/alert.service';
 import { InfrastructureService } from 'src/app/services/infra/infra.service';
+import { ngxLoadingAnimationTypes } from 'ngx-loading';
 
 @Component({
   selector: 'app-report-incident',
@@ -16,6 +17,7 @@ import { InfrastructureService } from 'src/app/services/infra/infra.service';
 export class ReportIncidentComponent implements OnInit {
 
   incident: CreateIncidentModel;
+  imagesToUpload: File[];
   reporterId: string;
   errorMessage: string;
   successMessage: string;
@@ -24,6 +26,10 @@ export class ReportIncidentComponent implements OnInit {
   currentLng = 0;
   incidentLat = -1;
   incidentLng = -1;
+
+  public ngxLoadingAnimationTypes = ngxLoadingAnimationTypes;
+  public loading: boolean;
+
   currentPositionIcon = {
     url: '../../../assets/current-position-marker.png',
     scaledSize: {
@@ -52,6 +58,7 @@ export class ReportIncidentComponent implements OnInit {
     private alertService: AlertService,
     private infrastructure: InfrastructureService) {
     this.incident = new CreateIncidentModel();
+    this.imagesToUpload = [];
     this.incident.Severity = 2;
     this.reportIncidentRadius = 500;
   }
@@ -83,7 +90,12 @@ export class ReportIncidentComponent implements OnInit {
     this.reportIncidentRadius = $event;
   }
 
+  public receiveFile($event: File) {
+    this.imagesToUpload.push($event);
+  }
+
   async onSubmit() {
+    this.loading = true;
     this.incident.Latitude = this.checked ? this.currentLat : this.incidentLat;
     this.incident.Longitude = this.checked ? this.currentLng : this.incidentLng;
 
@@ -98,7 +110,30 @@ export class ReportIncidentComponent implements OnInit {
         await this.incidentService.createIncident(this.incident)
           .subscribe(
           async (res: any) => {
-            this.successMessage = 'The incident was successfully reported!';
+
+            // Upload images
+            const images = this.imagesToUpload.map(x => {
+              return {
+                base64String: x['dataURL']
+              };
+            });
+            const model = {
+              incidentId: res.id,
+              images: images
+            };
+            await this.incidentService.uploadPhotos(model)
+            .subscribe(
+              (uploadResult: any) => {
+                console.log(uploadResult);
+                this.successMessage = 'The incident was successfully reported!';
+                this.loading = false;
+              },
+              (uploadErrorResponse: HttpErrorResponse) => {
+                console.log(uploadErrorResponse);
+                this.loading = false;
+              }
+            );
+
             const severity =
               this.incident.Severity === 0 ? 'Critical' :
               this.incident.Severity === 1 ? 'Major' : 'Minor';
@@ -117,21 +152,25 @@ export class ReportIncidentComponent implements OnInit {
             .subscribe(
               (alertResponse: any) => {
                 console.log('Users successfully alerted via SMS:', alertResponse, alertModel);
+                this.loading = false;
               },
               (alertErrorResponse: HttpErrorResponse) => {
                 this.errorMessage = alertErrorResponse.error;
                 console.log('Alert call function error: ', alertErrorResponse);
+                this.loading = false;
               }
             );
           },
           (errorResponse: HttpErrorResponse) => {
             this.errorMessage = errorResponse.error;
             console.log(errorResponse);
+            this.loading = false;
           }
         );
       },
       (errorResponse: HttpErrorResponse) => {
         console.log(errorResponse);
+        this.loading = false;
       }
     );
   }

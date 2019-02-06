@@ -1,0 +1,21 @@
+<div class="announce-box">
+    <div class="announce-title">
+      <i #icon class="fa fa-info-circle" style="font-size: 22px"></i>{{ incident.Title }}
+      <i (click)="navigateToIncidentDetails(incident.IncidentId)" 
+         class="fa fa-expand" 
+         id="expand">
+      </i>
+    </div>
+    
+    <div class="announce-description">{{ incident.Description }}</div>
+  
+    <div class="row">
+      <div class="posted-by">
+        Reported by 
+        <a (click)="navigateToUserProfile(incident.ReporterName)">
+          {{ incident.ReporterName }}
+        </a>
+      </div>
+    </div>
+  </div>
+  

@@ -10,28 +10,28 @@
     <tbody>
       <tr>
         <td><i class="fa fa-envelope"></i> Email</td>
-        <td>{{ user.Email }}</td>
+        <td>{{ user.Email || 'Undefined' }}</td>
       </tr>
       <tr>
         <td><i class="fa fa-user"></i> Username </td>
-        <td>{{ user.Username }}</td>
+        <td>{{ user.Username || 'Undefined' }}</td>
       </tr>
       <tr>
         <td><i class="fa fa-phone"></i> Phone number </td>
-        <td>{{ user.Phone }}</td>
+        <td>{{ user.Phone || 'Undefined' }}</td>
       </tr>
       <tr>
         <td><i class="fa fa-transgender" style="font-weight: 800;"></i> Gender </td>
-        <td>{{ user.Gender }}</td>
+        <td>{{ user.Gender || 'Undefined' }}</td>
       </tr>      
       <tr>
         <td><i class="fa fa-calendar"></i> Date of Birth</td>
-        <td>{{ user.DateOfBirth }}</td>
+        <td>{{ user.DateOfBirth || 'Undefined' }}</td>
       </tr>
       <tr>
           <td><i class="fa fa-map-marker"></i> Address</td>
           <td>
-            {{ user.address }}
+            {{ user.address || 'Undefined' }}
           </td>
         </tr>
     </tbody>

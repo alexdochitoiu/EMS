@@ -121,6 +121,24 @@ body.modal-open {
   background-position: center center;
 }
 
+.bg-report-incident {
+  height: 150px;
+  padding-top: 50px;
+  background-image: url("/assets/report-incident-cover.jpg");
+  background-color: rgba(255, 255, 255, 0.75);
+  background-size: cover;
+  background-position: center center;
+}
+
+.bg-incident {
+  height: 150px;
+  padding-top: 50px;
+  background-image: url("/assets/incident-cover.jpg");
+  background-color: rgba(255, 255, 255, 0.75);
+  background-size: cover;
+  background-position: center center;
+}
+
 .title-announcement {
   font-size: 32px;
   font-family: 'Montserrat', sans-serif;
@@ -187,28 +205,6 @@ span .k-switch-label-on {
   0%   {transform: scale(0.5)}
   75%  {transform: scale(1.1)}
   100% {transform: scale(1)}
-}
-
-@media (max-width: 1023px) {
-  .photo-gallery {
-      width: auto;
-      float: none;
-  }
-}
-@media (max-width: 425px) {
-  .photo-gallery {
-    width: 100% !important;
-  }
-  .photo-gallery > div > ks-modal-gallery {
-    margin: 0 auto;
-  }
-  .photo-gallery > div > ks-modal-gallery > ks-plain-gallery > .plain-container {
-    width: 100%;
-    display: inline-grid !important;
-  }
-  .photo-gallery > div > ks-modal-gallery > ks-plain-gallery > .plain-container > img {
-      margin: 5px auto !important;
-  }
 }
 
 
@@ -293,6 +289,11 @@ span .k-switch-label-on {
   }
 }
 
+app-footer {
+  top: 30px;
+  position: relative;
+}
+
 @media (max-width: 425px) {
   .auth-btns {
     float: right;
@@ -309,6 +310,9 @@ span .k-switch-label-on {
     height: 32px;
     padding: 3px 15px 0 15px;
   }
+  app-footer {
+    top: 8px !important;
+  }
 }
 
 #loading {
@@ -322,4 +326,122 @@ span .k-switch-label-on {
 
 .spinner-wandering-cubes, .backdrop {
   z-index: 1049 !important;
+}
+
+.dz-message {
+  overflow: hidden !important;
+}
+
+dropzone > .dropzone.dz-wrapper {
+  overflow: hidden !important;
+  max-height: none !important;
+}
+
+@media (max-width: 375px) {
+  .dz-text {
+    font-size: 12px !important;
+  }
+  .title-announcement {
+    font-size: 20px;
+  }
+}
+@media (max-width: 320px) {
+  .dropzone .dz-preview {
+    padding: 0 23% !important;
+  }
+}
+
+.announce-box {
+  background-color: rgb(252, 252, 252);
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19);
+  height: 150px;
+  padding: 8px;
+  margin: 12px 0;
+  position: relative;
+}
+
+.announce-box .announce-title {
+  font-size: 22px;
+  font-family: 'Trebuchet MS', sans-serif;
+  color: #7d7d7d;  
+  padding: 0 10px;
+  overflow: hidden;
+  margin-right: 25px;
+  display: flex;
+  white-space: nowrap;
+}
+
+#expand {
+  position: absolute;
+  top: 5px;
+  right: -3px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.2s;
+  color: rgba(0, 0, 0, 0.5);
+}
+#expand:hover {
+  font-size: 18px;
+  color: rgba(0, 0, 0, 0.8);
+}
+.announce-box .announce-title i {
+  color: #0d9e73;
+  padding: 0 10px;
+}
+
+.announce-box .announce-description {
+  padding: 0 10px;
+  font-size: 14px;
+  white-space: pre-wrap;
+  overflow: hidden;
+  max-width: 1200px;
+  max-height: 60px;
+  border: 1px dotted rgb(212, 212, 212);
+  background: rgb(238, 238, 238);
+}
+
+.announce-box .row {
+  color: rgb(170, 170, 170);
+  padding: 10px;
+  font-family: Verdana, sans-serif;
+  font-size: 12px;
+  position: absolute;
+  bottom: 0;
+  left: 20px;
+}
+
+.announce-box .row > * {
+  padding-right: 40px;
+}
+
+.announce-box .row .posted-by a {
+  color: rgb(66, 154, 255);
+}
+
+.announce-box .row .posted-by a:hover {
+  color: rgb(0, 84, 180);
+}
+
+@media (max-width: 425px) {
+  .announce-box .announce-title {
+    font-size: 18px;
+    white-space: nowrap;
+
+  }
+
+  .announce-box .row .posted-at {
+    float: right;
+    padding: 0;
+  }
+}
+
+@media (max-width: 375px) {
+  .announce-box .row {
+    font-size: 9px;
+    padding: 4px;
+  }
+
+  .announce-box .announce-description {    
+    max-height: 90px;
+  }
 }

@@ -1,11 +1,11 @@
 <div class="body-container">  
   <div>
-    <button routerLink="/incidents/report" class="btn btn-secondary" id="report-incident-btn">
+    <button routerLink="/report-incident" class="btn btn-secondary" id="report-incident-btn">
       <i class="fa fa-exclamation-triangle" style="margin-right: 3px; color: yellow;"></i>
       Report an incident
     </button>
     <button 
-      (click)="displayNearHospitals()" 
+      (click)="displayNearHospitals();" 
       class="btn btn-secondary"
       id="display-hospitals-btn">  
       <i class="fa fa-heartbeat" style="margin-right: 3px; color: red;"></i>
@@ -45,85 +45,103 @@
       <i class="fa fa-times close-chip" (click)="reportedBy = null; applyFilters()"></i>
     </div>
   </div>
-  <agm-map 
-    [zoom]="city ? 12 : 14" 
-    [latitude]="city ? city.latitude : currentLat" 
-    [longitude]="city ? city.longitude : currentLng">
-    <agm-marker 
-      [latitude]="currentLat"
-      [longitude]="currentLng"
-      [iconUrl]="currentPositionIcon"
-    >
-      <agm-info-window>
-        <strong>Your position</strong>
-      </agm-info-window>      
-    </agm-marker>
-    <agm-circle 
-      [latitude]="city ? city.latitude : currentLat" 
-      [longitude]="city ? city.longitude : currentLng" 
-      [radius]="city ? 10000 : kmRadius * 1000"
-      [fillColor]="'red'">
-    </agm-circle>
-    <agm-marker 
-      *ngFor="let incident of incidents; let i = index"
-      [latitude]="incident.Latitude"
-      [longitude]="incident.Longitude"
-      [iconUrl]="incident.Severity === 'Minor' ? minorSeverityIcon 
-        : incident.Severity === 'Major' ? majorSeverityIcon : null"
-    >
-      <agm-info-window>
-        <div class="info-window-wrapper">
-          <div class="centered"><strong>{{incident.Title}}</strong></div>
-          <hr />
-          <p>{{incident.Description}}</p>
-          <p>Severity:<span class="severity" [style.background]="getBGColor(incident)">{{incident.Severity}}</span></p>
-          <p>
-            <small>
-              Reported by 
-              <a [routerLink]='"/users/"+incident.ReporterName'>
-                {{incident.ReporterName}}
-              </a>
-            </small>
-          </p>
-          <hr />
-          <div class="centered">
-            <a [routerLink]='"/incidents/"+incident.IncidentId'>Click for details</a>
-          </div>
-        </div>
-      </agm-info-window>      
-    </agm-marker>
+  <div class="row"> 
+    <div [ngClass]="getColClass()">
+      <button 
+        *ngIf="!hospitalDetailsOpened && this.nearbyHospitals" 
+        class="btn btn-success hide-show-btn"
+        (click)="hospitalDetailsOpened = true"
+      >Show</button>
+      <agm-map 
+        [zoom]="city ? 12 : 14" 
+        [latitude]="city ? city.latitude : currentLat" 
+        [longitude]="city ? city.longitude : currentLng"
+      >
+      <agm-marker 
+          [latitude]="currentLat"
+          [longitude]="currentLng"
+          [iconUrl]="currentPositionIcon"
+        >
+          <agm-info-window>
+            <strong>Your position</strong>
+          </agm-info-window>      
+        </agm-marker>
+        <agm-circle 
+          [latitude]="city ? city.latitude : currentLat" 
+          [longitude]="city ? city.longitude : currentLng" 
+          [radius]="city ? 10000 : kmRadius * 1000"
+          [fillColor]="'red'">
+        </agm-circle>
+        <agm-marker 
+          *ngFor="let incident of incidents; let i = index"
+          [latitude]="incident.Latitude"
+          [longitude]="incident.Longitude"
+          [iconUrl]="incident.Severity === 'Minor' ? minorSeverityIcon 
+            : incident.Severity === 'Major' ? majorSeverityIcon : null"
+        >
+          <agm-info-window>
+            <div class="info-window-wrapper">
+              <div class="centered"><strong>{{incident.Title}}</strong></div>
+              <hr />
+              <p>{{incident.Description.length < 30 ? incident.Description : incident.Description.substring(0, 30) + '...'}}</p>
+              <p>Severity:<span class="severity" [style.background]="getBGColor(incident)">{{incident.Severity}}</span></p>
+              <p>
+                <small>
+                  Reported by 
+                  <a [routerLink]='"/users/"+incident.ReporterName'>
+                    {{incident.ReporterName}}
+                  </a>
+                </small>
+              </p>
+              <hr />
+              <div class="centered">
+                <a [routerLink]='"/incidents/"+incident.IncidentId'>Click for details</a>
+              </div>
+            </div>
+          </agm-info-window>      
+        </agm-marker>
 
-    <!-- Display Nearby Hospitals Markers -->
-    <agm-marker 
-      *ngFor="let hospital of nearbyHospitals"
-      [latitude]="hospital.Latitude"
-      [longitude]="hospital.Longitude"
-      [iconUrl]="hospitalMarker"
-      (markerClick)="setDestinationPoint(hospital.Latitude, hospital.Longitude)"
-    >
-      <agm-info-window>
-        <div class="info-window-wrapper">
-          <div class="centered"><strong>{{hospital.Name}}</strong></div>
-          <hr />
-        </div>
-      </agm-info-window>  
-    </agm-marker>
-    <!-- ------------------------------ -->
-    <agm-direction 
-      *ngIf="destination" 
-      [origin]="origin" 
-      [destination]="destination">
-    </agm-direction>
-  </agm-map>
-  <ng-sidebar-container>
-    <ng-sidebar [(opened)]="_opened">
-      <p>Sidebar contents</p>
-    </ng-sidebar>
-  
-    <div ng-sidebar-content>
-      <button (click)="_toggleSidebar()">Toggle sidebar</button>
+        <!-- Display Nearby Hospitals Markers -->
+        <agm-marker 
+          *ngFor="let hospital of nearbyHospitals"
+          [latitude]="hospital.Latitude"
+          [longitude]="hospital.Longitude"
+          [iconUrl]="hospitalMarker"
+          (markerClick)="setDestinationPoint(hospital.Latitude, hospital.Longitude)"
+        >
+          <agm-info-window>
+            <div class="info-window-wrapper">
+              <div class="centered"><strong>{{hospital.Name}}</strong></div>
+              <hr />
+            </div>
+          </agm-info-window>  
+        </agm-marker>
+        <!-- ------------------------------ -->
+        <agm-direction 
+          *ngIf="destination" 
+          [origin]="origin" 
+          [destination]="destination">
+        </agm-direction>
+      </agm-map>
     </div>
-  </ng-sidebar-container>
+    <div *ngIf="hospitalDetailsOpened" class="col-sm-4 hospital-details">
+      <button class="btn btn-secondary hide-show-btn" (click)="hospitalDetailsOpened=false">Hide</button>
+      <div class="hospital-box" *ngFor="let hospital of nearbyHospitals">
+        <strong>
+          <i 
+            class="fa fa-angle-right" 
+            style="margin-right: 10px; color: #0d9e73; font-size: 20px; font-weight: 800;">
+          </i>{{ hospital.Name }}</strong>
+        <hr/>
+        <small><b>{{ hospital.Vicinity }}</b></small>
+        <br/>
+        <a (click)="setDestinationPoint(hospital.Latitude, hospital.Longitude)">
+          <i class="fa fa-location-arrow"></i> See indications
+        </a>
+      </div>
+    </div>
+  </div>
+
   <div id="loading" *ngIf="loading">
     <ngx-loading 
       [show]="true" 

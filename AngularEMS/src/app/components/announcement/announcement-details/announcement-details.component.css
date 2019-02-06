@@ -21,6 +21,7 @@
 .severity span {    
     font-size: 26px;
     font-family: 'Montserrat', sans-serif;
+    -webkit-text-stroke: 1px rgb(148, 148, 148);
 }
 
 .photo-gallery {

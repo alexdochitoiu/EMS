@@ -1,0 +1,65 @@
+.no-available {
+    background-image: url('/assets/no-incidents-available.png');
+    background-size: cover;
+    margin: 15px auto;
+    width: 300px;
+    height: 300px;
+    text-align: center;
+    padding-top: 100px;
+    margin-bottom: 70px;
+}
+
+.back-to-home {
+    top: 175px;
+    position: relative;
+    padding: 7px 20px;
+}
+
+.row app-incident {
+    margin: 0 2px;
+    min-width: 295px;
+}
+
+.pag-div {
+    background: white;
+    text-align: center;
+    padding-right: 40px;
+    font-size: 18px;
+}
+
+.grid-list {
+    font-size: 26px;
+    width: 100px;
+    margin: 0 auto;
+    background: white;
+    text-align: center;
+}
+
+.grid-list > * {
+    padding: 10px;
+}
+
+.grid-list a {
+    color: #0d9e73;
+}
+
+.grid-list a:hover {
+    color: #054935;
+}
+
+app-footer {
+    top: 28px;
+    position: relative;
+}
+
+@media (max-width: 425px) {
+    .grid-list {
+        display: none;
+    }
+}
+
+@media (max-width: 375px) {
+    .pag-div {
+        font-size: 12px;
+    }
+}

@@ -11,14 +11,12 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { AngularFireModule } from 'angularfire2';
 import { AngularFirestoreModule } from 'angularfire2/firestore';
 import { AngularFireAuthModule } from 'angularfire2/auth';
-import 'hammerjs';
-import 'mousetrap';
-import { ModalGalleryModule } from '@ks89/angular-modal-gallery';
-import { environment } from '../environments/environment';
 import { InputsModule } from '@progress/kendo-angular-inputs';
 import { NgxLoadingModule } from 'ngx-loading';
 import { AgmDirectionModule } from 'agm-direction';
-import { SidebarModule } from 'ng-sidebar';
+import { DropzoneModule, DROPZONE_CONFIG, DropzoneConfigInterface } from 'ngx-dropzone-wrapper';
+
+import { environment } from '../environments/environment';
 
 import { AppComponent } from './app.component';
 import { HomeComponent } from './components/home/home.component';
@@ -38,6 +36,16 @@ import { VerifyEmailComponent } from './components/authentication/verify-email/v
 import { ResetPasswordComponent } from './components/authentication/reset-password/reset-password.component';
 import { PopupMessageComponent } from './components/popup-message/popup-message.component';
 import { ReportIncidentComponent } from './components/incident/report-incident/report-incident.component';
+import { UploadComponent } from './components/upload/upload.component';
+import { IncidentDetailsComponent } from './components/incident/incident-details/incident-details.component';
+import { IncidentsComponent } from './components/incident/incidents/incidents.component';
+import { IncidentBoxComponent } from './components/incident/incident-box/incident-box.component';
+
+const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
+   url: 'http://httpbin.org/post',
+   maxFilesize: 3,
+   acceptedFiles: 'image/*'
+ };
 
 @NgModule({
   declarations: [
@@ -58,10 +66,13 @@ import { ReportIncidentComponent } from './components/incident/report-incident/r
     VerifyEmailComponent,
     ResetPasswordComponent,
     PopupMessageComponent,
-    ReportIncidentComponent
+    ReportIncidentComponent,
+    UploadComponent,
+    IncidentDetailsComponent,
+    IncidentsComponent,
+    IncidentBoxComponent
   ],
   imports: [
-    ModalGalleryModule.forRoot(),
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule, // imports firebase/firestore, only needed for database features
     AngularFireAuthModule, // imports firebase/auth, only needed for auth features
@@ -79,9 +90,14 @@ import { ReportIncidentComponent } from './components/incident/report-incident/r
     NgxPaginationModule,
     InputsModule,
     NgxLoadingModule,
-    SidebarModule.forRoot()
+    DropzoneModule
   ],
-  providers: [],
+  providers: [
+    {
+      provide: DROPZONE_CONFIG,
+      useValue: DEFAULT_DROPZONE_CONFIG
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

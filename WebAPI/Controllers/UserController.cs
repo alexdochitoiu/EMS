@@ -90,8 +90,8 @@ namespace WebAPI.Controllers
             }
         }
 
-        // GET api/users/dokee131
-        [HttpGet("{username}", Name = "UsersByUsername")]
+        // GET api/users/by-username/dokee131
+        [HttpGet("by-username/{username}", Name = "UsersByUsername")]
         [ProducesResponseType(typeof(DisplayUserModel), 200)]
         public async Task<ActionResult> UsersByUsername(string username)
         {
