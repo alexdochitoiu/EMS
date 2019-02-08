@@ -8,7 +8,8 @@ namespace Data.Core.Interfaces
 {
     public interface IGenericRepository<T> where T : class
     {
-        Task<IEnumerable<T>> GetAllAsync<TOrderKey>(Func<IQueryable<T>, IQueryable<T>> load, Expression<Func<T, TOrderKey>> orderBy = null);
+        Task<IEnumerable<T>> GetAllAsync<TOrderKey>(Func<IQueryable<T>, IQueryable<T>> load, 
+            Expression<Func<T, TOrderKey>> orderBy = null);
         Task<IEnumerable<T>> GetAllAsync<TOrderKey>(Expression<Func<T, TOrderKey>> orderBy = null);
         Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> predicate,
             Func<IQueryable<T>, IQueryable<T>> load);
