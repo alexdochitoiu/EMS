@@ -71,8 +71,8 @@ namespace Data.Core.Domain.Entities.Identity
         {
             const double ky = 40000 / 360;
             var kx = Math.Cos(Math.PI * centerLat / 180.0) * ky;
-            var dx = Math.Abs(centerLng - this.LastLongitude) * kx;
-            var dy = Math.Abs(centerLat - this.LastLatitude) * ky;
+            var dx = Math.Abs(centerLng - LastLongitude) * kx;
+            var dy = Math.Abs(centerLat - LastLatitude) * ky;
             return Math.Sqrt(dx * dx + dy * dy) <= km;
         }
     }

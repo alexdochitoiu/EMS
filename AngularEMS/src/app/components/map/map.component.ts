@@ -120,6 +120,7 @@ export class MapComponent implements AfterViewInit {
   public destination: any;
 
   public hospitalDetailsOpened = false;
+  public distanceInfo: string[];
 
   constructor(private incidentService: IncidentService,
     private modalService: NgbModal,
@@ -143,6 +144,21 @@ export class MapComponent implements AfterViewInit {
       // Fetch incidents and display on map
       this.origin = { lat: this.currentLat, lng: this.currentLng };
       this.fetchIncidents();
+    }, (err: { code: any; message: any; }) => {
+      console.warn(`Geolocation ERROR(${err.code}): ${err.message}`);
+      this.loading = false;
+    }, this.options);
+  }
+
+  setCurrentPosition() {
+    // Set marker to current position
+    navigator.geolocation.getCurrentPosition(pos => {
+      const crd = pos.coords;
+      this.currentLat = crd.latitude;
+      this.currentLng = crd.longitude;
+      console.log(`Current position: lat ${this.currentLat} lng ${this.currentLng}`);
+      // Fetch incidents and display on map
+      this.origin = { lat: this.currentLat, lng: this.currentLng };
     }, (err: { code: any; message: any; }) => {
       console.warn(`Geolocation ERROR(${err.code}): ${err.message}`);
       this.loading = false;
@@ -201,8 +217,8 @@ export class MapComponent implements AfterViewInit {
   }
 
   async resetToDefault() {
-    console.log('Called here too (3)');
     await new Promise((resolve, reject) => {
+      this.setCurrentPosition();
       this.loading = true;
       this.city = null;
       this.incidents = [];
@@ -214,6 +230,9 @@ export class MapComponent implements AfterViewInit {
         (this.severityCritical && 'Critical' || '');
       this.summaryContains = null;
       this.reportedBy = null;
+      this.nearbyHospitals = null;
+      this.destination = null;
+      this.hospitalDetailsOpened = false;
       resolve();
     }).then(() => this.fetchIncidents());
   }
@@ -261,8 +280,15 @@ export class MapComponent implements AfterViewInit {
     );
   }
 
-  setDestinationPoint(lat: any, lng: any) {
-    this.destination = { lat: lat, lng: lng };
+  setDestinationPoint(hospital: Hospital) {
+    this.distanceInfo = [];
+    this.destination = { lat: hospital.Latitude, lng: hospital.Longitude };
+    this.hospitalService.getDistance(
+      { lat: this.currentLat, lng: this.currentLng },
+      this.destination
+    ).subscribe((response: any) => {
+      this.distanceInfo[hospital.Id] = `(Distance: ${response.distance.text}, Duration: ${response.duration.text})`;
+    });
   }
 
   getColClass() {

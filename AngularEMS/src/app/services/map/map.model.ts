@@ -29,12 +29,14 @@ export class CreateIncidentModel {
 }
 
 export class Hospital {
+  Id: number;
   Latitude: number;
   Longitude: number;
   Name: string;
   Vicinity: string;
 
-  public constructor(lat: number, long: number, name: string, vicinity: string) {
+  public constructor(id: number, lat: number, long: number, name: string, vicinity: string) {
+    this.Id = id;
     this.Latitude = lat;
     this.Longitude = long;
     this.Name = name;

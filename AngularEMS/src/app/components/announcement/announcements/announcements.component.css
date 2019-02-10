@@ -63,3 +63,7 @@ app-footer {
         font-size: 12px;
     }
 }
+
+#loading {
+    position: fixed;
+}

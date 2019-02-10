@@ -160,6 +160,12 @@ a:hover {
   background-color: #313332;
 }
 
+#vicinity {
+  margin-top: 8px;
+  border-top: 1px solid rgb(168, 168, 168);
+  padding-top: 8px;
+}
+
 @media (max-width: 425px) {
   #report-incident-btn, #display-hospitals-btn {
     width: 99%;

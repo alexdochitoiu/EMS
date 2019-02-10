@@ -107,7 +107,7 @@
           [latitude]="hospital.Latitude"
           [longitude]="hospital.Longitude"
           [iconUrl]="hospitalMarker"
-          (markerClick)="setDestinationPoint(hospital.Latitude, hospital.Longitude)"
+          (markerClick)="setDestinationPoint(hospital)"
         >
           <agm-info-window>
             <div class="info-window-wrapper">
@@ -126,16 +126,18 @@
     </div>
     <div *ngIf="hospitalDetailsOpened" class="col-sm-4 hospital-details">
       <button class="btn btn-secondary hide-show-btn" (click)="hospitalDetailsOpened=false">Hide</button>
-      <div class="hospital-box" *ngFor="let hospital of nearbyHospitals">
+      <div class="hospital-box" 
+        *ngFor="let hospital of nearbyHospitals; index as i">
         <strong>
           <i 
             class="fa fa-angle-right" 
             style="margin-right: 10px; color: #0d9e73; font-size: 20px; font-weight: 800;">
-          </i>{{ hospital.Name }}</strong>
-        <hr/>
-        <small><b>{{ hospital.Vicinity }}</b></small>
+          </i>{{ hospital.Name }}
+        </strong>
+        <p id="vicinity"><small><b>{{ hospital.Vicinity }}</b></small></p>
+        <small *ngIf="distanceInfo">{{ distanceInfo[hospital.Id] }}</small>
         <br/>
-        <a (click)="setDestinationPoint(hospital.Latitude, hospital.Longitude)">
+        <a (click)="setDestinationPoint(hospital)">
           <i class="fa fa-location-arrow"></i> See indications
         </a>
       </div>

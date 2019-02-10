@@ -9,6 +9,10 @@
     margin-bottom: 70px;
 }
 
+#loading {
+    position: fixed;
+}
+
 .back-to-home {
     top: 175px;
     position: relative;
